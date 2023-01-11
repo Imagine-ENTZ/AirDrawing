@@ -11,14 +11,18 @@ function MainHome() {
             </div>
 
             <div className='MainHome_right'>
-                <div className='MainHome_right_title'>Study various words while playing!!!</div>
-                <AwesomeButton
-                    className='mainButton'
-                    type="secondary">Login</AwesomeButton>
+                <div className='MainHome_right_title'>Study words while playing!!!</div>
+                <div className='main_login_button'>
+                    <AwesomeButton
+                        className='mainButton'
+                        type="secondary">Login
+                    </AwesomeButton>
+                </div>
 
                 <AwesomeButton
                     className='mainButton'
-                    type="secondary">Register</AwesomeButton>
+                    type="primary">Register
+                </AwesomeButton>
 
 
             </div>

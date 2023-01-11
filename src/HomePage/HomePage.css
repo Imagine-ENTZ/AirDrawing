@@ -13,7 +13,7 @@
     height: 15vh;
     display: flex;
     align-items: center;
-    background-color: antiquewhite;
+    /* background-color: antiquewhite; */
 }
 .topbanner-inner {
     font-size: 40px;
@@ -25,14 +25,14 @@
 /* MainHome */
 
 .MainHome {
-    background-color: aqua;
+    /* background-color: aqua; */
     display: flex;
     flex-direction: row;
     height: 75vh;
     margin: 0px 60px;
 }
 .MainHome_left {
-    background-color: aquamarine;
+    /* background-color: aquamarine; */
     flex: 1;
     display: flex;
     align-items: center;
@@ -43,7 +43,7 @@
     height: 70%;
 }
 .MainHome_right {
-    background-color: rgb(113, 126, 25);
+    /* background-color: rgb(113, 126, 25); */
     flex: 1;
     display: flex;
     flex-direction: column;
@@ -51,10 +51,15 @@
     justify-content:center;
 }
 .MainHome_right_title {
-    font-size: 28px;
     margin-bottom: 20px;
     font-family: 'Varela Round', sans-serif;
+    font-size: 30px;
+    color: white;
+
 }
-.mainButton{
-    width: 200px
+.main_login_button {
+    margin: 20px;
+}
+.mainButton {
+    width: 280px;
 }
