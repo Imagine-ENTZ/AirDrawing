@@ -1,0 +1,60 @@
+@import url('https://fonts.googleapis.com/css2?family=Lobster&family=Varela+Round&display=swap');
+
+
+.main_homepage {
+    height: 100vh;
+    width: 100%;
+    background-color: #285cac;
+}
+
+/* TopBanner */
+.topbanner {
+    width: 100%;
+    height: 15vh;
+    display: flex;
+    align-items: center;
+    background-color: antiquewhite;
+}
+.topbanner-inner {
+    font-size: 40px;
+    margin-left: 30px;
+    font-family: 'Varela Round', sans-serif;
+    color: white;
+}
+
+/* MainHome */
+
+.MainHome {
+    background-color: aqua;
+    display: flex;
+    flex-direction: row;
+    height: 75vh;
+    margin: 0px 60px;
+}
+.MainHome_left {
+    background-color: aquamarine;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.airplneimg {
+    width: 70%;
+    height: 70%;
+}
+.MainHome_right {
+    background-color: rgb(113, 126, 25);
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content:center;
+}
+.MainHome_right_title {
+    font-size: 28px;
+    margin-bottom: 20px;
+    font-family: 'Varela Round', sans-serif;
+}
+.mainButton{
+    width: 200px
+}
