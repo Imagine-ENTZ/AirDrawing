@@ -3,8 +3,18 @@ import "../HomePage.css"
 import { AwesomeButton } from 'react-awesome-button';
 import 'react-awesome-button/dist/styles.css';
 import {Link} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function MainHome() {
+    const navigate = useNavigate();
+    
+    const navigateToLogin = () => {
+        navigate("/login");
+    };
+
+    const navigateToSignup = () => {
+        navigate("/signup");
+    };
 
     return (
         <div className='MainHome'>
@@ -17,7 +27,7 @@ function MainHome() {
                 <div className='main_login_button'>
 
                     <Link to = {`/main`}>
-                    <AwesomeButton
+                    <AwesomeButton onClick={navigateToLogin}
                         className='mainButton'
                         type="secondary"
                         >Login
@@ -27,7 +37,8 @@ function MainHome() {
                     
                 </div>
 
-                <AwesomeButton
+                <AwesomeButton 
+                onClick={navigateToSignup}
                     className='mainButton'
                     type="primary">Register
                 </AwesomeButton>

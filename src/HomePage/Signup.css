@@ -1,0 +1,138 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700&display=swap');
+
+body {
+    background-color: #060919;
+}
+
+.main-container{
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+}
+
+.left-container {
+    width: 52%;
+    height: 100%;
+}
+
+.right-container {
+    width: 48%;
+    height: 100%;
+    /*
+    display: flex;
+    align-items: center;
+    justify-content: center;*/
+}
+
+.left-top-container{
+    width: 100%;
+    height: 25%;
+    background-color: "inherit";
+}
+
+.left-body-container{
+    width: 100%;
+    height: 75%;
+}
+
+.home-image{
+    width:80%;
+    position:relative;
+    top:15%;
+}
+
+.top-title{
+    font-size: 90px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: bold;
+    color: white;
+
+    position:relative;
+    top:40%;
+    left:40%;
+}
+
+.line {
+    width:10%;
+
+    position:relative;
+    top:33%;
+    left:70%;
+}
+
+.input-list {
+    position:relative;
+    top:1%;
+    left:30%;
+}
+
+.input-class {
+    display:flex;
+}
+
+.contact-form {
+    text-align: center;
+    margin: 0 auto;
+    width: 100%;
+    padding: 0.5em 0.8em;
+}
+
+.contact-form > div {
+    position: relative; 
+    width: 100%;
+}
+
+.contact-form > div input {
+    width: 420px; 
+    height: 42px; 
+    margin: 10px 0; 
+    border: 2px solid white; 
+    box-sizing: border-box; 
+    border-radius: 28px; 
+    padding: 0 20px; 
+    outline: none !important;
+    background-color: transparent;
+    color:white;
+}
+
+.contact-form > div label {
+    position: absolute; 
+    top: -40px; 
+    left: 0; 
+    margin: 1.9em 2em 2em 1em; 
+    background-color: #060919; 
+    padding: 0 8px;  
+    color: white;
+}
+
+.input-class:focus {
+    box-shadow: 0 0 10px 0 blue inset, 0 0 10px 4px blue;
+}
+.input-class:hover {
+    box-shadow: 0 0 10px 0 blue inset, 0 0 10px 4px blue;
+}
+
+.register-button {
+    margin:20px;
+    border-radius:28px;
+	border:1px solid white;
+	display:inline-block;
+	cursor:pointer;
+	background-color:transparent;
+    color:white;
+	font-family:Arial;
+	font-size:15px;
+	padding:17px 100px;
+    display:flex;
+
+    border-color: blue;
+    box-shadow: 0 0 40px 40px blue inset, 0 0 0 0 blue;
+    transition: all 150ms ease-in-out;
+
+    position:relative;
+    left:7.5%;
+}
+
+.register-button:hover {
+    box-shadow: 0 0 10px 0 blue inset, 0 0 10px 4px blue;
+}
