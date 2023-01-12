@@ -13,6 +13,34 @@ function MediapipeHands() {
   const webcamRef = useRef(null);
   const canvasRef = useRef(null);
 
+  const canvasRef2 = useRef(null);
+  const contextRef = useRef(null);
+  // const [isDrawing, setIsDrawing] = useState(false);
+  const isDrawing = useRef(false);
+  const preFingerPositionX = useRef(null);
+  const preFingerPositionY = useRef(null);
+
+  const [fingerPosition, setFingerPosition] = useState({
+    x : 0,
+    y : 0
+  });
+
+  useEffect(() => {
+    if(preFingerPositionX.current != null && preFingerPositionY.current != null){
+      contextRef.current.moveTo(fingerPosition.x, fingerPosition.y);
+      contextRef.current.lineTo(preFingerPositionX.current, preFingerPositionY.current);
+      contextRef.current.stroke();
+    }
+
+    if(contextRef.current){
+      // setIsDrawing(true);
+      isDrawing.current = true;
+      
+      preFingerPositionX.current = fingerPosition.x;
+      preFingerPositionY.current = fingerPosition.y;
+    }
+  }, [fingerPosition])
+
   useEffect(() => {
     const hands = new Hands({
       locateFile: (file) => {
@@ -25,10 +53,7 @@ function MediapipeHands() {
       minDetectionConfidence: 0.5,
       minTrackingConfidence: 0.5,
     });
-    
-    hands.onResults(onResults);
-    
-
+  
     if (typeof webcamRef.current !== "undefined" && webcamRef.current !== null) {
       const camera = new Camera(webcamRef.current.video, {
         onFrame: async () => {
@@ -39,6 +64,18 @@ function MediapipeHands() {
       });
       camera.start();
     }  
+
+    const canvas = canvasRef2.current;
+    canvas.height = 600;
+    canvas.width = 800;
+
+    const context = canvas.getContext("2d");
+    context.lineCap = "round";
+    context.strokeStyle = "black";
+    context.lineWidth = 5;
+    contextRef.current = context;
+    hands.onResults(onResults);
+
   }, []);
 
   const onResults = (results) => {
@@ -50,14 +87,11 @@ function MediapipeHands() {
     canvasElement.width = videoWidth;
     canvasElement.height = videoHeight;
 
-    //현재상태를 저장
-    canvasCtx.save();
-    // 직사각형 영역의 픽셀을 투명한 검은색으로 설정
-    canvasCtx.clearRect(0, 0, videoWidth, videoHeight);
-    // 비디오 가로만큼 이동해서 손그릴 캔버스를 웹캠과 일치하도록 설정
-    canvasCtx.translate(videoWidth, 0);
-    // 뒤집기 
-    canvasCtx.scale(-1, 1);
+                          
+    canvasCtx.save(); //현재상태를 저장
+    canvasCtx.clearRect(0, 0, videoWidth, videoHeight);   // 직사각형 영역의 픽셀을 투명한 검은색으로 설정
+    canvasCtx.translate(videoWidth, 0); // 비디오 가로만큼 이동해서 손그릴 캔버스를 웹캠과 일치하도록 설정
+    canvasCtx.scale(-1, 1);  // 뒤집기 
 
     // 캔버스 이미지 그리기
     canvasCtx.drawImage(
@@ -72,66 +106,127 @@ function MediapipeHands() {
     if (results.multiHandLandmarks) {
 
       for (const landmarks of results.multiHandLandmarks) {
-        // 손가락 선
-        drawConnectors(canvasCtx, landmarks, HAND_CONNECTIONS, {
+        drawConnectors(canvasCtx, landmarks, HAND_CONNECTIONS, { // 손가락 선
           color: "#00FF00",
           lineWidth: 2,
         });
-        // 손가락 점
-        drawLandmarks(canvasCtx, landmarks, { color: "#FFFFFF", lineWidth: 2 });
+        drawLandmarks(canvasCtx, landmarks, { color: "#FFFFFF", lineWidth: 2 }); // 손가락 점
       }
 
       // 손가락 포인트 값
-      // const x = results.multiHandLandmarks[0][0].x;
-      // const y = results.multiHandLandmarks[0][0].y;
-      // const z = results.multiHandLandmarks[0][0].z;
-      // console.log(x);
-      // console.log(y);
-      // console.log(z);
+      const x = parseInt(800 - results.multiHandLandmarks[0][8].x * 800);
+      const y = parseInt(results.multiHandLandmarks[0][8].y * 600);
       
+      // const z = results.multiHandLandmarks[0][8].z;
+      setFingerPosition({x : x, y : y});
     }
     //save한 곳으로 이동
     canvasCtx.restore();
   };
 
-  
-  return (
-    <div>
-      <Webcam
-        className="webcam"
-        audio={false}
-        mirrored={true}
-        ref={webcamRef}
-        style={{
-          position: "absolute",
-          marginLeft: "auto",
-          marginRight: "auto",
-          left: "0",
-          right: "0",
-          textAlign: "center",
-          zindex: 9,
-          width: 800,
-          height: 600,
-        }}
-      />
-      <canvas
-        ref={canvasRef}
-        style={{
-          position: "absolute",
-          marginLeft: "auto",
-          marginRight: "auto",
-          left: "0",
-          right: "0",
-          textAlign: "center",
-          zindex: 9,
-          width: 800,
-          height: 600,
-        }}
+  // const startDrawing = ({nativeEvent}) => {
+  //     const {offsetX, offsetY} = nativeEvent;
+  //     contextRef.current.beginPath();
+  //     contextRef.current.moveTo(offsetX, offsetY);
+  //     contextRef.current.lineTo(offsetX, offsetY);
+  //     contextRef.current.stroke();
+  //     // setIsDrawing(true);
+  //     nativeEvent.preventDefault();
+  // };
 
-       
-      ></canvas>
-    </div>
-  );
+  // const draw = ({nativeEvent}) => {
+  //     if(!isDrawing) {
+  //         return;
+  //     }
+      
+  //     const {offsetX, offsetY} = nativeEvent;
+  //     contextRef.current.lineTo(offsetX, offsetY);
+  //     contextRef.current.stroke();
+  //     nativeEvent.preventDefault();
+  // };
+
+  // const stopDrawing = () => {
+  //     contextRef.current.closePath();
+  //     // setIsDrawing(false);
+  // };
+
+  // const setToDraw = () => {
+  //     contextRef.current.globalCompositeOperation = 'source-over';
+  // };
+
+  // const setToErase = () => {
+  //     contextRef.current.globalCompositeOperation = 'destination-out';
+  // };
+
+  // const saveImageToLocal = (event) => {
+  //     let link = event.currentTarget;
+  //     link.setAttribute('download', 'canvas.png');
+  //     let image = canvasRef2.current.toDataURL('image/png');
+  //     link.setAttribute('href', image);
+  // };
+
+    return (
+        <div>
+          <Webcam
+            className="webcam"
+            audio={false}
+            mirrored={true}
+            ref={webcamRef}
+            style={{
+              position: "absolute",
+              marginLeft: "auto",
+              marginRight: "auto",
+              left: "0",
+              right: "0",
+              textAlign: "center",
+              zindex: 9,
+              width: 800,
+              height: 600,
+            }}
+          />
+          <canvas
+              ref={canvasRef}
+              style={{
+                position: "absolute",
+                marginLeft: "auto",
+                marginRight: "auto",
+                left: "0",
+                right: "0",
+                textAlign: "center",
+                zindex: 9,
+                width: 800,
+                height: 600,
+              }}>
+          </canvas>
+          <canvas
+              ref={canvasRef2}
+              // onMouseDown={startDrawing}
+              // onMouseMove={draw}
+              // onMouseUp={stopDrawing}
+              // onMouseLeave={stopDrawing}
+              style={{
+                position: "absolute",
+                marginLeft: "auto",
+                marginRight: "auto",
+                left: "0",
+                right: "0",
+                textAlign: "center",
+                zindex: 9,
+                width: 800,
+                height: 600,
+              }}>
+          </canvas>
+          {/* <div>
+              <button onClick={setToDraw}>
+                  Draw
+              </button>
+              <button onClick={setToErase}>
+                  Erase
+              </button>
+              <a id="download_image_link" href="download_link" onClick={saveImageToLocal}>Download Image</a>
+          </div> */}
+        </div>
+    )
 }
 
 export default MediapipeHands;
