@@ -43,7 +43,7 @@ const getCosAngle = (u, v) => {
 
   // palm vector
   let palm_to_index_vector = calculateVectorize(landmarks[0], landmarks[5])
-  let palm_to_mid_vector = calculateVectorize(landmarks[0], landmarks[9])
+  let palm_to_middle_vector = calculateVectorize(landmarks[0], landmarks[9])
   let palm_to_ring_vector = calculateVectorize(landmarks[0], landmarks[13])
   let palm_to_pinky_vector = calculateVectorize(landmarks[0], landmarks[17])
 
@@ -55,11 +55,17 @@ const getCosAngle = (u, v) => {
 
   console.log(getCosAngle(palm_to_index_vector, index_vector))
 
-  if (getCosAngle(palm_to_index_vector, index_vector) > threshhold && 
+  if( getCosAngle(palm_to_index_vector, index_vector) > threshhold && 
       getCosAngle(index_vector, middle_vector) < 0 &&
       getCosAngle(index_vector, ring_vector) < 0 &&
-      getCosAngle(index_vector, pinky_vector) < 0)
-        return constants.DRAW;
+      getCosAngle(index_vector, pinky_vector) < 0 )
+      return constants.DRAW;
+
+  if( getCosAngle(palm_to_index_vector, index_vector) > threshhold && 
+      getCosAngle(palm_to_middle_vector, middle_vector) > threshhold &&
+      getCosAngle(palm_to_ring_vector, ring_vector) > threshhold &&
+      getCosAngle(index_vector, pinky_vector) < 0 )
+      return constants.ERASE;
 
   return constants.HOVER;
 }

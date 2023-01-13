@@ -57,20 +57,21 @@ function MediapipeHands() {
 
   // 손그리기 캔버스
   useEffect(() => {
-    console.log(HandGesture.current)
-
-    // if (preFingerPositionX.current != null 
-    //     && preFingerPositionY.current != null ) {
-    //     && isDrawing1 === true) {
     switch(HandGesture.current){
       case constants.DRAW:
         contextRef.current.moveTo(fingerPosition.x, fingerPosition.y);
         contextRef.current.lineTo(preFingerPositionX.current, preFingerPositionY.current);
         contextRef.current.stroke();
+        break;
+      // case constants.ERASE:
+      //   console.log("ERASE");
+      //   contextRef.current.clearRect(0, 0, constants.CANVAS_WIDTH, constants.CANVAS_HEIGHT);
+      //   contextRef.current.fillStyle = "rgb(255, 255, 255)";
+      //   contextRef.current.fillRect(0, 0, constants.CANVAS_WIDTH, constants.CANVAS_HEIGHT);
+      //   break;
     }
 
     if (contextRef.current) {
-      // isDrawing.current = true;
       preFingerPositionX.current = fingerPosition.x;
       preFingerPositionY.current = fingerPosition.y;
     }
@@ -164,25 +165,6 @@ function MediapipeHands() {
     //save한 곳으로 이동
     canvasCtx.restore();
   };
-
-  // 스페이스바 누르면 그리기
-  // const spaceDown = (e) => {
-
-  //   if (e.key === ' ' && isDrawing1 === false) {
-  //     console.log("start drawing");
-  //     setIsDrawing1(true);
-  //   }
-  //   else if (e.key === ' ' && isDrawing1 === true) {
-  //     console.log("stop drawing");
-  //     setIsDrawing1(false);
-  //   }
-  //   else if (e.key === 'Enter') {
-  //     console.log( "enter");
-  //     handleDownload();
-  //   }
-
-  // };
-
 
   // 사각형 그리기 함수
   const startDrawingRectangle = ({ nativeEvent }) => {
