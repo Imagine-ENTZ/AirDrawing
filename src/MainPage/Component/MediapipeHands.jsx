@@ -8,6 +8,10 @@ import {
 import { Camera } from "@mediapipe/camera_utils/camera_utils";
 import "./MediapipeHands.css"
 
+import { download } from "./download.jsx";
+import { addBackgroundToCanvas } from "./addBackgroundToCanvas.jsx";
+
+
 function MediapipeHands() {
 
   const webcamRef = useRef(null);
@@ -99,7 +103,7 @@ function MediapipeHands() {
 
     const context = canvas.getContext("2d");
     context.lineCap = "round";
-    context.strokeStyle = "red";
+    context.strokeStyle = "black";
     context.lineWidth = 8;
     contextRef.current = context;
 
@@ -164,6 +168,7 @@ function MediapipeHands() {
     }
     else if (e.key === 'Enter') {
       console.log( "enter");
+      handleDownload();
     }
 
   };
@@ -203,6 +208,17 @@ function MediapipeHands() {
     setIsDrawing3(false);
     canvasRef2.current.focus();
   };
+
+
+  // 저장하기
+
+  const handleDownload = () => {
+    const saveData = getImg(canvasRef2);
+    download(saveData, `${new Date().toISOString()}.png`);
+  };
+
+  const getImg = (ref) =>
+  addBackgroundToCanvas(ref.current.canvasContainer.children[1], "#FFFFFF");
 
 
   return (
