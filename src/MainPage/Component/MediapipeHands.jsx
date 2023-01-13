@@ -96,6 +96,7 @@ function MediapipeHands() {
       minTrackingConfidence: 0.5,
     });
 
+    canvasRef2.current.focus();
     if (typeof webcamRef.current !== "undefined" && webcamRef.current !== null) {
       const camera = new Camera(webcamRef.current.video, {
         onFrame: async () => {
@@ -212,7 +213,14 @@ function MediapipeHands() {
       a.click();
   
     };
-
+    const spaceDown = (e) => {
+      if (e.key === ' ') {
+        console.log("space click");
+        handleDownload();
+      }
+  
+    };
+  
 
   return (
     <div>
@@ -253,6 +261,7 @@ function MediapipeHands() {
         ref={canvasRef2}
         mirrored={true}
         tabIndex={0}
+        onKeyDown={spaceDown}
         style={{
           position: "absolute",
           marginLeft: "auto",
@@ -271,6 +280,7 @@ function MediapipeHands() {
         onMouseMove={drawRectangle}
         onMouseUp={stopDrawingRectangle}
         onMouseLeave={stopDrawingRectangle}
+      
         style={{
           position: "absolute",
           marginLeft: "auto",
