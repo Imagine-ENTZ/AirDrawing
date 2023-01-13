@@ -12,12 +12,16 @@ function Main() {
     };
 
     return (
-        <div>
-            <p id="age">For Kids</p>
-            <p id="page-name">PlayGround</p>
-            <button id="start_button" onClick={navigateToLoginOrSignup}>Get Started</button>
-            <img id="line" src={line} alt="line"/>
-            <img id="home_image" src={homeimage} alt="homeimage"/>
+        <div className="main-container-main">
+            <div className="left-container-main">
+                <div className="age">For Kids</div>
+                <div className="page-name">PlayGround</div>
+                <img className="line-main" src={line} alt="line"/>
+                <button className="start-button" onClick={navigateToLoginOrSignup}>Get Started</button>
+            </div>
+            <div className="right-container-main">
+                <img className="home-image-main" src={homeimage} alt="homeimage"/>
+            </div>
         </div>
     );
 };

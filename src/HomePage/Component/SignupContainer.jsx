@@ -1,8 +1,16 @@
 import React from "react";
 import "../Signup.css";
 import line from '../img/line.png';
+import { useNavigate } from "react-router-dom";
 
 function SignupContainer() {
+
+    const navigate = useNavigate();
+    
+    const navigateToLoginAgain = () => {
+        navigate("/login");
+    };
+
       return (
         <div className="left-container">
         <div className="left-top-container">
@@ -35,7 +43,7 @@ function SignupContainer() {
                 <label className="label-class" for="Password-confirm">PASSWORD-CONFIRM</label>
             </div>
             </div>
-            <button className="register-button">REGISTER</button>
+            <button className="register-button" onClick={navigateToLoginAgain}>REGISTER</button>
 
         </div>
         </div>

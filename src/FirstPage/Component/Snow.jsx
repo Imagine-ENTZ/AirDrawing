@@ -3,7 +3,7 @@ import "../Lobby.css";
 function Snow() {
    
     return (
-        <div class="snow">
+        <div className="snow">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 10000" preserveAspectRatio="xMidYMax slice">
 		    <g fill="#FFF" fill-opacity=".15" transform="translate(55 42)">
 			   <g id="snow-bottom-layer">

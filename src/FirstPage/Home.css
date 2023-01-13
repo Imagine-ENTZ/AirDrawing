@@ -4,16 +4,50 @@ body {
     background-color: #060919;
 }
 
-#start_button {
+.main-container-main {
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+}
+
+.left-container-main {
+    width:48%;
+    height:100%;
+}
+.right-container-main {
+    width:52%;
+    height:100%;
+}
+
+.start-button {
     position:relative;
-    top:60px;
-    left:310px;
+    top:26%;
+    left:15%;
 
     border-color: blue;
     color: #fff;
     box-shadow: 0 0 40px 40px blue inset, 0 0 0 0 blue;
     transition: all 150ms ease-in-out;
 
+    margin:20px;
+    border-radius:28px;
+	border:1px solid white;
+	display:inline-block;
+	cursor:pointer;
+	background-color:transparent;
+    color:white;
+	text-decoration: none;
+    text-align: center;
+    text-transform: uppercase;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700; 
+	font-size:15px;
+	padding:17px 100px;
+
+    border-color: blue;
+    box-shadow: 0 0 40px 40px blue inset, 0 0 0 0 blue;
+    transition: all 150ms ease-in-out;
+/*
     box-sizing: border-box;
         appearance: none;
         background-color: transparent;
@@ -31,46 +65,50 @@ body {
         text-transform: uppercase;
         font-family: 'Montserrat', sans-serif;
         font-weight: 700;  
+        */
 }
 
-#start_button:hover {
+.start-button:hover {
     box-shadow: 0 0 10px 0 blue inset, 0 0 10px 4px blue;
 }
 
-#home_image {
-    width:600px;
-
-    position:absolute;
-    top:100px;
-    right: 150px;
+.start-button:focus {
+    box-shadow: 0 0 10px 0 blue inset, 0 0 10px 4px blue;
 }
 
-#line {
-    width:100px;
+.home-image-main {
+    width:80%;
 
-    position:absolute;
-    top:380px;
-    left:575px;
+    position: relative;
+    top:15%;
+}
+
+.line-main {
+    width:20%;
     
+    position:relative;
+    top:18%;
+    left:74.5%;
 }
 
-#age {
+.age {
     font-size: 25px;
     font-family: 'Space Grotesk', sans-serif;
     color: white;
 
     position:relative;
-    top:225px;
-    left:585px;
+    top:27%;
+    left:81%;
 }
 
-#page-name {
+.page-name {
     font-size: 90px;
     font-family: 'Space Grotesk', sans-serif;
     font-weight: bold;
     color: white;
 
     position:relative;
-    top:115px;
-    left:180px;
+    top:24%;
+    left:23%;
+
 }

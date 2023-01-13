@@ -5,6 +5,23 @@ body {
     background-color: #060919;
 }
 
+.main-container-menu {
+	display: flex;
+    width: 100vw;
+    height: 100vh;
+}
+
+.left-container-menu {
+	width:55%;
+	height:100%;
+
+}
+
+.right-container-menu {
+	width:45%;
+	height:100%;
+}
+
 .selection {
     margin:20px;
     border-radius:28px;
@@ -23,15 +40,20 @@ body {
     box-shadow: 0 0 10px 0 blue inset, 0 0 10px 4px blue;
 }
 
+.selection:focus {
+    box-shadow: 0 0 10px 0 blue inset, 0 0 10px 4px blue;
+}
+
 .safety {
     font-size: 50px;
     font-family: 'Space Grotesk', sans-serif;
     font-weight: bold;
     color: white;
 
-    position:absolute;
-    top:130px;
-    left:250px;
+	position: relative;
+	top:15%;
+	left:25%;
+
 }
 
 .sentence {
@@ -43,20 +65,20 @@ body {
     font-weight: bold;
     color: white;
 
-    position:relative;
-    top:130px;
-    left:-310px;
+	position:relative;
+	top:15%;
+	left:24%;
+
 }
 
 .button-list {
     text-align: center;
 
-    position:absolute;
-    top:220px;
-    right:320px;
+    position:relative;
+    top:25%;
 }
 
-#name {
+.user-name {
     color:#FF9B01;
 }
 

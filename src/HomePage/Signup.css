@@ -68,6 +68,11 @@ body {
 
 .input-class {
     display:flex;
+    background-color: transparent;
+}
+
+.input-class:focus {
+    background-color: transparent;
 }
 
 .contact-form {
@@ -134,5 +139,8 @@ body {
 }
 
 .register-button:hover {
+    box-shadow: 0 0 10px 0 blue inset, 0 0 10px 4px blue;
+}
+.register-button:focus {
     box-shadow: 0 0 10px 0 blue inset, 0 0 10px 4px blue;
 }
