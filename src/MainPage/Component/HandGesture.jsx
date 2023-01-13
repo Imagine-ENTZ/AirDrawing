@@ -1,3 +1,5 @@
+import * as constants from "../../utils/Constants"
+
 const calculateVectorize = (u, v) =>{
   let difference = [];
 
@@ -57,7 +59,7 @@ const getCosAngle = (u, v) => {
       getCosAngle(index_vector, middle_vector) < 0 &&
       getCosAngle(index_vector, ring_vector) < 0 &&
       getCosAngle(index_vector, pinky_vector) < 0)
-        return "DRAW";
+        return constants.DRAW;
 
-  return null;
+  return constants.HOVER;
 }
