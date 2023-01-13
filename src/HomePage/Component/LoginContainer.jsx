@@ -31,7 +31,7 @@ function LoginContainer() {
                 <label className="label-class" for="Password">PASSWORD</label>
             </div>
             </div>
-            <button className="register-button" onClick={navigateToLobby}>GET STARTED</button>
+            <button className="login-button" onClick={navigateToLobby}>GET STARTED</button>
         </div>
         </div>
     </div>

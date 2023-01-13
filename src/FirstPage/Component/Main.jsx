@@ -6,9 +6,11 @@ import { useNavigate } from "react-router-dom";
 
 function Main() {
     const navigate = useNavigate();
-    
+
+    // 제일 처음 화면에서 어디로 갈지..
     const navigateToLoginOrSignup = () => {
-        navigate("/login-or-signup");
+        navigate("/selection");
+        //navigate("/main");
     };
 
     return (

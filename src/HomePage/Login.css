@@ -124,7 +124,7 @@ button {
     outline: none;
 }
 
-.register-button {
+.login-button {
     margin:20px;
     border-radius:28px;
 	border:1px solid white;
@@ -143,9 +143,9 @@ button {
     transition: all 150ms ease-in-out;
 
     position:relative;
-    left:7.5%;
+    left:7.1%;
 }
 
-.register-button:hover {
+.login-button:hover {
     box-shadow: 0 0 10px 0 blue inset, 0 0 10px 4px blue;
 }
