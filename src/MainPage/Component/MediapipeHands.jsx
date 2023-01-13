@@ -10,6 +10,7 @@ import "./MediapipeHands.css"
 
 import { download } from "./download.jsx";
 import { addBackgroundToCanvas } from "./addBackgroundToCanvas.jsx";
+import { detectHandGesture } from "./HandGesture"
 
 
 function MediapipeHands() {
@@ -20,9 +21,10 @@ function MediapipeHands() {
   // 그리기 변수
   const canvasRef2 = useRef(null);
   const contextRef = useRef(null);
+  const HandGesture = useRef(null);
 
-  const isDrawing = useRef(false);
-  const [isDrawing1, setIsDrawing1] = useState(false);
+  // const isDrawing = useRef(false);
+  // const [isDrawing1, setIsDrawing1] = useState(false);
 
   const preFingerPositionX = useRef(null);
   const preFingerPositionY = useRef(null);
@@ -60,14 +62,19 @@ function MediapipeHands() {
 
   // 손그리기 캔버스
   useEffect(() => {
-    if (preFingerPositionX.current != null && preFingerPositionY.current != null && isDrawing1 === true) {
+    console.log(HandGesture.current)
+
+    // if (preFingerPositionX.current != null 
+    //     && preFingerPositionY.current != null ) {
+    //     && isDrawing1 === true) {
+    if(HandGesture.current === "DRAW"){
       contextRef.current.moveTo(fingerPosition.x, fingerPosition.y);
       contextRef.current.lineTo(preFingerPositionX.current, preFingerPositionY.current);
       contextRef.current.stroke();
     }
 
     if (contextRef.current) {
-      isDrawing.current = true;
+      // isDrawing.current = true;
       preFingerPositionX.current = fingerPosition.x;
       preFingerPositionY.current = fingerPosition.y;
     }
@@ -149,6 +156,7 @@ function MediapipeHands() {
       const x = parseInt(800 - results.multiHandLandmarks[0][8].x * 800);
       const y = parseInt(results.multiHandLandmarks[0][8].y * 600);
 
+      HandGesture.current = detectHandGesture(results.multiHandLandmarks[0]);  //현재 그리기 모드
       setFingerPosition({ x: x, y: y });
     }
     //save한 곳으로 이동
@@ -156,22 +164,22 @@ function MediapipeHands() {
   };
 
   // 스페이스바 누르면 그리기
-  const spaceDown = (e) => {
+  // const spaceDown = (e) => {
 
-    if (e.key === ' ' && isDrawing1 === false) {
-      console.log("start drawing");
-      setIsDrawing1(true);
-    }
-    else if (e.key === ' ' && isDrawing1 === true) {
-      console.log("stop drawing");
-      setIsDrawing1(false);
-    }
-    else if (e.key === 'Enter') {
-      console.log( "enter");
-      handleDownload();
-    }
+  //   if (e.key === ' ' && isDrawing1 === false) {
+  //     console.log("start drawing");
+  //     setIsDrawing1(true);
+  //   }
+  //   else if (e.key === ' ' && isDrawing1 === true) {
+  //     console.log("stop drawing");
+  //     setIsDrawing1(false);
+  //   }
+  //   else if (e.key === 'Enter') {
+  //     console.log( "enter");
+  //     handleDownload();
+  //   }
 
-  };
+  // };
 
 
   // 사각형 그리기 함수
@@ -257,7 +265,7 @@ function MediapipeHands() {
       <canvas
         className="canvas"
         ref={canvasRef2}
-        onKeyDown={spaceDown}
+        // onKeyDown={spaceDown}
         tabIndex={0}
         style={{
           position: "absolute",
