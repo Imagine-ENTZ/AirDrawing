@@ -72,10 +72,13 @@ body {
 }
 
 .input-class:focus {
-    background-color: transparent;
+    background-color: tr;
 }
 
 .contact-form {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700; 
+	font-size:15px;
     text-align: center;
     margin: 0 auto;
     width: 100%;

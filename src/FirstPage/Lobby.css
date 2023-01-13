@@ -12,13 +12,13 @@ body {
 }
 
 .left-container-menu {
-	width:55%;
+	width:57%;
 	height:100%;
 
 }
 
 .right-container-menu {
-	width:45%;
+	width:43%;
 	height:100%;
 }
 
@@ -30,7 +30,8 @@ body {
 	cursor:pointer;
 	background-color:transparent;
     color:white;
-	font-family:Arial;
+	font-family: 'Montserrat', sans-serif;
+    font-weight: 700; 
 	font-size:15px;
 	padding:17px 100px;
     display:flex;
@@ -51,8 +52,8 @@ body {
     color: white;
 
 	position: relative;
-	top:15%;
-	left:25%;
+	top:16%;
+	left:35%;
 
 }
 
@@ -66,8 +67,8 @@ body {
     color: white;
 
 	position:relative;
-	top:15%;
-	left:24%;
+	top:17%;
+	left:35%;
 
 }
 
@@ -75,7 +76,7 @@ body {
     text-align: center;
 
     position:relative;
-    top:25%;
+    top:26%;
 }
 
 .user-name {

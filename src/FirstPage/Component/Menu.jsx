@@ -21,10 +21,10 @@ function Menu() {
             </div>
             <div className="right-container-menu">
                 <div className="button-list">
-                    <button onClick={navigateToMain} className="selection button1">Follow-up</button>
-                    <button className="selection button2">Follow-up</button>
-                    <button className="selection button3">Follow-up</button>
-                    <button className="selection button4">Follow-up</button>
+                    <button onClick={navigateToMain} className="selection button1">FOLLOW-UP</button>
+                    <button className="selection button2">FOLLOW-UP</button>
+                    <button className="selection button3">FOLLOW-UP</button>
+                    <button className="selection button4">FOLLOW-UP</button>
                 </div>
             </div>
         </div>

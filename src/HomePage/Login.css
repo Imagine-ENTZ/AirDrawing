@@ -106,9 +106,22 @@ body {
 
 .input-class:focus {
     box-shadow: 0 0 10px 0 blue inset, 0 0 10px 4px blue;
+    background-color: transparent;
 }
 .input-class:hover {
     box-shadow: 0 0 10px 0 blue inset, 0 0 10px 4px blue;
+}
+
+input:-webkit-autofill { 
+    -webkit-box-shadow: 0 0 0 30px transparent inset ; 
+    -webkit-text-fill-color: white; 
+}
+input:-webkit-autofill, input:-webkit-autofill:hover, input:-webkit-autofill:focus, input:-webkit-autofill:active { 
+    transition: background-color 5000s ease-in-out 0s; 
+}
+
+button {
+    outline: none;
 }
 
 .register-button {
@@ -119,7 +132,8 @@ body {
 	cursor:pointer;
 	background-color:transparent;
     color:white;
-	font-family:Arial;
+	font-family: 'Montserrat', sans-serif;
+    font-weight: 700; 
 	font-size:15px;
 	padding:17px 100px;
     display:flex;

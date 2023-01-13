@@ -1,6 +1,6 @@
 import React from "react";
 import "../Home.css";
-import homeimage from '../img/mainimagenone.png';
+import homeimage from '../img/mainimagetrue.png';
 import line from '../img/line.png';
 import { useNavigate } from "react-router-dom";
 
