@@ -5,8 +5,6 @@ import { drawConnectors, drawLandmarks } from "@mediapipe/drawing_utils/drawing_
 import { Camera } from "@mediapipe/camera_utils/camera_utils";
 import "./MediapipeHands.css"
 
-import { download } from "./download.jsx";
-import { addBackgroundToCanvas } from "./addBackgroundToCanvas.jsx";
 import { detectHandGesture } from "./HandGesture"
 import * as constants from "../../utils/Constants"
 
@@ -51,6 +49,8 @@ function MediapipeHands() {
     contextRef3.current = context;
 
     const canvasOffSet = canvas.getBoundingClientRect();
+
+    console.log(canvasOffSet);
     canvasOffSetX.current = canvasOffSet.top;
     canvasOffSetY.current = canvasOffSet.left;
   }, []);
@@ -171,8 +171,8 @@ function MediapipeHands() {
     nativeEvent.preventDefault();
     nativeEvent.stopPropagation();
 
-    startX.current = nativeEvent.clientX - canvasOffSetX.current;
-    startY.current = nativeEvent.clientY - canvasOffSetY.current;
+    startX.current = nativeEvent.clientX - canvasOffSetY.current;
+    startY.current = nativeEvent.clientY - canvasOffSetX.current ;
 
     setIsDrawing3(true);
   };
@@ -185,11 +185,12 @@ function MediapipeHands() {
     nativeEvent.preventDefault();
     nativeEvent.stopPropagation();
 
-    const newMouseX = nativeEvent.clientX - canvasOffSetX.current;
-    const newMouseY = nativeEvent.clientY - canvasOffSetY.current;
+    const newMouseX = nativeEvent.clientX - canvasOffSetY.current;
+    const newMouseY = nativeEvent.clientY - canvasOffSetX.current;
 
     const rectWidht = newMouseX - startX.current;
     const rectHeight = newMouseY - startY.current;
+    
 
     contextRef3.current.clearRect(0, 0, canvasRef3.current.width, canvasRef3.current.height);
 
@@ -201,16 +202,16 @@ function MediapipeHands() {
     canvasRef2.current.focus();
   };
 
-
-  // 저장하기
-
-  const handleDownload = () => {
-    const saveData = getImg(canvasRef2);
-    download(saveData, `${new Date().toISOString()}.png`);
-  };
-
-  const getImg = (ref) =>
-  addBackgroundToCanvas(ref.current.canvasContainer.children[1], "#FFFFFF");
+    // 저장하기
+    const handleDownload = () => {
+      const image = canvasRef2.current.toDataURL("image/png");
+  
+      const a = document.createElement("a");
+      a.href = image;
+      a.setAttribute("download", "hong.png");
+      a.click();
+  
+    };
 
 
   return (
@@ -234,6 +235,7 @@ function MediapipeHands() {
       />
       <canvas
         ref={canvasRef}
+        mirrored={true}
         style={{
           position: "absolute",
           marginLeft: "auto",
@@ -249,7 +251,7 @@ function MediapipeHands() {
       <canvas
         className="canvas"
         ref={canvasRef2}
-        // onKeyDown={spaceDown}
+        mirrored={true}
         tabIndex={0}
         style={{
           position: "absolute",

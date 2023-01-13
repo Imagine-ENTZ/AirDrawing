@@ -53,7 +53,7 @@ const getCosAngle = (u, v) => {
   let ring_vector = calculateVectorize(landmarks[14], landmarks[16])
   let pinky_vector = calculateVectorize(landmarks[18], landmarks[20])
 
-  console.log(getCosAngle(palm_to_index_vector, index_vector))
+  // console.log(getCosAngle(palm_to_index_vector, index_vector))
 
   if( getCosAngle(palm_to_index_vector, index_vector) > threshhold && 
       getCosAngle(index_vector, middle_vector) < 0 &&
