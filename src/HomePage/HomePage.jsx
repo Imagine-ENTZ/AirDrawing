@@ -1,5 +1,6 @@
 import TopBanner from "./Component/TopBanner";
 import MainHome from "./Component/MainHome";
+import Snow from "./Component/SnowCopy";
 
 const styles = {
   
@@ -11,9 +12,12 @@ const styles = {
 }
 function HomePage() {
     return (
+        <div className="hero">
+            <Snow />
         <div className="main_homepage">
             <TopBanner/>
             <MainHome/>
+        </div>
         </div>
     )
 }

@@ -1,6 +1,6 @@
 import React from "react";
-import "../Lobby.css";
-function Snow() {
+import "../SnowCopy.css";
+function SnowCopy() {
    
     return (
         <div className="snow">
@@ -78,4 +78,4 @@ function Snow() {
     );
 };
 
-export default Snow;
+export default SnowCopy;
