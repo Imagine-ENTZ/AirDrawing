@@ -1,0 +1,21 @@
+
+.main_wrap{
+    height: 100%;
+    background-color: chartreuse;
+}
+.webcam_wrap{
+    background-color: brown;
+    height: 100%;
+    position: relative;
+}  
+.canvas {
+   
+}
+
+
+
+.test_inner {
+    /* background-color: blueviolet; */
+    border: 2px solid blueviolet;
+    background-color: aliceblue;
+}

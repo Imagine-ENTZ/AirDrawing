@@ -5,7 +5,6 @@ import LobbyPage from "./FirstPage/Lobby.jsx";
 import LoginPage from "./HomePage/Login.jsx";
 import SignupPage from "./HomePage/Signup.jsx";
 import SelectionPage from "./FirstPage/Selection.jsx";
-
 import { Routes, Route, BrowserRouter } from "react-router-dom";
 
 function App() {
