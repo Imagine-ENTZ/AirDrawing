@@ -7,7 +7,6 @@ import SignupPage from "./HomePage/Signup.jsx";
 import SelectionPage from "./FirstPage/Selection.jsx";
 import { Routes, Route, BrowserRouter } from "react-router-dom";
 
-import TextConvertPage from "./textConvert.jsx"
 
 function App() {
   return (
@@ -17,7 +16,6 @@ function App() {
         <Route path="/lobby" element={<LobbyPage />} />
         <Route path="/login-or-signup" element={<HomePage />} />
         <Route path="/main" element={<MainPage />} />
-        <Route path="/capture" element = {<TextConvertPage/>}/>
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/selection" element={<SelectionPage />} />

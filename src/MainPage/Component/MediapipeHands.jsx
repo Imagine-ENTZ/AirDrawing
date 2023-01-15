@@ -8,6 +8,7 @@ import "./MediapipeHands.css"
 import { detectHandGesture } from "./HandGesture"
 import * as constants from "../../utils/Constants"
 
+import Tesseract from 'tesseract.js';
 
 function MediapipeHands() {
 
@@ -57,7 +58,7 @@ function MediapipeHands() {
 
   // 손그리기 캔버스
   useEffect(() => {
-    switch(HandGesture.current){
+    switch (HandGesture.current) {
       case constants.DRAW:
         contextRef.current.moveTo(fingerPosition.x, fingerPosition.y);
         contextRef.current.lineTo(preFingerPositionX.current, preFingerPositionY.current);
@@ -77,7 +78,7 @@ function MediapipeHands() {
     }
 
     //cam 화면을 벗어나면 
-    if(fingerPosition.x < 0 || fingerPosition.x > constants.CANVAS_WIDTH || fingerPosition.y < 0 || fingerPosition.y > constants.CANVAS_HEIGHT){
+    if (fingerPosition.x < 0 || fingerPosition.x > constants.CANVAS_WIDTH || fingerPosition.y < 0 || fingerPosition.y > constants.CANVAS_HEIGHT) {
       preFingerPositionX.current = null;
       preFingerPositionY.current = null;
     }
@@ -114,7 +115,7 @@ function MediapipeHands() {
 
     const context = canvas.getContext("2d");
     context.lineCap = "round";
-    context.strokeStyle = "black";
+    context.strokeStyle = "blue";
     context.lineWidth = 8;
     contextRef.current = context;
 
@@ -173,7 +174,7 @@ function MediapipeHands() {
     nativeEvent.stopPropagation();
 
     startX.current = nativeEvent.clientX - canvasOffSetY.current;
-    startY.current = nativeEvent.clientY - canvasOffSetX.current ;
+    startY.current = nativeEvent.clientY - canvasOffSetX.current;
 
     setIsDrawing3(true);
   };
@@ -191,7 +192,7 @@ function MediapipeHands() {
 
     const rectWidht = newMouseX - startX.current;
     const rectHeight = newMouseY - startY.current;
-    
+
 
     contextRef3.current.clearRect(0, 0, canvasRef3.current.width, canvasRef3.current.height);
 
@@ -203,24 +204,48 @@ function MediapipeHands() {
     canvasRef2.current.focus();
   };
 
-    // 저장하기
-    const handleDownload = () => {
+  // 이미지 저장
+  const spaceDown = (e) => {
+    if (e.key === ' ') {
+      console.log("space click");
       const image = canvasRef2.current.toDataURL("image/png");
-  
+
       const a = document.createElement("a");
       a.href = image;
       a.setAttribute("download", "hong.png");
       a.click();
+      saveImage(image);
+    }
+
+  };
+
+  const saveImage = (imgDataUrl) => {
   
-    };
-    const spaceDown = (e) => {
-      if (e.key === ' ') {
-        console.log("space click");
-        handleDownload();
-      }
+    var blobBin = atob(imgDataUrl.split(',')[1]);	// base64 데이터 디코딩
+    var array = [];
+    for (var i = 0; i < blobBin.length; i++) {
+        array.push(blobBin.charCodeAt(i));
+    }
+
+    var file = new Blob([new Uint8Array(array)], {type: 'image/png'});	// Blob 생성
+    const image = URL.createObjectURL(file);
   
-    };
-  
+    Tesseract.recognize(image, 'eng', {
+      logger: (m) => {
+        console.log(m);
+      
+      },
+    })
+      .catch((err) => {
+        console.error(err);
+      })
+      .then((result) => {
+        console.log("결과값 + " + result.data.text);
+      });
+ 
+
+}
+
 
   return (
     <div>
@@ -280,7 +305,7 @@ function MediapipeHands() {
         onMouseMove={drawRectangle}
         onMouseUp={stopDrawingRectangle}
         onMouseLeave={stopDrawingRectangle}
-      
+
         style={{
           position: "absolute",
           marginLeft: "auto",
