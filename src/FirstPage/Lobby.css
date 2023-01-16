@@ -5,6 +5,23 @@ body {
     background-color: #060919;
 }
 
+.main-container-menu {
+	display: flex;
+    width: 100vw;
+    height: 100vh;
+}
+
+.left-container-menu {
+	width:57%;
+	height:100%;
+
+}
+
+.right-container-menu {
+	width:43%;
+	height:100%;
+}
+
 .selection {
     margin:20px;
     border-radius:28px;
@@ -13,7 +30,8 @@ body {
 	cursor:pointer;
 	background-color:transparent;
     color:white;
-	font-family:Arial;
+	font-family: 'Montserrat', sans-serif;
+    font-weight: 700; 
 	font-size:15px;
 	padding:17px 100px;
     display:flex;
@@ -23,15 +41,20 @@ body {
     box-shadow: 0 0 10px 0 blue inset, 0 0 10px 4px blue;
 }
 
+.selection:focus {
+    box-shadow: 0 0 10px 0 blue inset, 0 0 10px 4px blue;
+}
+
 .safety {
     font-size: 50px;
     font-family: 'Space Grotesk', sans-serif;
     font-weight: bold;
     color: white;
 
-    position:absolute;
-    top:130px;
-    left:250px;
+	position: relative;
+	top:16%;
+	left:35%;
+
 }
 
 .sentence {
@@ -43,20 +66,20 @@ body {
     font-weight: bold;
     color: white;
 
-    position:relative;
-    top:130px;
-    left:-310px;
+	position:relative;
+	top:17%;
+	left:35%;
+
 }
 
 .button-list {
     text-align: center;
 
-    position:absolute;
-    top:220px;
-    right:320px;
+    position:relative;
+    top:26%;
 }
 
-#name {
+.user-name {
     color:#FF9B01;
 }
 

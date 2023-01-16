@@ -5,7 +5,7 @@ import Menu from "./Component/Menu.jsx";
 
 function Lobby() {
     return (
-		<div class="hero">
+		<div className="hero">
 			<Snow/>
 			<Menu/>
 		</div>

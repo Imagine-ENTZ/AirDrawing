@@ -16,7 +16,7 @@ function MainHome() {
                 <div className='MainHome_right_title'>Study words while playing!!!</div>
                 <div className='main_login_button'>
 
-                    <Link to = {`/main`}>
+                    <Link to = {`/login`}>
                     <AwesomeButton
                         className='mainButton'
                         type="secondary"
@@ -27,10 +27,12 @@ function MainHome() {
                     
                 </div>
 
-                <AwesomeButton
+                <Link to = {`/signup`}>
+                <AwesomeButton 
                     className='mainButton'
                     type="primary">Register
                 </AwesomeButton>
+                </Link>
 
 
             </div>

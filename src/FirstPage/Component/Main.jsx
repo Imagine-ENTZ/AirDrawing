@@ -1,24 +1,29 @@
 import React from "react";
 import "../Home.css";
-import homeimage from '../img/mainimagenone.png';
+import homeimage from '../img/mainimagetrue.png';
 import line from '../img/line.png';
 import { useNavigate } from "react-router-dom";
 
 function Main() {
-
     const navigate = useNavigate();
-    
-    const navigateToLobby = () => {
-        navigate("/lobby");
+
+    // 제일 처음 화면에서 어디로 갈지..
+    const navigateToLoginOrSignup = () => {
+        navigate("/selection");
+        //navigate("/main");
     };
 
     return (
-        <div>
-            <p id="age">For Kids</p>
-            <p id="page-name">PlayGround</p>
-            <button id="start_button" onClick={navigateToLobby}>Get Started</button>
-            <img id="line" src={line} alt="line"/>
-            <img id="home_image" src={homeimage} alt="homeimage"/>
+        <div className="main-container-main">
+            <div className="left-container-main">
+                <div className="age">For Kids</div>
+                <div className="page-name">PlayGround</div>
+                <img className="line-main" src={line} alt="line"/>
+                <button className="start-button" onClick={navigateToLoginOrSignup}>Get Started</button>
+            </div>
+            <div className="right-container-main">
+                <img className="home-image-main" src={homeimage} alt="homeimage"/>
+            </div>
         </div>
     );
 };
