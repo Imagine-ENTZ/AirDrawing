@@ -29,13 +29,16 @@ function MediapipeHands() {
     y: 0
   });
 
+
   // 손그리기 캔버스
   useEffect(() => {
     switch (HandGesture.current) {
       case constants.DRAW:
+        contextRef.current.beginPath();
         contextRef.current.moveTo(fingerPosition.x, fingerPosition.y);
         contextRef.current.lineTo(preFingerPositionX.current, preFingerPositionY.current);
         contextRef.current.stroke();
+        contextRef.current.closePath();
         break;
       // case constants.ERASE:
       //   console.log("ERASE");
@@ -82,11 +85,13 @@ function MediapipeHands() {
       camera.start();
     }
 
+    
     const canvas = canvasRef2.current;
     canvas.height = constants.CANVAS_HEIGHT;
     canvas.width = constants.CANVAS_WIDTH;
 
     const context = canvas.getContext("2d");
+    context.globalAlpha = 0.1;
     context.lineCap = "round";
     context.strokeStyle = "blue";
     context.lineWidth = 4;
