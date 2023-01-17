@@ -9,6 +9,8 @@ import { detectHandGesture } from "./HandGesture"
 import * as constants from "../../utils/Constants"
 
 import Tesseract from 'tesseract.js';
+// import cv from "@techstark/opencv-js"
+
 
 function MediapipeHands() {
 
@@ -45,8 +47,8 @@ function MediapipeHands() {
 
     const context = canvas.getContext("2d");
     context.lineCap = "round";
-    context.strokeStyle = "black";
-    context.lineWidth = 5;
+    context.strokeStyle = "blue";
+    context.lineWidth = 6;
     contextRef3.current = context;
 
     const canvasOffSet = canvas.getBoundingClientRect();
@@ -123,7 +125,7 @@ function MediapipeHands() {
     const context = canvas.getContext("2d");
     context.lineCap = "round";
     context.strokeStyle = "blue";
-    context.lineWidth = 8;
+    context.lineWidth = 30;
     contextRef.current = context;
 
     hands.onResults(onResults);
@@ -216,7 +218,10 @@ function MediapipeHands() {
   const spaceDown = (e) => {
     if (e.key === ' ') {
       console.log("space click");
-      const image = canvasRef2.current.toDataURL("image/png");
+      //const image = canvasRef2.current.toDataURL("image/png");
+
+      const image = converToGray();
+      //const image = fromCanvasToMat.toDataURL("image/png");
 
       const a = document.createElement("a");
       a.href = image;
@@ -228,7 +233,8 @@ function MediapipeHands() {
   };
 
   const saveImage = (imgDataUrl) => {
-  
+
+
     var blobBin = atob(imgDataUrl.split(',')[1]);	// base64 데이터 디코딩
     var array = [];
     for (var i = 0; i < blobBin.length; i++) {
@@ -250,8 +256,38 @@ function MediapipeHands() {
       .then((result) => {
         console.log("결과값 + " + result.data.text);
       });
+  }
+/*
+  const fromCanvasToMat = () => {
 
-}
+    let canvas1 = canvasRef2.current;
+    let ctx = canvas1.getContext('2d')
+    let imgData = ctx.getImageData(0,0,canvas1.width,canvas1.height)
+    let src = cv.matFromImageData(imgData)
+    return src
+  }*/
+// 흑백 처리 함수
+  const converToGray = () => {
+    const canvas = canvasRef2.current;
+    const ctx = canvas.getContext('2d');
+    
+    //canvas.width = 50;
+    //canvas.height = 50;
+    let imgData = ctx.getImageData(0, 0, canvas.width, canvas.height); 
+    let pixels = imgData.data;
+    for (var i = 0; i < pixels.length; i += 4) {
+
+      let lightness = parseInt((pixels[i] + pixels[i + 1] + pixels[i + 2]) / 3);
+   
+      pixels[i] = lightness;
+      pixels[i + 1] = lightness;
+      pixels[i + 2] = lightness;
+    }
+    ctx.putImageData(imgData, 0, 0); // 화면에 흑백 변환 나타내줌
+    
+    
+    return canvas.toDataURL('image/png');
+  }
 
   return (
     <div>
