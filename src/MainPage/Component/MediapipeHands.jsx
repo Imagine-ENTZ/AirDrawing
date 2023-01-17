@@ -4,16 +4,14 @@ import { Hands, HAND_CONNECTIONS } from "@mediapipe/hands/hands";
 import { drawConnectors, drawLandmarks } from "@mediapipe/drawing_utils/drawing_utils";
 import { Camera } from "@mediapipe/camera_utils/camera_utils";
 import "./MediapipeHands.css"
-
-import { detectHandGesture } from "./HandGesture"
-import * as constants from "../../utils/Constants"
+import { detectHandGesture } from "./HandGesture";
+import * as constants from "../../utils/Constants";
 
 import Tesseract from 'tesseract.js';
 // import cv from "@techstark/opencv-js"
 
 
 function MediapipeHands() {
-
   const webcamRef = useRef(null);
   const canvasRef = useRef(null);
 
@@ -124,8 +122,8 @@ function MediapipeHands() {
 
     const context = canvas.getContext("2d");
     context.lineCap = "round";
-    context.strokeStyle = "white";
-    context.lineWidth = 25;
+    context.strokeStyle = "blue";
+    context.lineWidth = 15;
     contextRef.current = context;
 
     hands.onResults(onResults);
@@ -258,15 +256,16 @@ function MediapipeHands() {
       });
   }
 
-// 흑백 처리 함수
+  // 흑백 처리 함수
   const converToGray = () => {
     const canvas = canvasRef2.current;
     const ctx = canvas.getContext('2d');
     
     let imgData = ctx.getImageData(0, 0, canvas.width, canvas.height); 
     let pixels = imgData.data;
-    for (var i = 0; i < pixels.length; i += 4) {
 
+    for (var i = 0; i < pixels.length; i += 4) {
+  
       let lightness = parseInt((pixels[i] + pixels[i + 1] + pixels[i + 2]) / 3);
    
       pixels[i] = lightness;
@@ -276,7 +275,7 @@ function MediapipeHands() {
     //ctx.putImageData(imgData, 0, 0); 
     return canvas.toDataURL('image/png');
   }
-
+  
   // 이미지 전처리
   const preprocessImage = (canvas) => {
     const level = 0.4;
@@ -290,11 +289,11 @@ function MediapipeHands() {
     thresholdFilter(image.data, level);
   
     ctx.putImageData(image, 0, 0);
-
-    //return canvas.toDataURL('image/png');
-    return converToGray();
+  
+    return canvas.toDataURL('image/png');
+    //return converToGray();
    }
-
+  
    ////////////////////// 이미지 전처리
    function thresholdFilter(pixels, level) {
     if (level === undefined) {
@@ -307,15 +306,15 @@ function MediapipeHands() {
       const b = pixels[i + 2];
       const gray = 0.2126 * r + 0.7152 * g + 0.0722 * b;
       let val;
-      if (gray >= thresh) {
-        val = 255;
-      } else {
+      //if (gray >= thresh) {
+      //  val = 255;
+      //} else {
         val = 0;
-      }
+      //}
       pixels[i] = pixels[i + 1] = pixels[i + 2] = val;
     }
   }
-
+  
    function getARGB (data, i) {
     const offset = i * 4;
     return (
@@ -325,7 +324,7 @@ function MediapipeHands() {
       (data[offset + 2] & 0x000000ff)
     );
   };
-
+  
   function setPixels (pixels, data) {
     let offset = 0;
     for (let i = 0, al = pixels.length; i < al; i++) {
@@ -336,18 +335,18 @@ function MediapipeHands() {
       pixels[offset + 3] = (data[i] & 0xff000000) >>> 24;
     }
   };
-
+  
   // internal kernel stuff for the gaussian blur filter
   let blurRadius;
   let blurKernelSize;
   let blurKernel;
   let blurMult;
-
+  
   // from https://github.com/processing/p5.js/blob/main/src/image/filters.js
   function buildBlurKernel(r) {
   let radius = (r * 3.5) | 0;
   radius = radius < 1 ? 1 : radius < 248 ? radius : 248;
-
+  
   if (blurRadius !== radius) {
     blurRadius = radius;
     blurKernelSize = (1 + blurRadius) << 1;
@@ -356,10 +355,10 @@ function MediapipeHands() {
     for (let l = 0; l < blurKernelSize; l++) {
       blurMult[l] = new Int32Array(256);
     }
-
+  
     let bk, bki;
     let bm, bmi;
-
+  
     for (let i = 1, radiusi = radius - 1; i < radius; i++) {
       blurKernel[radius + i] = blurKernel[radiusi] = bki = radiusi * radiusi;
       bm = blurMult[radius + i];
@@ -370,15 +369,15 @@ function MediapipeHands() {
     }
     bk = blurKernel[radius] = radius * radius;
     bm = blurMult[radius];
-
+  
     for (let k = 0; k < 256; k++) {
       bm[k] = bk * k;
     }
   }
-}
-
-// from https://github.com/processing/p5.js/blob/main/src/image/filters.js
-function blurARGB(pixels, canvas, radius) {
+  }
+  
+  // from https://github.com/processing/p5.js/blob/main/src/image/filters.js
+  function blurARGB(pixels, canvas, radius) {
   const width = canvas.width;
   const height = canvas.height;
   const numPackedPixels = width * height;
@@ -471,27 +470,28 @@ function blurARGB(pixels, canvas, radius) {
     ym++;
   }
   setPixels(pixels, argb);
-};
-
-function invertColors(pixels) {
+  };
+  
+  function invertColors(pixels) {         
+  
   for (var i = 0; i < pixels.length; i+= 4) {
-    pixels[i] = pixels[i] ^ 255; // Invert Red
-    pixels[i+1] = pixels[i+1] ^ 255; // Invert Green
-    pixels[i+2] = pixels[i+2] ^ 255; // Invert Blue
+      pixels[i] = pixels[i] ^ 255; // Invert Red
+      pixels[i+1] = pixels[i+1] ^ 255; // Invert Green
+      pixels[i+2] = pixels[i+2] ^ 255; // Invert Blue
   }
-}
-// from https://github.com/processing/p5.js/blob/main/src/image/filters.js
-function dilate(pixels, canvas) {
- let currIdx = 0;
- const maxIdx = pixels.length ? pixels.length / 4 : 0;
- const out = new Int32Array(maxIdx);
- let currRowIdx, maxRowIdx, colOrig, colOut, currLum;
-
- let idxRight, idxLeft, idxUp, idxDown;
- let colRight, colLeft, colUp, colDown;
- let lumRight, lumLeft, lumUp, lumDown;
-
- while (currIdx < maxIdx) {
+  }
+  // from https://github.com/processing/p5.js/blob/main/src/image/filters.js
+  function dilate(pixels, canvas) {
+  let currIdx = 0;
+  const maxIdx = pixels.length ? pixels.length / 4 : 0;
+  const out = new Int32Array(maxIdx);
+  let currRowIdx, maxRowIdx, colOrig, colOut, currLum;
+  
+  let idxRight, idxLeft, idxUp, idxDown;
+  let colRight, colLeft, colUp, colDown;
+  let lumRight, lumLeft, lumUp, lumDown;
+  
+  while (currIdx < maxIdx) {
    currRowIdx = currIdx;
    maxRowIdx = currIdx + canvas.width;
    while (currIdx < maxRowIdx) {
@@ -500,7 +500,7 @@ function dilate(pixels, canvas) {
      idxRight = currIdx + 1;
      idxUp = currIdx - canvas.width;
      idxDown = currIdx + canvas.width;
-
+  
      if (idxLeft < currRowIdx) {
        idxLeft = currIdx;
      }
@@ -517,7 +517,7 @@ function dilate(pixels, canvas) {
      colLeft = getARGB(pixels, idxLeft);
      colDown = getARGB(pixels, idxDown);
      colRight = getARGB(pixels, idxRight);
-
+  
      //compute luminance
      currLum =
        77 * ((colOrig >> 16) & 0xff) +
@@ -539,7 +539,7 @@ function dilate(pixels, canvas) {
        77 * ((colDown >> 16) & 0xff) +
        151 * ((colDown >> 8) & 0xff) +
        28 * (colDown & 0xff);
-
+  
      if (lumLeft > currLum) {
        colOut = colLeft;
        currLum = lumLeft;
@@ -558,13 +558,9 @@ function dilate(pixels, canvas) {
      }
      out[currIdx++] = colOut;
    }
- }
- setPixels(pixels, out);
-};
-
-/////////////////////////////
-  
-
+  }
+  setPixels(pixels, out);
+  };
 
   return (
     <div>
