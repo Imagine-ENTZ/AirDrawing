@@ -18,6 +18,10 @@ function Canvas() {
   const contextRef = useRef(null);
   const HandGesture = useRef(null);
 
+  //현재 시점 그리기 변수
+  const pointOfContextRef = useRef(null);
+  const pointOfCanvasRef = useRef(null);
+
   const preFingerPositionX = useRef(null);
   const preFingerPositionY = useRef(null);
   const [fingerPosition, setFingerPosition] = useState({
@@ -106,13 +110,23 @@ function Canvas() {
     context.strokeStyle = "orange";
     context.lineWidth = 8;
 
-    let img = new Image();
-    img.src = A
-    img.onload = () => {
-      context.drawImage(img, 0, 0, canvas.width, canvas.height);
-    }
-    context.fillRect(0, 0, canvas.width, canvas.height);
+    // let img = new Image();
+    // img.src = A
+    // img.onload = () => {
+    //   context.drawImage(img, 0, 0, canvas.width, canvas.height);
+    // }
+    // context.fillRect(0, 0, canvas.width, canvas.height);
+
     contextRef.current = context;
+    
+    const pointOfCanvas = pointOfCanvasRef.current;
+    pointOfCanvas.width = windowSize.width;
+    pointOfCanvas.height = windowSize.height;
+    const pointOfContext = pointOfCanvas.getContext("2d");
+    // pointOfContext.lineCap = "round";
+    // pointOfContext.strokeStyle = "orange";
+    // pointOfContext.lineWidth = 8;
+    pointOfContextRef.current = pointOfContext;
   }, []);
 
   //윈도우 화면 resize시 캔버스와
@@ -140,7 +154,6 @@ function Canvas() {
     const canvasCtx = canvasElement.getContext("2d");
     canvasElement.width = videoWidth;
     canvasElement.height = videoHeight;
-    console.log()
 
     canvasCtx.save(); //현재상태를 저장
     canvasCtx.clearRect(0, 0, videoWidth, videoHeight);   // 직사각형 영역의 픽셀을 투명한 검은색으로 설정
@@ -172,15 +185,27 @@ function Canvas() {
 
       HandGesture.current = detectHandGesture(results.multiHandLandmarks[0]);  //현재 그리기 모드
       setFingerPosition({ x: x, y: y });
+
+      let radius = 20;
+
+      pointOfContextRef.current.clearRect(0, 0, windowSize.width, windowSize.height);
+      pointOfContextRef.current.beginPath();
+      pointOfContextRef.current.arc(x, y, radius, 0, 2 * Math.PI, false);
+      pointOfContextRef.current.lineWidth = 3;
+      pointOfContextRef.current.strokeStyle = '#ffffff';
+      pointOfContextRef.current.stroke();
+      pointOfContextRef.current.closePath();
     }
     //save한 곳으로 이동
     canvasCtx.restore();
 
+    // let radius = 20;
+    // contextRef.current.strokeStyle = "orange"
     // contextRef.current.save();
     // contextRef.current.beginPath();
     // contextRef.current.arc(fingerPosition.x, fingerPosition.y, radius, 0, 2*Math.PI, true);
     // contextRef.current.clip();
-    // // contextRef.current.clearRect(fingerPosition.x - radius, fingerPosition.y - radius, radius*2, radius*2);
+    // contextRef.current.drawImage(fingerPosition.x - radius, fingerPosition.y - radius, radius*2, radius*2);
     // contextRef.current.restore();
   };
 
@@ -223,6 +248,21 @@ function Canvas() {
       </canvas>
       <canvas
         ref={canvasRef2}
+        mirrored={true}
+        style={{
+          position: "absolute",
+          top: "0",
+          left: "0",
+          textAlign: "center",
+          zindex: 9,
+          width: "100%",
+          height: "100%",
+          // objectFit: "cover", 
+          // objectPosition: "center"
+        }}>
+      </canvas>
+      <canvas
+        ref={pointOfCanvasRef}
         mirrored={true}
         style={{
           position: "absolute",
