@@ -5,6 +5,7 @@ import LobbyPage from "./FirstPage/Lobby.jsx";
 import LoginPage from "./HomePage/Login.jsx";
 import SignupPage from "./HomePage/Signup.jsx";
 import SelectionPage from "./FirstPage/Selection.jsx";
+import WordTracingPage from './wordtracing/WordTracingPage.jsx';
 import { Routes, Route, BrowserRouter } from "react-router-dom";
 
 
@@ -19,6 +20,8 @@ function App() {
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/selection" element={<SelectionPage />} />
+        <Route path="/word-tracing" element={<WordTracingPage />} />
+
         {/* <Route path="/detail/:id" element={<Detail />} />
       <Route path="/mypage/*" element={<MyPage />} /> */}
       </Routes>

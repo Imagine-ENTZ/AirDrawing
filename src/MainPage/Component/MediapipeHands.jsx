@@ -62,7 +62,6 @@ function MediapipeHands() {
 
     switch(HandGesture.current){
       case constants.DRAW:
-        contextRef.current.fillStyle = "#"
         contextRef.current.beginPath();
         contextRef.current.moveTo(fingerPosition.x, fingerPosition.y);
         contextRef.current.lineTo(preFingerPositionX.current, preFingerPositionY.current);
@@ -138,7 +137,6 @@ function MediapipeHands() {
 
     canvasElement.width = videoWidth;
     canvasElement.height = videoHeight;
-
     canvasCtx.save(); //현재상태를 저장
     canvasCtx.clearRect(0, 0, videoWidth, videoHeight);   // 직사각형 영역의 픽셀을 투명한 검은색으로 설정
     canvasCtx.translate(videoWidth, 0); // 비디오 가로만큼 이동해서 손그릴 캔버스를 웹캠과 일치하도록 설정
