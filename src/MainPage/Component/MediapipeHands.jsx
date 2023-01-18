@@ -5,7 +5,9 @@ import { drawConnectors, drawLandmarks } from "@mediapipe/drawing_utils/drawing_
 import { Camera } from "@mediapipe/camera_utils/camera_utils";
 import "./MediapipeHands.css"
 import { detectHandGesture } from "./HandGesture";
+import frame from "./react-frame.png";
 import * as constants from "../../utils/Constants";
+import ReactCrop from 'react-image-crop';
 
 import Tesseract from 'tesseract.js';
 // import cv from "@techstark/opencv-js"
@@ -26,6 +28,10 @@ function MediapipeHands() {
     x: 0,
     y: 0
   });
+
+  // 프레임 변수
+  const frameImage = new Image();
+  frameImage.src = frame;  
 
   //사각형 그리기 변수
   const canvasRef3 = useRef(null);
@@ -85,11 +91,22 @@ function MediapipeHands() {
     }
 
     //cam 화면을 벗어나면 
-    if (fingerPosition.x < 0 || fingerPosition.x > constants.CANVAS_WIDTH || fingerPosition.y < 0 || fingerPosition.y > constants.CANVAS_HEIGHT) {
+    if (fingerPosition.x < 125 || fingerPosition.x > constants.DRAWING_WIDTH + 125 || fingerPosition.y < 0 || fingerPosition.y > constants.DRAWING_HEIGHT) {
       preFingerPositionX.current = null;
       preFingerPositionY.current = null;
     }
-  }, [fingerPosition])
+  }, [fingerPosition]);
+
+  // 단어 적는 프레임 
+  useEffect(() => {
+    if (!canvasRef3) return;
+    const ctx = canvasRef3.current.getContext("2d");           
+    //ctx.clearRect(0, 0, canvasRef2.current.width, canvasRef2.current.height);
+    frameImage.onload = function() {
+      ctx.drawImage(frameImage, 125, 0); // 프레임 위치 나중에 손 봐야함
+      console.log("width:" + frameImage.width + ", height:" + frameImage.height);
+    };
+  }, [canvasRef3]);
 
   useEffect(() => {
     const hands = new Hands({
@@ -122,7 +139,7 @@ function MediapipeHands() {
 
     const context = canvas.getContext("2d");
     context.lineCap = "round";
-    context.strokeStyle = "blue";
+    context.strokeStyle = "black";
     context.lineWidth = 15;
     contextRef.current = context;
 
@@ -145,13 +162,7 @@ function MediapipeHands() {
     canvasCtx.scale(-1, 1);  // 뒤집기 
 
     // 캔버스 이미지 그리기
-    canvasCtx.drawImage(
-      results.image,
-      0,
-      0,
-      canvasElement.width,
-      canvasElement.height
-    );
+    canvasCtx.drawImage(results.image, 0, 0, canvasElement.width, canvasElement.height);
 
     // 손가락 부분 그리기
     if (results.multiHandLandmarks) {
@@ -164,16 +175,43 @@ function MediapipeHands() {
         drawLandmarks(canvasCtx, landmarks, { color: "#FFFFFF", lineWidth: 2 }); // 손가락 점
       }
 
+      let beforeX = parseInt(constants.CANVAS_WIDTH - results.multiHandLandmarks[0][8].x * constants.CANVAS_WIDTH);
+      let beforeY = parseInt(results.multiHandLandmarks[0][8].y * constants.CANVAS_HEIGHT);
+
+      // if (beforeX > constants.DRAWING_WIDTH + 125 || beforeY > constants.DRAWING_HEIGHT || beforeX < 125 || beforeY < 0) {
+      //   beforeX = null;
+      //   beforeY = null;
+      // }
+
+      const x = calculateX(parseInt(constants.CANVAS_WIDTH - results.multiHandLandmarks[0][8].x * constants.CANVAS_WIDTH));
+      const y = calculateY(parseInt(results.multiHandLandmarks[0][8].y * constants.CANVAS_HEIGHT));
+
       // 손가락 포인트 값
-      const x = parseInt(constants.CANVAS_WIDTH - results.multiHandLandmarks[0][8].x * constants.CANVAS_WIDTH);
-      const y = parseInt(results.multiHandLandmarks[0][8].y * constants.CANVAS_HEIGHT);
+      // const x = parseInt(constants.CANVAS_WIDTH - results.multiHandLandmarks[0][8].x * constants.CANVAS_WIDTH);
+      // const y = parseInt(results.multiHandLandmarks[0][8].y * constants.CANVAS_HEIGHT);
 
       HandGesture.current = detectHandGesture(results.multiHandLandmarks[0]);  //현재 그리기 모드
       setFingerPosition({ x: x, y: y });
-    }
-    //save한 곳으로 이동
+    } 
     canvasCtx.restore();
   };
+
+  const calculateX = (beforeX) => {
+    if (beforeX > constants.DRAWING_WIDTH + 125 || beforeX < 125) {
+      console.log("X" + beforeX);
+      beforeX = preFingerPositionX;
+    }
+    return beforeX;
+  }
+
+  const calculateY = (beforeY) => {
+    if (beforeY > constants.DRAWING_HEIGHT || beforeY < 0) {
+      console.log("Y" + beforeY);
+      beforeY = preFingerPositionY;
+    }
+    return beforeY;
+  }
+  
 
   // 사각형 그리기 함수
   const startDrawingRectangle = ({ nativeEvent }) => {
@@ -200,8 +238,6 @@ function MediapipeHands() {
     const rectWidht = newMouseX - startX.current;
     const rectHeight = newMouseY - startY.current;
     
-
-
     contextRef3.current.clearRect(0, 0, canvasRef3.current.width, canvasRef3.current.height);
 
     contextRef3.current.strokeRect(startX.current, startY.current, rectWidht, rectHeight);
@@ -219,7 +255,6 @@ function MediapipeHands() {
       //const image = canvasRef2.current.toDataURL("image/png"); // 이걸로 바로하면 흑백 처리 안됨
       //const image = converToGray();
       const image = preprocessImage(canvasRef2.current);
-      console.log("안냥" + image);
 
       const a = document.createElement("a");
       a.href = image;
@@ -227,12 +262,9 @@ function MediapipeHands() {
       a.click();
       saveImage(image);
     }
-
   };
 
   const saveImage = (imgDataUrl) => {
-
-
     var blobBin = atob(imgDataUrl.split(',')[1]);	// base64 데이터 디코딩
     var array = [];
     for (var i = 0; i < blobBin.length; i++) {
@@ -614,6 +646,7 @@ function MediapipeHands() {
           height: constants.CANVAS_HEIGHT,
         }}>
       </canvas>
+      
       <canvas
         ref={canvasRef3}
         onMouseDown={startDrawingRectangle}
@@ -632,6 +665,7 @@ function MediapipeHands() {
           height: constants.CANVAS_HEIGHT,
         }}>
       </canvas>
+      
     </div>
   )
 }
