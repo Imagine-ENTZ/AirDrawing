@@ -7,7 +7,6 @@ import { detectHandGesture } from "../../MainPage/Component/HandGesture"
 import * as constants from "../../utils/Constants"
 import "../WordTracing.css"
 import A from "../img/draw_a.png" 
-import 'react-toastify/dist/ReactToastify.css';
 
 function Canvas() {
 
@@ -18,6 +17,10 @@ function Canvas() {
   const canvasRef2 = useRef(null);
   const contextRef = useRef(null);
   const handGesture = useRef(constants.HOVER);
+
+  //스팰링 도안 캔버스 변수
+  const spellingArtOfCanvasRef = useRef(null);
+  const spellingArtOfContextRef = useRef(null);
 
   //현재 시점 그리기 변수
   const pointOfContextRef = useRef(null);
@@ -35,8 +38,6 @@ function Canvas() {
       width: window.innerHeight*constants.HEIGHT_RATIO*(4.0 / 3.0),
       height: window.innerHeight*constants.HEIGHT_RATIO
   });
-
-  const toastId = useRef(null);
 
   // 손그리기 캔버스
   useEffect(() => {
@@ -68,13 +69,6 @@ function Canvas() {
       preFingerPositionX.current = fingerPosition.x;
       preFingerPositionY.current = fingerPosition.y;
     }
-
-    //cam 화면을 벗어나면 
-    if (contextRef.current && (fingerPosition.x <= 0 || fingerPosition.x >= windowSize.width
-        || fingerPosition.y <= 0 || fingerPosition.y >= windowSize.height)) {
-      preFingerPositionX.current = null;
-      preFingerPositionY.current = null;
-    }
   }, [fingerPosition])
 
   useEffect(() => {
@@ -104,6 +98,7 @@ function Canvas() {
 
     hands.onResults(onResults);
 
+    //사용자 그리기 캔버스
     const canvas = canvasRef2.current;
     canvas.width = windowSize.width;
     canvas.height = windowSize.height;
@@ -113,23 +108,37 @@ function Canvas() {
     context.strokeStyle = "orange";
     context.lineWidth = 15;
 
-    let img = new Image();
-    img.src = A
-    img.onload = () => {
-      context.drawImage(img, 0, 0, canvas.width, canvas.height);
-    }
-    context.fillRect(0, 0, canvas.width, canvas.height);
-
     contextRef.current = context;
-    
+
+    //영어 단어 스펠링 도안 캔버스
+    const spellingArtCanvas = spellingArtOfCanvasRef.current;
+    spellingArtCanvas.width = windowSize.width;
+    spellingArtCanvas.height = windowSize.height;
+
+    const spellingArtOfContext = spellingArtCanvas.getContext("2d");
+
+    let spellingArtImg = new Image();
+
+    spellingArtImg.src = A
+    spellingArtImg.onload = () => {
+      spellingArtOfContext.drawImage(
+        spellingArtImg, 0, 0, spellingArtCanvas.width, spellingArtCanvas.height);
+    }
+    spellingArtOfContext.fillRect(0, 0, spellingArtCanvas.width, spellingArtCanvas.height);
+
+    spellingArtOfContextRef.current = spellingArtOfContext;
+
+    //현재 8번 포인트가 가리키는 지점 표시
     const pointOfCanvas = pointOfCanvasRef.current;
     pointOfCanvas.width = windowSize.width;
     pointOfCanvas.height = windowSize.height;
+
     const pointOfContext = pointOfCanvas.getContext("2d");
+    pointOfContextRef.current = pointOfContext;
+
     // pointOfContext.lineCap = "round";
     // pointOfContext.strokeStyle = "orange";
     // pointOfContext.lineWidth = 8;
-    pointOfContextRef.current = pointOfContext;
   }, []);
 
   //윈도우 화면 resize시 캔버스와
@@ -198,17 +207,21 @@ function Canvas() {
       let y = parseInt(windowSize.height*results.multiHandLandmarks[0][8].y);
 
       handGesture.current = detectHandGesture(results.multiHandLandmarks[0]);  //현재 그리기 모드
-      setFingerPosition({ x: x, y: y });
 
       let radius = 10;
 
+      //현재 8번으로 포인트되는 지점 표시
       pointOfContextRef.current.clearRect(0, 0, windowSize.width, windowSize.height);
       pointOfContextRef.current.beginPath();
       pointOfContextRef.current.arc(x, y, radius, 0, 2 * Math.PI, false);
+      // pointOfContextRef.current.fillStyle = contextRef.current.strokeStyle;
+      // pointOfContextRef.current.fillRect();
       pointOfContextRef.current.lineWidth = 3;
       pointOfContextRef.current.strokeStyle = "ffa03b";
       pointOfContextRef.current.stroke();
       pointOfContextRef.current.closePath();
+
+      setFingerPosition({ x: x, y: y });
     }
     //save한 곳으로 이동
     canvasCtx.restore();
@@ -222,21 +235,23 @@ function Canvas() {
       }}>
       <div style={{
         position: "absolute", 
+        width:"100%",
+        height: "30%",
+        bottom: "0",
         display: "flex",
-        width: "97%",
-        justifyContent: "right",
-        marginTop: "10px",
-        marginRight: "10px",
-        // alignItems: "center",
-        textAlign: "right",
+        justifyContent: "center",
+        // marginTop: "10px",
+        // marginRight: "10px",
+        alignItems: "center",
+        textAlign: "center",
         fontSize: "20px",
-        color: "white",
         zIndex: 15,
         color: "purple",
+        // background: "yellow"
       }}>
         { getCurrentHandGesture() }
       </div>
-      <div style={{
+      {/* <div style={{
         position: "absolute", 
         width:"100%",
         height:"100%",
@@ -248,8 +263,7 @@ function Canvas() {
         color: "white",
         zIndex: 16,
       }}>
-      </div>
-      
+      </div> */}
       <Webcam
         audio={false}
         mirrored={true}
@@ -290,6 +304,21 @@ function Canvas() {
           top: "0",
           left: "0",
           textAlign: "center",
+          zIndex: 2,
+          width: "100%",
+          height: "100%",
+          // objectFit: "cover", 
+          // objectPosition: "center"
+        }}>
+      </canvas>
+      <canvas
+        ref={spellingArtOfCanvasRef}
+        mirrored={true}
+        style={{
+          position: "absolute",
+          top: "0",
+          left: "0",
+          textAlign: "center",
           zIndex: 1,
           width: "100%",
           height: "100%",
@@ -305,7 +334,7 @@ function Canvas() {
           top: "0",
           left: "0",
           textAlign: "center",
-          zIndex: 2,
+          zIndex: 3,
           width: "100%",
           height: "100%",
           // objectFit: "cover", 
