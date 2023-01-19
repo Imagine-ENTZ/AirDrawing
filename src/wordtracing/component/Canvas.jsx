@@ -6,7 +6,8 @@ import { Camera } from "@mediapipe/camera_utils/camera_utils";
 import { detectHandGesture } from "../../MainPage/Component/HandGesture"
 import * as constants from "../../utils/Constants"
 import "../WordTracing.css"
-import A from "../img/a.png" 
+import A from "../img/draw_a.png" 
+import 'react-toastify/dist/ReactToastify.css';
 
 function Canvas() {
 
@@ -16,7 +17,7 @@ function Canvas() {
   // 그리기 변수
   const canvasRef2 = useRef(null);
   const contextRef = useRef(null);
-  const HandGesture = useRef(null);
+  const handGesture = useRef(constants.HOVER);
 
   //현재 시점 그리기 변수
   const pointOfContextRef = useRef(null);
@@ -31,25 +32,27 @@ function Canvas() {
 
   //window size
   const [windowSize, setWindowSize] = useState({
-      width: window.innerWidth*constants.WIDTH_RATIO,
+      width: window.innerHeight*constants.HEIGHT_RATIO*(4.0 / 3.0),
       height: window.innerHeight*constants.HEIGHT_RATIO
   });
+
+  const toastId = useRef(null);
 
   // 손그리기 캔버스
   useEffect(() => {
     let radius = 20;
 
-    if(HandGesture.current == constants.DRAW && (preFingerPositionX == null || preFingerPositionY == null)){
+    if(handGesture.current == constants.DRAW && (preFingerPositionX == null || preFingerPositionY == null)){
       return;
     }
 
-    switch(HandGesture.current){
+    switch(handGesture.current){
       case constants.DRAW:
         contextRef.current.beginPath();
         contextRef.current.moveTo(preFingerPositionX.current, preFingerPositionY.current);
         contextRef.current.lineTo(fingerPosition.x, fingerPosition.y);
         contextRef.current.stroke();
-        contextRef.current.closePath();
+        contextRef.current.closePath();   
         break;
       case constants.ERASE:
         contextRef.current.save();
@@ -108,14 +111,14 @@ function Canvas() {
     const context = canvas.getContext("2d");
     context.lineCap = "round";
     context.strokeStyle = "orange";
-    context.lineWidth = 8;
+    context.lineWidth = 15;
 
-    // let img = new Image();
-    // img.src = A
-    // img.onload = () => {
-    //   context.drawImage(img, 0, 0, canvas.width, canvas.height);
-    // }
-    // context.fillRect(0, 0, canvas.width, canvas.height);
+    let img = new Image();
+    img.src = A
+    img.onload = () => {
+      context.drawImage(img, 0, 0, canvas.width, canvas.height);
+    }
+    context.fillRect(0, 0, canvas.width, canvas.height);
 
     contextRef.current = context;
     
@@ -131,8 +134,8 @@ function Canvas() {
 
   //윈도우 화면 resize시 캔버스와
   const handleResize = () => {
-    let width = window.innerWidth*constants.WIDTH_RATIO;
     let height = window.innerHeight*constants.HEIGHT_RATIO;
+    let width = height*(4.0 / 3.0);
 
     setWindowSize({
       width: width,
@@ -146,6 +149,17 @@ function Canvas() {
       window.removeEventListener('resize', handleResize);
     }  
   }, [])
+
+  const getCurrentHandGesture = () => {    
+    switch(handGesture.current){
+      case constants.DRAW:
+        return "Draw";
+      case constants.ERASE:
+        return "Erase"
+      default:
+        return "Hover"
+    }
+  }
 
   const onResults = (results) => {
     const videoWidth = webcamRef.current.video.videoWidth;
@@ -183,38 +197,59 @@ function Canvas() {
       let x = parseInt(windowSize.width - results.multiHandLandmarks[0][8].x*windowSize.width);
       let y = parseInt(windowSize.height*results.multiHandLandmarks[0][8].y);
 
-      HandGesture.current = detectHandGesture(results.multiHandLandmarks[0]);  //현재 그리기 모드
+      handGesture.current = detectHandGesture(results.multiHandLandmarks[0]);  //현재 그리기 모드
       setFingerPosition({ x: x, y: y });
 
-      let radius = 20;
+      let radius = 10;
 
       pointOfContextRef.current.clearRect(0, 0, windowSize.width, windowSize.height);
       pointOfContextRef.current.beginPath();
       pointOfContextRef.current.arc(x, y, radius, 0, 2 * Math.PI, false);
       pointOfContextRef.current.lineWidth = 3;
-      pointOfContextRef.current.strokeStyle = '#ffffff';
+      pointOfContextRef.current.strokeStyle = "ffa03b";
       pointOfContextRef.current.stroke();
       pointOfContextRef.current.closePath();
     }
     //save한 곳으로 이동
     canvasCtx.restore();
-
-    // let radius = 20;
-    // contextRef.current.strokeStyle = "orange"
-    // contextRef.current.save();
-    // contextRef.current.beginPath();
-    // contextRef.current.arc(fingerPosition.x, fingerPosition.y, radius, 0, 2*Math.PI, true);
-    // contextRef.current.clip();
-    // contextRef.current.drawImage(fingerPosition.x - radius, fingerPosition.y - radius, radius*2, radius*2);
-    // contextRef.current.restore();
   };
 
   return (
     <div
       style={{
         position: "relative",
-        height: "100%"
+        height: "100%",
       }}>
+      <div style={{
+        position: "absolute", 
+        display: "flex",
+        width: "97%",
+        justifyContent: "right",
+        marginTop: "10px",
+        marginRight: "10px",
+        // alignItems: "center",
+        textAlign: "right",
+        fontSize: "20px",
+        color: "white",
+        zIndex: 15,
+        color: "purple",
+      }}>
+        { getCurrentHandGesture() }
+      </div>
+      <div style={{
+        position: "absolute", 
+        width:"100%",
+        height:"100%",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        textAlign: "center",
+        fontSize: "20px",
+        color: "white",
+        zIndex: 16,
+      }}>
+      </div>
+      
       <Webcam
         audio={false}
         mirrored={true}
@@ -224,9 +259,10 @@ function Canvas() {
           top: "0",
           left: "0",
           textAlign: "center",
-          zindex: 9,
+          zIndex: 1,
           width: "100%",
           height: "100%",
+          backgroundColor: '(0, 0, 0, 0.5)',
           // objectFit: "cover", 
           // objectPosition: "center"
         }}
@@ -239,7 +275,7 @@ function Canvas() {
           top: "0",
           left: "0",
           textAlign: "center",
-          zindex: 9,
+          zIndex: 1,
           width: "100%",
           height: "100%",
           // objectFit: "cover", 
@@ -254,7 +290,7 @@ function Canvas() {
           top: "0",
           left: "0",
           textAlign: "center",
-          zindex: 9,
+          zIndex: 1,
           width: "100%",
           height: "100%",
           // objectFit: "cover", 
@@ -269,7 +305,7 @@ function Canvas() {
           top: "0",
           left: "0",
           textAlign: "center",
-          zindex: 9,
+          zIndex: 2,
           width: "100%",
           height: "100%",
           // objectFit: "cover", 
