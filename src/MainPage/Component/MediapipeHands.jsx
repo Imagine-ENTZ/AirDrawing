@@ -247,10 +247,11 @@ function MediapipeHands() {
       //const image = converToGray();
       const image = preprocessImage(canvasRef2.current);
 
-      const a = document.createElement("a");
-      a.href = image;
-      a.setAttribute("download", "hong.png");
-      a.click();
+      // 이미지 저장
+      // const a = document.createElement("a");
+      // a.href = image;
+      // a.setAttribute("download", "hong.png");
+      // a.click();
       saveImage(image);
     }
   };
@@ -277,6 +278,8 @@ function MediapipeHands() {
       .then((result) => {
         console.log("결과값 + " + result.data.text);
       });
+
+    canvasRef2.current.getContext('2d').clearRect(0, 0, constants.CANVAS_WIDTH, constants.CANVAS_HEIGHT); // 저장 후 지우기
   }
 
   // 흑백 처리 함수
@@ -656,10 +659,10 @@ function MediapipeHands() {
 
       <canvas
         ref={canvasRef3}
-        onMouseDown={startDrawingRectangle}
-        onMouseMove={drawRectangle}
-        onMouseUp={stopDrawingRectangle}
-        onMouseLeave={stopDrawingRectangle}
+        // onMouseDown={startDrawingRectangle}
+        // onMouseMove={drawRectangle}
+        // onMouseUp={stopDrawingRectangle}
+        // onMouseLeave={stopDrawingRectangle}
         style={{
           position: "absolute",
           marginLeft: "auto",
