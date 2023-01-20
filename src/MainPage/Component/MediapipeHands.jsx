@@ -37,8 +37,8 @@ function MediapipeHands() {
 
   const canvasOffSetX = useRef(null);
   const canvasOffSetY = useRef(null);
-  const startX = useRef(null);
-  const startY = useRef(null);
+  //const startX = useRef(null);
+  //const startY = useRef(null);
   const [isDrawing3, setIsDrawing3] = useState(false);
 
   // 캐릭터 변수
@@ -46,6 +46,10 @@ function MediapipeHands() {
   const contextRef4 = useRef(null);
 
 
+  let dragok = false;
+  let startX;
+  let startY;
+  const shapes = [];
 
   // // 사각형 캔버스 
   // useEffect(() => {
@@ -115,6 +119,19 @@ function MediapipeHands() {
       console.log("width:" + frameImage.width + ", height:" + frameImage.height);
     };
   }, [canvasRef3]);
+
+  useEffect(() => {
+    const canvas = canvasRef4.current;
+    canvas.height = constants.CANVAS_HEIGHT;
+    canvas.width = constants.CANVAS_WIDTH;
+
+    const context = canvas.getContext("2d");
+    contextRef4.current = context;
+
+    const canvasOffSet = canvas.getBoundingClientRect();
+    canvasOffSetX.current = canvasOffSet.left;
+    canvasOffSetY.current = canvasOffSet.top;
+  }, [canvasRef4]);
 
   useEffect(() => {
     const hands = new Hands({
@@ -217,16 +234,142 @@ function MediapipeHands() {
     canvas.height = constants.CANVAS_HEIGHT;
     canvas.width = constants.CANVAS_WIDTH;
     const ctx = canvas.getContext('2d'); 
-  const image = new Image();
+    const image = new Image();
 
     image.src = "https://emojiapi.dev/api/v1/" + emojiName + "/50.png";
     image.onload = function () {
       ctx.drawImage(image, 125, 0);
+      shapes.push({
+        x:300, y:0, width:50, height:50, fill:image.src, isDragging: false
+      });
+      draw();
+      console.log(shapes.length);
       console.log("success!");
     }
   }
 
+  function rect(r) {
+    canvasRef4.current.getContext('2d').fillStyle = r.fill;
+    canvasRef4.current.getContext('2d').fillRect(r.x, r.y, r.width, r.height);
+  }
+
+  function clear() {
+    canvasRef4.current.getContext('2d').clearRect(0, 0, constants.CANVAS_WIDTH, constants.CANVAS_HEIGHT);
+  }
+
+  function draw() {
+    clear();
+    console.log(shapes.length);
+    // redraw each shape in the shapes[] array
+    for (let i = 0; i < shapes.length; i++) {
+      // decide if the shape is a rect or circle
+      // (it's a rect if it has a width property)
+      if (shapes[i].width) {
+        rect(shapes[i]);
+      } 
+    }
+  }
   
+
+  // handle mousedown events
+function myDown({ nativeEvent }) {
+  // tell the browser we're handling this mouse event
+  nativeEvent.preventDefault();
+  nativeEvent.stopPropagation();
+
+  // get the current mouse position
+  const mx = parseInt(nativeEvent.clientX - canvasOffSetX.current);
+  const my = parseInt(nativeEvent.clientY - canvasOffSetY.current);
+
+  console.log("x:" + mx + ", y:" + my);
+  console.log("myDown" + dragok);
+  // test each shape to see if mouse is inside
+  dragok = false;
+  console.log(shapes.length);
+  for (let i = 0; i < shapes.length; i++) {
+    var s = shapes[i];
+    console.log("xx:" + s.x + ", yy:" + s.y);
+    // decide if the shape is a rect or circle
+    if (s.width) {
+      // test if the mouse is inside this rect
+      if (
+        !dragok &&
+        mx > s.x &&
+        mx < s.x + s.width &&
+        my > s.y &&
+        my < s.y + s.height
+      ) {
+        // if yes, set that rects isDragging=true
+        dragok = true;
+        s.isDragging = true;
+      }
+    } else {
+      const dx = s.x - mx;
+      const dy = s.y - my;
+      // test if the mouse is inside this circle
+      if (!dragok && dx * dx + dy * dy < s.r * s.r) {
+        dragok = true;
+        s.isDragging = true;
+      }
+    }
+  }
+  // save the current mouse position
+  startX = mx;
+  startY = my;
+}
+
+// handle mouseup events
+function myUp({ nativeEvent }) {
+  // tell the browser we're handling this mouse event
+  nativeEvent.preventDefault();
+  nativeEvent.stopPropagation();
+
+  console.log("myUp" + dragok);
+  // clear all the dragging flags
+  dragok = false;
+  for (let i = 0; i < shapes.length; i++) {
+    shapes[i].isDragging = false;
+  }
+}
+
+// handle mouse moves
+function myMove({ nativeEvent }) {
+  // if we're dragging anything...
+  if (dragok) {
+    console.log("drag ok! - myMove");
+    // tell the browser we're handling this mouse event
+    nativeEvent.preventDefault();
+    nativeEvent.stopPropagation();
+
+    // get the current mouse position
+    const mx = parseInt(nativeEvent.clientX - canvasOffSetX.current);
+    const my = parseInt(nativeEvent.clientY - canvasOffSetY.current);
+
+    // calculate the distance the mouse has moved
+    // since the last mousemove
+    const dx = mx - startX;
+    const dy = my - startY;
+
+    // move each rect that isDragging
+    // by the distance the mouse has moved
+    // since the last mousemove
+    for (let i = 0; i < shapes.length; i++) {
+      const s = shapes[i];
+      if (s.isDragging) {
+        s.x += dx;
+        s.y += dy;
+      }
+    }
+
+    // redraw the scene with the new rect positions
+    draw();
+
+    // reset the starting mouse position for the next mousemove
+    startX = mx;
+    startY = my;
+  }
+  console.log("drag no ok! - myMove");
+}
 
   // // 사각형 그리기 함수
   // const startDrawingRectangle = ({ nativeEvent }) => {
@@ -385,7 +528,9 @@ function MediapipeHands() {
 
       <canvas
         ref={canvasRef4}
-        
+        onMouseUp={myUp}
+        onMouseMove={myMove}
+        onMouseDown={myDown}
         style={{
           position: "absolute",
           top: 100,
@@ -394,7 +539,7 @@ function MediapipeHands() {
           left: "0",
           right: "0",
           textAlign: "center",
-          zIndex: 9,
+          zIndex: 11,
           width: constants.CANVAS_WIDTH,
           height: constants.CANVAS_HEIGHT,
         }}>
