@@ -1,0 +1,151 @@
+.word-tracing-play-container{
+  width: 100vw;
+  height: 100vh;
+}
+
+.word-tracing-play-container{
+  width: 100vw;
+  height: 100vh;
+}
+
+.word-tracing-timer-container{
+  width: 100%;
+  height: 15%;
+  /* position: relative; */
+}
+
+.word-tracing-timer-class{
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: flex-end; 
+}
+
+.word-tracing-timer{
+  width: 20%;
+  height: 80%;
+  display: flex;
+}
+
+.word-tracing-timer-img{
+  height: 100%;
+  margin-left: auto;
+  object-fit: contain;
+}
+/* display: inline-block; margin: 0 5px;  float: right; */
+
+.word-tracing-timer-gauge{
+  width: 60%;
+  height: 80%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.word-tracing-timer-gauge-bar{
+  width: 100%;
+}
+
+.word-tracing-score-container{
+  width: 100%;
+  height: 10%;
+}
+
+.word-tracing-score{
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.word-tracing-score-img{
+  height: 60%;
+}
+
+.word-tracing-play-screen{
+  width: 100%;
+  height: 60%;
+  display: flex;
+}
+
+.word-tracing-handed-mode-container{
+  width: 20%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.word-tracing-handed-mode{
+  height: 40%;
+  display: flex;
+  margin-left: auto;
+  object-fit: contain;
+}
+
+.word-tracing-sketckbook{
+  width: 60%;
+  height: 100%;
+}
+
+.word-tracing-footer-container{
+  width: 100%;
+  height: 15%;
+}
+
+.word-tracing-footer-title{
+  width: 90%;
+  height: 100%;
+}
+
+.word-tracing-footer-title-img{
+  height: 40%;
+  display: flex;
+  margin-left: auto;
+  object-fit: contain;
+}
+
+/*timer progress bar*/
+.bar-container {
+  border-radius: 50px;
+}
+
+
+
+
+
+
+/* .title{
+  display: flex;
+  width: 100%;
+  height: 15%;
+  text-align: center; 
+  justify-content: center;
+}
+
+.title-text{  
+  font-size: 40px;
+  font-weight: bold;
+  align-self: flex-end;
+  align-content: center;
+  color: rgb(255, 136, 0);
+  -webkit-text-stroke-width: 1px;
+  -webkit-text-stroke-color: white;
+}
+
+.content{
+  width: 100%;
+  height: 65%;
+}
+
+.footer{
+  width: 100%;
+  height: 20%;
+}
+
+.footer-text{
+  font-size: 40px;
+  font-weight: bold;
+  color: #FF7878;
+  text-align: center;
+} */

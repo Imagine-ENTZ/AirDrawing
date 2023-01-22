@@ -5,8 +5,9 @@ import { drawConnectors, drawLandmarks } from "@mediapipe/drawing_utils/drawing_
 import { Camera } from "@mediapipe/camera_utils/camera_utils";
 import { detectHandGesture } from "../../MainPage/Component/HandGesture"
 import * as constants from "../../utils/Constants"
-import "../WordTracing.css"
+import "../Game.css"
 import A from "../img/draw_a.png" 
+import Tesseract from 'tesseract.js';
 
 function Canvas() {
 
@@ -227,6 +228,49 @@ function Canvas() {
     canvasCtx.restore();
   };
 
+  // 이미지 저장
+  const spaceDown = (e) => {
+    console.log("space click");
+
+    if (e.key === ' ') {
+      
+      const image = canvasRef2.current.toDataURL("image/png");
+
+      const a = document.createElement("a");
+      a.href = image;
+      a.setAttribute("download", "hong.png");
+      a.click();
+      saveImage(image);
+    }
+
+  };
+
+  const saveImage = (imgDataUrl) => {
+  
+    var blobBin = atob(imgDataUrl.split(',')[1]);	// base64 데이터 디코딩
+    var array = [];
+    for (var i = 0; i < blobBin.length; i++) {
+        array.push(blobBin.charCodeAt(i));
+    }
+
+    var file = new Blob([new Uint8Array(array)], {type: 'image/png'});	// Blob 생성
+    const image = URL.createObjectURL(file);
+  
+    Tesseract.recognize(image, 'eng', {
+      logger: (m) => {
+        console.log(m);
+      
+      },
+    })
+      .catch((err) => {
+        console.error(err);
+      })
+      .then((result) => {
+        console.log("결과값 + " + result.data.text);
+      });
+
+}
+
   return (
     <div
       style={{
@@ -313,7 +357,7 @@ function Canvas() {
       </canvas>
       <canvas
         ref={spellingArtOfCanvasRef}
-        mirrored={true}
+        mirrored={true}    
         style={{
           position: "absolute",
           top: "0",
@@ -329,6 +373,8 @@ function Canvas() {
       <canvas
         ref={pointOfCanvasRef}
         mirrored={true}
+        onKeyDown={spaceDown}
+        tabIndex={0}
         style={{
           position: "absolute",
           top: "0",

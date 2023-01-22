@@ -265,7 +265,7 @@ function MediapipeHands() {
           left: "0",
           right: "0",
           textAlign: "center",
-          zindex: 9,
+          zIndex: 9,
           width: constants.CANVAS_WIDTH,
           height: constants.CANVAS_HEIGHT,
         }}
@@ -280,7 +280,7 @@ function MediapipeHands() {
           left: "0",
           right: "0",
           textAlign: "center",
-          zindex: 9,
+          zIndex: 9,
           width: constants.CANVAS_WIDTH,
           height: constants.CANVAS_HEIGHT,
         }}>
@@ -298,7 +298,7 @@ function MediapipeHands() {
           left: "0",
           right: "0",
           textAlign: "center",
-          zindex: 9,
+          zIndex: 9,
           width: constants.CANVAS_WIDTH,
           height: constants.CANVAS_HEIGHT,
         }}>
@@ -316,7 +316,7 @@ function MediapipeHands() {
           left: "0",
           right: "0",
           textAlign: "center",
-          zindex: 9,
+          zIndex: 9,
           width: constants.CANVAS_WIDTH,
           height: constants.CANVAS_HEIGHT,
         }}>
