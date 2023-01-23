@@ -2,40 +2,22 @@ import React, { useState, useEffect, useRef } from "react"
 import "./Game.css"
 import Canvas from "./component/Canvas"
 import timer from "./img/timer.png"
-import score from "./img/score.png"
 import titleLog from "./img/word_title_logo.png";
 import handedMode from "./img/handed_mode.png"
 import ProgressBar from "@ramonak/react-progress-bar";
-
-// const myStyle = {
-//   backgroundColor: "yellow" , 
-// }
-
-
-
-//   return (
-//     // <div style={myStyle}>
-//     <div className='word-tracing-container'>
-//       <div className='title'>
-//         <div className='title-text'>Word Tracing</div>
-//       </div>
-//       <div className='content'>
-//         <div style={{
-//           width: { windowHeight } * (4.0/3.0) ,
-//           height: { windowHeight }
+import * as constants from "../utils/Constants"
 
 function GamePage() {
-  const [windowHeight, setWindowHeight] = useState(window.innerHeight* 0.60);
+  const [windowHeight, setWindowHeight] = useState(window.innerHeight*constants.HEIGHT_RATIO);
 
   const handleResize = () => {
-    let height = window.innerHeight* 0.60;
+    let height = window.innerHeight*constants.HEIGHT_RATIO;
     console.log(height)
 
     setWindowHeight(height);
   }
 
-  let progress = 0;
-  let timerId = null;
+  const score = useRef(0);
 
   useEffect(() => {
     window.addEventListener('resize', handleResize);
@@ -65,31 +47,14 @@ function GamePage() {
     return () => clearInterval(countdown);
   }, [minutes, seconds]);
 
-  return (
-    // <div style={myStyle}>
-    // <div className='word-tracing-play-container'>
-    //   <div className='title'>
-    //     <div className='title-text'>Word Tracing</div>
-    //   </div>
-    //   <div className='content'>
-    //     <div style={{width: (window.innerHeight * 0.65 * (4.0 / 3.0)), height:windowHeight, margin: "auto"}}>
-    //       <Canvas/>
-    //     </div>
-    //   </div>
-    //   <div className='footer'>
-    //     <div className='footer-text'>Let's try it together</div>
-    //   </div>
-    // </div>
-    
+  return (    
     <div className='word-tracing-play-container'>
 
       <div className='word-tracing-timer-container'>
-        <div className='word-tracing-timer-class'>
-          <div className='word-tracing-timer'>
-            <img className='word-tracing-timer-img' src={timer}/>
-          </div>
+        <div className='word-tracing-timer'>
           <div className='word-tracing-timer-gauge' style={{color: "white"}}>
             {/* {minutes}:{seconds < 10 ? `0${seconds}` : seconds} */}
+            <img className='word-tracing-timer-img' src={timer}/>
             <ProgressBar 
             className="word-tracing-timer-gauge-bar"
             completed={seconds}
@@ -107,7 +72,7 @@ function GamePage() {
 
       <div className='word-tracing-score-container'>
         <div className='word-tracing-score'>
-          <img className='word-tracing-score-img' src={score} />
+          socre : {score.current}
         </div>
       </div>
 
@@ -117,14 +82,14 @@ function GamePage() {
             <img className='word-tracing-handed-mode-img' src={handedMode} />
           </div>
         </div>
-        <div className='word-tracing-sketckbook'>
+        <div className='word-tracing-sketckbook-container'>
           <div style={{
               width: "100%",
               height: "60%",
           }}>
             <div style={{
-              width: (window.innerHeight * 0.60 * (4.0 / 3.0)), 
-              height:windowHeight,
+              width: (window.innerHeight * constants.HEIGHT_RATIO * (4.0 / 3.0)), 
+              height: windowHeight,
               margin: "auto"}}>
               <Canvas/>
             </div>
@@ -134,7 +99,16 @@ function GamePage() {
 
       <div className='word-tracing-footer-container'>
         <div className='word-tracing-footer-title'>
-          <img className='word-tracing-footer-title-img' src={titleLog} />
+          <div style={{
+            fontFamily: "Silkscreen",
+            fontSize: "2em",
+            display: "flex",
+            marginLeft: "auto",
+            width: "20%"
+          }}>
+            Word Tracing
+          </div>
+          {/* <img className='word-tracing-footer-title-img' src={titleLog} /> */}
         </div>
       </div>
     </div>

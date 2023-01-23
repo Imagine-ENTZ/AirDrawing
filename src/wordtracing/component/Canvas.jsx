@@ -6,7 +6,7 @@ import { Camera } from "@mediapipe/camera_utils/camera_utils";
 import { detectHandGesture } from "../../MainPage/Component/HandGesture"
 import * as constants from "../../utils/Constants"
 import "../Game.css"
-import A from "../img/draw_a.png" 
+import canvasPicture from "../img/canvas.png" 
 import Tesseract from 'tesseract.js';
 
 function Canvas() {
@@ -40,6 +40,9 @@ function Canvas() {
       height: window.innerHeight*constants.HEIGHT_RATIO
   });
 
+  //단어목록
+  const wordList = ["apple", "Z", "cat", "Zoo", "b", "bread", "J"];
+
   // 손그리기 캔버스
   useEffect(() => {
     let radius = 20;
@@ -63,6 +66,9 @@ function Canvas() {
         contextRef.current.clip();
         contextRef.current.clearRect(fingerPosition.x - radius, fingerPosition.y - radius, radius*2, radius*2);
         contextRef.current.restore();
+        break;
+      case constants.OK:
+        checkIfWordsMatch();
         break;
     }
 
@@ -107,7 +113,7 @@ function Canvas() {
     const context = canvas.getContext("2d");
     context.lineCap = "round";
     context.strokeStyle = "orange";
-    context.lineWidth = 15;
+    context.lineWidth = 10;
 
     contextRef.current = context;
 
@@ -120,7 +126,7 @@ function Canvas() {
 
     let spellingArtImg = new Image();
 
-    spellingArtImg.src = A
+    spellingArtImg.src = canvasPicture;
     spellingArtImg.onload = () => {
       spellingArtOfContext.drawImage(
         spellingArtImg, 0, 0, spellingArtCanvas.width, spellingArtCanvas.height);
@@ -165,9 +171,11 @@ function Canvas() {
       case constants.DRAW:
         return "Draw";
       case constants.ERASE:
-        return "Erase"
+        return "Erase";
+      case constants.OK:
+        return "Ok";
       default:
-        return "Hover"
+        return "Hover";
     }
   }
 
@@ -228,21 +236,10 @@ function Canvas() {
     canvasCtx.restore();
   };
 
-  // 이미지 저장
-  const spaceDown = (e) => {
-    console.log("space click");
-
-    if (e.key === ' ') {
-      
-      const image = canvasRef2.current.toDataURL("image/png");
-
-      const a = document.createElement("a");
-      a.href = image;
-      a.setAttribute("download", "hong.png");
-      a.click();
-      saveImage(image);
-    }
-
+  //사용자가 적은 단어와 제시된 단어의 일치 여부 확인
+  const checkIfWordsMatch = ( ) => {
+    const image = canvasRef2.current.toDataURL("image/png");
+    saveImage(image);
   };
 
   const saveImage = (imgDataUrl) => {
@@ -278,22 +275,23 @@ function Canvas() {
         height: "100%",
       }}>
       <div style={{
+        textShadow: "-1px 0 #000, 0 1px #000, 1px 0 #000, 0 -1px #000",
         position: "absolute", 
         width:"100%",
-        height: "30%",
+        height: "80%",
         bottom: "0",
         display: "flex",
         justifyContent: "center",
         // marginTop: "10px",
         // marginRight: "10px",
-        alignItems: "center",
+        // alignItems: "center",
         textAlign: "center",
-        fontSize: "20px",
-        zIndex: 15,
-        color: "purple",
-        // background: "yellow"
+        fontSize: "500%",
+        fontFamily: "Bungee_Outline",
+        zIndex: 2,
+        color: "black",
       }}>
-        { getCurrentHandGesture() }
+        { wordList[5] }
       </div>
       {/* <div style={{
         position: "absolute", 
@@ -348,7 +346,7 @@ function Canvas() {
           top: "0",
           left: "0",
           textAlign: "center",
-          zIndex: 2,
+          zIndex: 3,
           width: "100%",
           height: "100%",
           // objectFit: "cover", 
@@ -366,6 +364,7 @@ function Canvas() {
           zIndex: 1,
           width: "100%",
           height: "100%",
+          background: "transparent"
           // objectFit: "cover", 
           // objectPosition: "center"
         }}>
@@ -373,14 +372,13 @@ function Canvas() {
       <canvas
         ref={pointOfCanvasRef}
         mirrored={true}
-        onKeyDown={spaceDown}
         tabIndex={0}
         style={{
           position: "absolute",
           top: "0",
           left: "0",
           textAlign: "center",
-          zIndex: 3,
+          zIndex: 4,
           width: "100%",
           height: "100%",
           // objectFit: "cover", 
