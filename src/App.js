@@ -5,8 +5,9 @@ import LobbyPage from "./FirstPage/Lobby.jsx";
 import LoginPage from "./HomePage/Login.jsx";
 import SignupPage from "./HomePage/Signup.jsx";
 import SelectionPage from "./FirstPage/Selection.jsx";
+import DecorationPage from "./MainPage/Decoration.jsx";
+import DecorationGamePage from "./MainPage/ DecorationGame.jsx";
 import { Routes, Route, BrowserRouter } from "react-router-dom";
-
 
 function App() {
   return (
@@ -19,6 +20,9 @@ function App() {
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/selection" element={<SelectionPage />} />
+        <Route path="/decorate" element={<DecorationPage />} />
+        <Route path="/decorate-game" element={<DecorationGamePage />} />
+
         {/* <Route path="/detail/:id" element={<Detail />} />
       <Route path="/mypage/*" element={<MyPage />} /> */}
       </Routes>

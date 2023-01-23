@@ -1,7 +1,7 @@
 import * as constants from "../../utils/Constants"
 
 // 이미지 전처리
-export const preprocessImage = (canvas) => {
+export const preprocessImage = (canvas, width, height) => {
     const level = 0.4;
     const radius = 1;
     const ctx = canvas.getContext('2d');
@@ -16,10 +16,10 @@ export const preprocessImage = (canvas) => {
 
     // 오리는 것 까지 다 하기로..
     // Crop the canvas
-    var cropX = 125;
+    var cropX = width * constants.GAME_FRAME_POSITION_X_RATIO;
     var cropY = 0;
-    var cropWidth = constants.DRAWING_WIDTH;
-    var cropHeight = constants.DRAWING_HEIGHT;
+    var cropWidth = width * constants.GAME_FRAME_WIDTH_RATIO;
+    var cropHeight = height * constants.GAME_FRAME_HEIGHT_RATIO;
 
     // Create a new canvas to hold the cropped image
     var croppedCanvas = document.createElement("canvas");

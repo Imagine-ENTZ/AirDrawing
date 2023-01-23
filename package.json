@@ -10,6 +10,7 @@
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
+    "compass": "^0.1.1",
     "emoji-api": "^3.0.1",
     "konva": "^8.4.0",
     "opencv-react": "^0.0.6",
@@ -24,6 +25,7 @@
     "react-webcam": "^7.0.1",
     "sass": "^1.57.1",
     "tesseract.js": "^4.0.2",
+    "proxy": "http://apiserver.com:5000",
     "web-vitals": "^2.1.4"
   },
   "scripts": {

@@ -6,7 +6,7 @@ import { Camera } from "@mediapipe/camera_utils/camera_utils";
 import "./MediapipeHands.css"
 import { detectHandGesture } from "./HandGesture";
 import { preprocessImage } from "./PreprocessImage";
-import frame from "./react-frame.png";
+import frame from "./frame.png";
 import * as constants from "../../utils/Constants";
 
 import Tesseract from 'tesseract.js';
@@ -29,7 +29,7 @@ function MediapipeHands() {
 
   // 프레임 변수
   const frameImage = new Image();
-  frameImage.src = frame;
+  frameImage.src =  frame;
 
   //사각형 그리기 변수
   const canvasRef3 = useRef(null);
@@ -427,7 +427,7 @@ function myMove({ nativeEvent }) {
       console.log("space click");
       //const image = canvasRef2.current.toDataURL("image/png"); // 이걸로 바로하면 흑백 처리 안됨
       //const image = converToGray();
-      const image = preprocessImage(canvasRef2.current);
+      const image = preprocessImage(canvasRef2.current, constants.CANVAS_WIDTH, constants.CANVAS_HEIGHT);
 
       // 이미지 저장
       // const a = document.createElement("a");
