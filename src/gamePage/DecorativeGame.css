@@ -66,9 +66,25 @@
     width: 80%;
 }
 
+.middle-top-container-decoration-game {
+    width: 100%;
+    height: 25%;
+    /* background-color: olive; */
+}
+
+.screen-word-decoration-game {
+    text-align: center;
+    top: 50%;
+
+    font-size: 25px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: bold;
+    color: white;
+}
+
 .bottom-of-top-container-decoration-game {
     width: 100%;
-    height: 60%;
+    height: 35%;
     /* background-color: aqua; */
 }
 
@@ -80,7 +96,7 @@
 
     position: relative;
     text-align: center;
-    top: 40%;
+    top: -10%;
 }
 
 .top-of-bottom-container-decoration-game {
@@ -101,9 +117,11 @@
     font-weight: bold;
     color: white;
 
+    text-align: start;
     position: relative;
-    top: 40%;
-    left: 46%;
+    top: 30%;
+    left: 1%;
+    /* left:47.5%; */
 }
 
 .screen-capture-sentence {
@@ -115,4 +133,8 @@
     position: relative;
     text-align: center;
     top: 30%;
+}
+
+.click-word-decoration-game {
+    color:rgb(76, 76, 204);
 }

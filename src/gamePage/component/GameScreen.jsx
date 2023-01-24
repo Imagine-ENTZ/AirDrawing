@@ -250,6 +250,7 @@ function GameScreen(props) {
                 fill: image.src, isDragging: false
             });
             props.getData(shapes.current.length);
+            props.getWord(emojiName);
             draw();
             console.log("thisissetimage " + shapes.current.length);
             console.log("success!");

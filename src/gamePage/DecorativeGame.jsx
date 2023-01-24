@@ -43,6 +43,13 @@ function DecorativeGame(props) {
         console.log(number);
     }
 
+    // 쓰여진 단어 알려주기
+    const [word, setWord] = useState("Your Word Here!");
+
+    const getWord = (word) => {
+        console.log(word);
+    }
+
     return (
         <div className="main-container-decoration-game">
             <StarRain />
@@ -59,6 +66,11 @@ function DecorativeGame(props) {
                         </div>
                     </div>
                 </div>
+                <div className="middle-top-container-decoration-game">
+                    <div className="screen-word-decoration-game">
+                        {word}
+                    </div>
+                </div>
                 <div className="bottom-of-top-container-decoration-game">
                     <div className="decoration-game-sentence">
                         🐶Write Your Word and Make Emoji!🐰
@@ -68,7 +80,7 @@ function DecorativeGame(props) {
             <div className="body-container-decoration-game">
                 <div className="screen-admin">
                     <div style={{ width: (window.innerHeight * constants.GAME_SCREEN_HEIGHT_RATIO * (4.0 / 3.0)), height: windowHeight, margin: "auto" }}>
-                        <GameScreen getData = {setNumber} />
+                        <GameScreen getData = {setNumber} getWord = {setWord} />
                     </div>
                 </div>
             </div>
@@ -76,7 +88,7 @@ function DecorativeGame(props) {
                 <div className="top-of-bottom-container-decoration-game">
                     <div className="screen-capture-sentence">
                         <span>Do you want to capture your screen? </span>
-                        <span onClick={onClickButton}>Click Me!</span>
+                        <span className="click-word-decoration-game" onClick={onClickButton}>Click Me!</span>
                         {isOpen && (<TimerScreen
                             open={isOpen}
                             onClose={() => {
