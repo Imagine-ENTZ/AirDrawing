@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from "react";
-import "./DecorationGame.css";
-import GameScreen from "./Component/GameScreen";
+import "./DecorativeGame.css";
+import GameScreen from "./component/GameScreen";
 import OnOff from "./img/on-off-button.png";
-import TimerScreen from "./Component/TimerScreen.jsx";
-import StarRain from "./Component/StarRain.jsx";
+import TimerScreen from "./component/TimerScreen.jsx";
+import StarRain from "./component/StarRain.jsx";
 import { useNavigate } from "react-router-dom";
 
 import * as constants from "../utils/Constants";
 
 
-function DecorationGame(props) {
+function DecorativeGame(props) {
     const navigate = useNavigate();
 
     const [windowHeight, setWindowHeight] = useState(window.innerHeight * constants.GAME_SCREEN_HEIGHT_RATIO);
@@ -54,7 +54,7 @@ function DecorationGame(props) {
                         </div>
                     </div>
                     <div className="best-top-right-decoration-game">
-                        <div className="on-off-button" onClick={() => navigate("/decorate")}>
+                        <div className="on-off-button" onClick={() => navigate("/decorative")}>
                             <img className="on-off-image" src={OnOff} alt="END"></img>
                         </div>
                     </div>
@@ -96,4 +96,4 @@ function DecorationGame(props) {
     );
 };
 
-export default DecorationGame;
+export default DecorativeGame;

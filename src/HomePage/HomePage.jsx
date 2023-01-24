@@ -1,6 +1,6 @@
-import TopBanner from "./Component/TopBanner";
-import MainHome from "./Component/MainHome";
-import Snow from "./Component/SnowCopy";
+import TopBanner from "./component/TopBanner";
+import MainHome from "./component/MainHome";
+import Snow from "./component/SnowCopy";
 
 const styles = {
   

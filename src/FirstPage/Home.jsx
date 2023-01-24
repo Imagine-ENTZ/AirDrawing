@@ -1,8 +1,8 @@
 import React from "react";
 import "./Home.css";
 import "./Lobby.css";
-import Main from "./Component/Main.jsx";
-import Snow from "./Component/Snow.jsx";
+import Main from "./component/Main.jsx";
+import Snow from "./component/Snow.jsx";
 
 function Home() {
 

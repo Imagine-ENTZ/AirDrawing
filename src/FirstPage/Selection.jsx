@@ -1,8 +1,7 @@
 import React from "react";
 import "./Selection.css";
-import Snow from "./Component/Snow.jsx";
-import SelectionMenu from "./Component/SelectionMenu.jsx";
-import Waves from "./waves.jsx";
+import Snow from "./component/Snow.jsx";
+import SelectionMenu from "./component/SelectionMenu.jsx";
 
 function Selection() {
     return (

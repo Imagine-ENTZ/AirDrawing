@@ -1,6 +1,6 @@
 import React from "react";
 import "../Selection.css";
-import line from '../img/line.png';
+import Direction from "../img/direction-arrow.png";
 import { useNavigate } from "react-router-dom";
 
 function SelectionMenu() {
@@ -22,9 +22,9 @@ function SelectionMenu() {
             <div className="high-container-selection">
             <div className="left-container-selection">
                 <div className="left-container-selection-top">
-                    <div className="banner-age">For Kids</div>
-                    <div className="banner-name">PlayGround</div>
-                    <img className="line-banner" src={line} alt="line"/>
+                    <div className="direction-frame" onClick={() => navigate("/")}>
+                        <img className="direction-image" src={Direction} alt="direct" />
+                    </div>
                 </div>
 
                 <div className="left-container-selection-middle">

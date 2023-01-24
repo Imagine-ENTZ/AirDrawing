@@ -1,8 +1,8 @@
 import React from "react";
 import "./Login.css";
-import LoginContainer from "./Component/LoginContainer";
-import Image from "./Component/ImageContainer";
-import Snow from "./Component/SnowCopy";
+import LoginContainer from "./component/LoginContainer";
+import Image from "./component/ImageContainer";
+import Snow from "./component/SnowCopy";
 
 function Login() {
       return (

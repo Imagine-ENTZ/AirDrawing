@@ -1,8 +1,8 @@
 import React from "react";
 import "./Signup.css";
-import SignupContainer from './Component/SignupContainer';
-import Image from './Component/ImageContainer';
-import Snow from './Component/SnowCopy';
+import SignupContainer from './component/SignupContainer';
+import Image from './component/ImageContainer';
+import Snow from './component/SnowCopy';
 
 function Signup() {
       return (
