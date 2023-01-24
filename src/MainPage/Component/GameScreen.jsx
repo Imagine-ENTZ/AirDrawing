@@ -11,7 +11,7 @@ import * as constants from "../../utils/Constants";
 
 import Tesseract from 'tesseract.js';
 
-function GameScreen() {
+const GameScreen = () => {
 
     const [windowSize, setWindowSize] = useState({
         width: window.innerHeight * constants.GAME_SCREEN_HEIGHT_RATIO * (4.0 / 3.0),
@@ -234,6 +234,7 @@ function GameScreen() {
         canvas.width = windowSize.width;
         canvas.height = windowSize.height;
         const image = new Image();
+        //image.origin = "anonymous";
         image.src = "https://emojiapi.dev/api/v1/" + emojiName + "/" + parseInt(windowSize.width * constants.GAME_EMOJI_RATIO) + ".png";
 
         //image.crossOrigin = "Anonymous";
@@ -249,6 +250,7 @@ function GameScreen() {
                 x: windowSize.width * constants.GAME_FRAME_POSITION_X_RATIO, y: 0, width: windowSize.width * constants.GAME_EMOJI_RATIO, height: windowSize.width * constants.GAME_EMOJI_RATIO,
                 fill: image.src, isDragging: false
             });
+            //number.getData(shapes.length);
             draw();
             console.log("thisissetimage " + shapes.current.length);
             console.log("success!");
@@ -258,6 +260,7 @@ function GameScreen() {
     function rect(r) {
         const image = new Image();
         image.src = r.fill;
+        console.log(image.src)
         // canvasRef4.current.getContext('2d').fillStyle = image;
         // canvasRef4.current.getContext('2d').fillRect(r.x, r.y, r.width, r.height);
         // const image = new Image();
@@ -440,12 +443,12 @@ function GameScreen() {
         const ctxEmojiCanvas = emojiCanvas.getContext('2d')
         console.log("hihihihihihi???");
         // 두 캔버스를 저장용 캔버스에 그린다 (먼저 그린쪽이 아래에 있는 레이어가 된다)
+        console.log(emojiCanvas);
         ctx.drawImage(webcam, 0, 0);
         ctx.drawImage(emojiCanvas, 0, 0);
-        console.log(canvas);
+        
         var img = new Image();
-        // img.crossOrigin = "anonymous";
-        img.src = canvas.toDataURL('image/png');
+        img.src = canvas.toDataURL('image/png')
         
 
         // var blobBin = atob(img.src.split(',')[1]);	// base64 데이터 디코딩
@@ -570,7 +573,7 @@ function GameScreen() {
 
             <canvas
                 ref={canvasRef5}
-                mirrored={true}
+                // mirrored={true}
                 style={{
                     position: "absolute",
                     marginLeft: "auto",
