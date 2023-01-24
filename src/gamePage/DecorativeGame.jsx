@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import "./DecorativeGame.css";
 import GameScreen from "./component/GameScreen";
 import OnOff from "./img/on-off-button.png";
@@ -34,6 +34,13 @@ function DecorativeGame(props) {
     const onClickButton = () => {
         setIsOpen(true);
     };
+
+    // 자식 함수 데려오기
+    const gameScreenRef = useRef();
+
+    // useEffect(() => {
+    //     gameScreenRef.current.captureImage();
+    // }, []);
 
     // 이모지 개수 재주기
     const [number, setNumber] = useState(0);
@@ -80,7 +87,7 @@ function DecorativeGame(props) {
             <div className="body-container-decoration-game">
                 <div className="screen-admin">
                     <div style={{ width: (window.innerHeight * constants.GAME_SCREEN_HEIGHT_RATIO * (4.0 / 3.0)), height: windowHeight, margin: "auto" }}>
-                        <GameScreen getData = {setNumber} getWord = {setWord} />
+                        <GameScreen getData={setNumber} getWord={setWord} ref={gameScreenRef} />
                     </div>
                 </div>
             </div>
@@ -93,6 +100,7 @@ function DecorativeGame(props) {
                             open={isOpen}
                             onClose={() => {
                                 setIsOpen(false);
+                                gameScreenRef.current.captureImage();
                             }}
                         />)}
                     </div>

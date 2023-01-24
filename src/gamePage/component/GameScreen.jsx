@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect, useState, forwardRef, useImperativeHandle } from "react";
 import Webcam from "react-webcam";
 import { Hands, HAND_CONNECTIONS } from "@mediapipe/hands/hands";
 import { drawConnectors, drawLandmarks } from "@mediapipe/drawing_utils/drawing_utils";
@@ -11,12 +11,17 @@ import * as constants from "../../utils/Constants";
 
 import Tesseract from 'tesseract.js';
 
-function GameScreen(props) {
+const GameScreen = forwardRef((props, ref) => {
 
     const [windowSize, setWindowSize] = useState({
         width: window.innerHeight * constants.GAME_SCREEN_HEIGHT_RATIO * (4.0 / 3.0),
         height: window.innerHeight * constants.GAME_SCREEN_HEIGHT_RATIO
     });
+
+    useImperativeHandle(ref, () => ({
+        // 부모 컴포넌트에서 사용할 함수를 선언
+        captureImage
+    }))
 
     // 웹캡 변수
     const webcamRef = useRef(null);
@@ -228,35 +233,6 @@ function GameScreen(props) {
         return beforeY;
     }
 
-    // 이모지 넣어주는 함수 
-    const setEmoji = (emojiName) => {
-        const canvas = canvasRef4.current;
-        canvas.width = windowSize.width;
-        canvas.height = windowSize.height;
-        const image = new Image();
-        image.src = "https://emojiapi.dev/api/v1/" + emojiName + "/" + parseInt(windowSize.width * constants.GAME_EMOJI_RATIO) + ".png";
-
-        //image.crossOrigin = "Anonymous";
-        //image.setAttribute('crossOrigin', '');
-        //image.crossOrigin="*";
-        image.onerror = function () {
-            draw();
-        }
-
-        image.onload = function () {
-            //ctx.drawImage(image, 125, 0);
-            shapes.current.push({
-                x: windowSize.width * constants.GAME_FRAME_POSITION_X_RATIO, y: 0, width: windowSize.width * constants.GAME_EMOJI_RATIO, height: windowSize.width * constants.GAME_EMOJI_RATIO,
-                fill: image.src, isDragging: false
-            });
-            props.getData(shapes.current.length);
-            props.getWord(emojiName);
-            draw();
-            console.log("thisissetimage " + shapes.current.length);
-            console.log("success!");
-        }
-    }
-
     function rect(r) {
         const image = new Image();
         image.src = r.fill;
@@ -434,6 +410,35 @@ function GameScreen(props) {
         canvasRef2.current.getContext('2d').clearRect(0, 0, windowSize.width, windowSize.height); // 저장 후 지우기
     }
 
+    // 이모지 넣어주는 함수 
+    const setEmoji = (emojiName) => {
+        const canvas = canvasRef4.current;
+        canvas.width = windowSize.width;
+        canvas.height = windowSize.height;
+        const image = new Image();
+        image.src = "https://emojiapi.dev/api/v1/" + emojiName + "/" + parseInt(windowSize.width * constants.GAME_EMOJI_RATIO) + ".png";
+
+        //image.crossOrigin = "Anonymous";
+        //image.setAttribute('crossOrigin', '');
+        //image.crossOrigin="*";
+        image.onerror = function () {
+            draw();
+        }
+
+        image.onload = function () {
+            //ctx.drawImage(image, 125, 0);
+            shapes.current.push({
+                x: windowSize.width * constants.GAME_FRAME_POSITION_X_RATIO, y: 0, width: windowSize.width * constants.GAME_EMOJI_RATIO, height: windowSize.width * constants.GAME_EMOJI_RATIO,
+                fill: image.src, isDragging: false
+            });
+            props.getData(shapes.current.length);
+            props.getWord(emojiName);
+            draw();
+            console.log("thisissetimage " + shapes.current.length);
+            console.log("success!");
+        }
+    }
+
     const captureImage = () => {
         const canvas = canvasRef5.current;
         const webcam = canvasRef.current;
@@ -448,7 +453,7 @@ function GameScreen(props) {
         var img = new Image();
         // img.crossOrigin = "anonymous";
         img.src = canvas.toDataURL('image/png');
-        
+
 
         // var blobBin = atob(img.src.split(',')[1]);	// base64 데이터 디코딩
         // var array = [];
@@ -588,6 +593,6 @@ function GameScreen(props) {
 
         </div>
     )
-}
+});
 
 export default GameScreen;
