@@ -6,7 +6,7 @@ import LoginPage from "./HomePage/Login.jsx";
 import SignupPage from "./HomePage/Signup.jsx";
 import SelectionPage from "./FirstPage/Selection.jsx";
 import DecorationPage from "./MainPage/Decoration.jsx";
-import DecorationGamePage from "./MainPage/DecorationGame.jsx";
+import DecorationGamePage from "./MainPage/ DecorationGame.jsx";
 import { Routes, Route, BrowserRouter } from "react-router-dom";
 
 function App() {
