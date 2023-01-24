@@ -249,7 +249,7 @@ function GameScreen(props) {
                 x: windowSize.width * constants.GAME_FRAME_POSITION_X_RATIO, y: 0, width: windowSize.width * constants.GAME_EMOJI_RATIO, height: windowSize.width * constants.GAME_EMOJI_RATIO,
                 fill: image.src, isDragging: false
             });
-            props.setData(shapes.length);
+            props.getData(shapes.current.length);
             draw();
             console.log("thisissetimage " + shapes.current.length);
             console.log("success!");

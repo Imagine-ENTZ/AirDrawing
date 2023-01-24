@@ -36,7 +36,8 @@ function DecorationGame(props) {
     const [number, setNumber] = useState(0);
 
     const getData = (number) => {
-        setNumber(number);
+        //setNumber(number);
+        console.log(number);
     }
 
     return (
@@ -63,7 +64,7 @@ function DecorationGame(props) {
             <div className="body-container-decoration-game">
                 <div className="screen-admin">
                     <div style={{ width: (window.innerHeight * constants.GAME_SCREEN_HEIGHT_RATIO * (4.0 / 3.0)), height: windowHeight, margin: "auto" }}>
-                        <GameScreen setNumber = {setNumber} />
+                        <GameScreen getData = {setNumber} />
                     </div>
                 </div>
             </div>
