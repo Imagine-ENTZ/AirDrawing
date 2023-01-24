@@ -7,7 +7,7 @@ import TimerScreen from "./Component/TimerScreen.jsx";
 import * as constants from "../utils/Constants";
 
 
-function DecorationGame() {
+function DecorationGame(props) {
 
     const [windowHeight, setWindowHeight] = useState(window.innerHeight * constants.GAME_SCREEN_HEIGHT_RATIO);
 
@@ -25,12 +25,14 @@ function DecorationGame() {
         }
     }, [])
 
+    // 모달창 (타이머)
     const [isOpen, setIsOpen] = useState(false);
 
     const onClickButton = () => {
         setIsOpen(true);
     };
 
+    // 이모지 개수 재주기
     const [number, setNumber] = useState(0);
 
     const getData = (number) => {
@@ -43,7 +45,7 @@ function DecorationGame() {
                 <div className="best-top-container-decoration-game">
                     <div className="best-top-left-decoration-game">
                         <div className="emoji-record">
-                            <span>Your Emoji : </span>
+                            <span>Your Emoji : </span><span>{number}</span>
                         </div>
                     </div>
                     <div className="best-top-right-decoration-game">
@@ -61,7 +63,7 @@ function DecorationGame() {
             <div className="body-container-decoration-game">
                 <div className="screen-admin">
                     <div style={{ width: (window.innerHeight * constants.GAME_SCREEN_HEIGHT_RATIO * (4.0 / 3.0)), height: windowHeight, margin: "auto" }}>
-                        <GameScreen />
+                        <GameScreen setNumber = {setNumber} />
                     </div>
                 </div>
             </div>

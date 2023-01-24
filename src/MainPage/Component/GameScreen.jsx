@@ -11,7 +11,7 @@ import * as constants from "../../utils/Constants";
 
 import Tesseract from 'tesseract.js';
 
-function GameScreen() {
+function GameScreen(props) {
 
     const [windowSize, setWindowSize] = useState({
         width: window.innerHeight * constants.GAME_SCREEN_HEIGHT_RATIO * (4.0 / 3.0),
@@ -249,6 +249,7 @@ function GameScreen() {
                 x: windowSize.width * constants.GAME_FRAME_POSITION_X_RATIO, y: 0, width: windowSize.width * constants.GAME_EMOJI_RATIO, height: windowSize.width * constants.GAME_EMOJI_RATIO,
                 fill: image.src, isDragging: false
             });
+            props.setData(shapes.length);
             draw();
             console.log("thisissetimage " + shapes.current.length);
             console.log("success!");
