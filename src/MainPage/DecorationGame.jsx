@@ -3,11 +3,14 @@ import "./DecorationGame.css";
 import GameScreen from "./Component/GameScreen";
 import OnOff from "./img/on-off-button.png";
 import TimerScreen from "./Component/TimerScreen.jsx";
+import StarRain from "./Component/StarRain.jsx";
+import { useNavigate } from "react-router-dom";
 
 import * as constants from "../utils/Constants";
 
 
 function DecorationGame(props) {
+    const navigate = useNavigate();
 
     const [windowHeight, setWindowHeight] = useState(window.innerHeight * constants.GAME_SCREEN_HEIGHT_RATIO);
 
@@ -42,6 +45,7 @@ function DecorationGame(props) {
 
     return (
         <div className="main-container-decoration-game">
+            <StarRain />
             <div className="top-container-decoration-game">
                 <div className="best-top-container-decoration-game">
                     <div className="best-top-left-decoration-game">
@@ -50,7 +54,7 @@ function DecorationGame(props) {
                         </div>
                     </div>
                     <div className="best-top-right-decoration-game">
-                        <div className="on-off-button">
+                        <div className="on-off-button" onClick={() => navigate("/decorate")}>
                             <img className="on-off-image" src={OnOff} alt="END"></img>
                         </div>
                     </div>

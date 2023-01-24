@@ -3,44 +3,44 @@
 .main-container-decoration-game {
     width: 100vw;
     height: 100vh;
-    background-color: aquamarine;
+    /* background-color: aquamarine; */
 }
 
 .top-container-decoration-game {
     width: 100%;
     height: 20%;
-    background-color: blueviolet;
+    /* background-color: blueviolet; */
 }
 
 .body-container-decoration-game {
     width: 100%;
     height: 60%;
-    background-color: brown;
+    /* background-color: brown; */
 }
 
 .bottom-container-decoration-game {
     width: 100%;
     height: 20%;
-    background-color: navy;
+    /* background-color: navy; */
 }
 
 .best-top-container-decoration-game {
     display: flex;
     width: 100%;
     height: 40%;
-    background-color: cadetblue;
+    /* background-color: cadetblue; */
 }
 
 .best-top-left-decoration-game {
     width: 95%;
     height: 100%;
-    background-color: yellowgreen;
+    /* background-color: yellowgreen; */
 }
 
 .best-top-right-decoration-game {
     width: 5%;
     height: 100%;
-    background-color: rgb(93, 0, 255);
+    /* background-color: rgb(93, 0, 255); */
 }
 
 .on-off-button {
@@ -69,7 +69,7 @@
 .bottom-of-top-container-decoration-game {
     width: 100%;
     height: 60%;
-    background-color: aqua;
+    /* background-color: aqua; */
 }
 
 .decoration-game-sentence {
@@ -86,13 +86,13 @@
 .top-of-bottom-container-decoration-game {
     width: 100%;
     height: 40%;
-    background-color: navy;
+    /* background-color: navy; */
 }
 
 .bottom-of-bottom-container-decoration-game {
     width: 100%;
     height: 60%;
-    background-color: black;
+    /* background-color: black; */
 }
 
 .emoji-record {
@@ -103,7 +103,7 @@
 
     position: relative;
     top: 40%;
-    left: 42%;
+    left: 46%;
 }
 
 .screen-capture-sentence {
