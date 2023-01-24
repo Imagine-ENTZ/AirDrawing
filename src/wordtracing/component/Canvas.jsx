@@ -9,15 +9,27 @@ import "../Game.css"
 import canvasPicture from "../img/canvas.png" 
 import Tesseract from 'tesseract.js';
 
-function Canvas() {
+function Canvas(props) {
+  const isTesting = useRef(props.isTesting);  //현재 단어의 정답 여부를 테스트 중인지 관리
+
+  const sendWordToParentComponent = (text) => {
+    text = text.split("\n").join("");
+    text = text.split(' ').join('');
+    props.wordWrittenByUser.current = text;   //사용자가 작성한 영어단어 전달
+  }
+
+  const wordList = ["apple", "Z", "cat", "Zoo", "b", "bread", "J"];
 
   const webcamRef = useRef(null);
   const canvasRef = useRef(null);
 
-  // 그리기 변수
-  const canvasRef2 = useRef(null);
-  const contextRef = useRef(null);
+  //손가락으로 캔버스에 그리는 변수
+  const fingerOfcanvasRef = useRef(null);
+  const fingerOfcontextRef = useRef(null);
+
+  //현재 그리기 모드
   const handGesture = useRef(constants.HOVER);
+  const preHandGesture = useRef(constants.HOVER);
 
   //스팰링 도안 캔버스 변수
   const spellingArtOfCanvasRef = useRef(null);
@@ -27,6 +39,7 @@ function Canvas() {
   const pointOfContextRef = useRef(null);
   const pointOfCanvasRef = useRef(null);
 
+  //직전의 손가락 위치
   const preFingerPositionX = useRef(null);
   const preFingerPositionY = useRef(null);
   const [fingerPosition, setFingerPosition] = useState({
@@ -40,9 +53,6 @@ function Canvas() {
       height: window.innerHeight*constants.HEIGHT_RATIO
   });
 
-  //단어목록
-  const wordList = ["apple", "Z", "cat", "Zoo", "b", "bread", "J"];
-
   // 손그리기 캔버스
   useEffect(() => {
     let radius = 20;
@@ -51,28 +61,32 @@ function Canvas() {
       return;
     }
 
+    if(handGesture.current == constants.OK && isTesting.current == constants.IS_TESTING){
+      return;
+    }
+
     switch(handGesture.current){
       case constants.DRAW:
-        contextRef.current.beginPath();
-        contextRef.current.moveTo(preFingerPositionX.current, preFingerPositionY.current);
-        contextRef.current.lineTo(fingerPosition.x, fingerPosition.y);
-        contextRef.current.stroke();
-        contextRef.current.closePath();   
+        fingerOfcontextRef.current.beginPath();
+        fingerOfcontextRef.current.moveTo(preFingerPositionX.current, preFingerPositionY.current);
+        fingerOfcontextRef.current.lineTo(fingerPosition.x, fingerPosition.y);
+        fingerOfcontextRef.current.stroke();
+        fingerOfcontextRef.current.closePath();   
         break;
       case constants.ERASE:
-        contextRef.current.save();
-        contextRef.current.beginPath();
-        contextRef.current.arc(fingerPosition.x, fingerPosition.y, radius, 0, 2*Math.PI, true);
-        contextRef.current.clip();
-        contextRef.current.clearRect(fingerPosition.x - radius, fingerPosition.y - radius, radius*2, radius*2);
-        contextRef.current.restore();
+        fingerOfcontextRef.current.save();
+        fingerOfcontextRef.current.beginPath();
+        fingerOfcontextRef.current.arc(fingerPosition.x, fingerPosition.y, radius, 0, 2*Math.PI, true);
+        fingerOfcontextRef.current.clip();
+        fingerOfcontextRef.current.clearRect(fingerPosition.x - radius, fingerPosition.y - radius, radius*2, radius*2);
+        fingerOfcontextRef.current.restore();
         break;
       case constants.OK:
         checkIfWordsMatch();
         break;
     }
 
-    if (contextRef.current) {
+    if (fingerOfcontextRef.current) {
       preFingerPositionX.current = fingerPosition.x;
       preFingerPositionY.current = fingerPosition.y;
     }
@@ -91,7 +105,7 @@ function Canvas() {
       minTrackingConfidence: 0.5,
     });
 
-    canvasRef2.current.focus();
+    fingerOfcanvasRef.current.focus();
     if (typeof webcamRef.current !== "undefined" && webcamRef.current !== null) {
       const camera = new Camera(webcamRef.current.video, {
         onFrame: async () => {
@@ -106,7 +120,7 @@ function Canvas() {
     hands.onResults(onResults);
 
     //사용자 그리기 캔버스
-    const canvas = canvasRef2.current;
+    const canvas = fingerOfcanvasRef.current;
     canvas.width = windowSize.width;
     canvas.height = windowSize.height;
 
@@ -115,7 +129,7 @@ function Canvas() {
     context.strokeStyle = "orange";
     context.lineWidth = 10;
 
-    contextRef.current = context;
+    fingerOfcontextRef.current = context;
 
     //영어 단어 스펠링 도안 캔버스
     const spellingArtCanvas = spellingArtOfCanvasRef.current;
@@ -215,6 +229,7 @@ function Canvas() {
       let x = parseInt(windowSize.width - results.multiHandLandmarks[0][8].x*windowSize.width);
       let y = parseInt(windowSize.height*results.multiHandLandmarks[0][8].y);
 
+      preHandGesture.current = handGesture.current;    
       handGesture.current = detectHandGesture(results.multiHandLandmarks[0]);  //현재 그리기 모드
 
       let radius = 10;
@@ -238,7 +253,15 @@ function Canvas() {
 
   //사용자가 적은 단어와 제시된 단어의 일치 여부 확인
   const checkIfWordsMatch = ( ) => {
-    const image = canvasRef2.current.toDataURL("image/png");
+    //아직 이전의 결과를 테스트 중인 경우 중복 테스트가 되는 것을 방지함
+    if(isTesting.current == constants.IS_TESTING){
+      return;
+    }
+
+    props.getIsTesting(constants.IS_TESTING);
+    isTesting.current = constants.IS_TESTING;
+    
+    const image = fingerOfcanvasRef.current.toDataURL("image/png");
     saveImage(image);
   };
 
@@ -259,12 +282,17 @@ function Canvas() {
       
       },
     })
-      .catch((err) => {
-        console.error(err);
-      })
-      .then((result) => {
-        console.log("결과값 + " + result.data.text);
-      });
+    .catch((err) => {
+      console.error(err);
+    })
+    .then((result) => {
+      sendWordToParentComponent(result.data.text);  //부모 컴포넌트에 사용자가 쓴 단어 텍스트값 보내기
+      console.log("결과값: " + result.data.text)
+      isTesting.current = !constants.IS_TESTING;
+      props.getIsTesting(!constants.IS_TESTING);  //테스트 모드 종료
+
+      fingerOfcontextRef.current.clearRect(0, 0, windowSize.width, windowSize.height); //검사 완료 후 글씨쓴 캔버스 초기화
+    });
 
 }
 
@@ -339,7 +367,7 @@ function Canvas() {
         }}>
       </canvas>
       <canvas
-        ref={canvasRef2}
+        ref={fingerOfcanvasRef}
         mirrored={true}
         style={{
           position: "absolute",

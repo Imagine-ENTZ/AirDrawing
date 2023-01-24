@@ -10,9 +10,32 @@ import * as constants from "../utils/Constants"
 function GamePage() {
   const [windowHeight, setWindowHeight] = useState(window.innerHeight*constants.HEIGHT_RATIO);
 
+  const wordWrittenByUser = useRef(null);  //사용자가 쓴 글자
+  const isTesting = useRef(!constants.IS_TESTING);
+  const indexOfwordList = useRef(0);  //단어목록에서 현재 사용자가 작성해야하는 단어의 인덱스값
+
+  const getIsTesting = (test) => {
+    isTesting.current = test;
+  }
+
+  useEffect(() => {
+
+    if(wordWrittenByUser.current === "C"){ //현재 화면에 표시된 단어와 사용자가 작성한 단어가 일치하는지를 확인함
+      console.log("정답 -> 사용자["+wordWrittenByUser.current+"], 정답["+wordList[indexOfwordList]+"]");
+    }
+    else{
+      console.log("실패 -> 사용자["+wordWrittenByUser.current+"], 정답["+wordList[indexOfwordList]+"]");
+    }
+
+    indexOfwordList.current += 1;
+    isTesting.current = !constants.IS_TESTING;
+  }, [wordWrittenByUser.current])
+  
+  //단어목록
+  const wordList = ["apple", "Z", "cat", "Zoo", "b", "bread", "J"];
+
   const handleResize = () => {
     let height = window.innerHeight*constants.HEIGHT_RATIO;
-    console.log(height)
 
     setWindowHeight(height);
   }
@@ -53,7 +76,7 @@ function GamePage() {
       <div className='word-tracing-timer-container'>
         <div className='word-tracing-timer'>
           <div className='word-tracing-timer-gauge' style={{color: "white"}}>
-            {/* {minutes}:{seconds < 10 ? `0${seconds}` : seconds} */}
+            {minutes}:{seconds < 10 ? `0${seconds}` : seconds}
             <img className='word-tracing-timer-img' src={timer}/>
             <ProgressBar 
             className="word-tracing-timer-gauge-bar"
@@ -72,7 +95,7 @@ function GamePage() {
 
       <div className='word-tracing-score-container'>
         <div className='word-tracing-score'>
-          socre : {score.current}
+          score : {score.current}
         </div>
       </div>
 
@@ -91,7 +114,11 @@ function GamePage() {
               width: (window.innerHeight * constants.HEIGHT_RATIO * (4.0 / 3.0)), 
               height: windowHeight,
               margin: "auto"}}>
-              <Canvas/>
+              <Canvas
+              wordWrittenByUser={wordWrittenByUser}
+              isTesting={isTesting.current}
+              getIsTesting={getIsTesting}
+              />
             </div>
           </div>
         </div>

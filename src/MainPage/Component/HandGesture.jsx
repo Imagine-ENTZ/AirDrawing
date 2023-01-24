@@ -53,7 +53,10 @@ const getCosAngle = (u, v) => {
   let ring_vector = calculateVectorize(landmarks[14], landmarks[16])
   let pinky_vector = calculateVectorize(landmarks[18], landmarks[20])
 
-  if( getCosAngle(palm_to_index_vector, index_vector) > threshhold && 
+  if( getCosAngle(palm_to_index_vector, index_vector) > threshhold &&
+      getCosAngle(palm_to_middle_vector, middle_vector) < threshhold && 
+      getCosAngle(palm_to_ring_vector, ring_vector) < threshhold && 
+      getCosAngle(palm_to_pinky_vector, pinky_vector) < threshhold && 
       getCosAngle(index_vector, middle_vector) < 0 &&
       getCosAngle(index_vector, ring_vector) < 0 &&
       getCosAngle(index_vector, pinky_vector) < 0 )
@@ -65,10 +68,10 @@ const getCosAngle = (u, v) => {
       getCosAngle(index_vector, pinky_vector) < 0 )
       return constants.ERASE;
 
-  if( getCosAngle(palm_to_index_vector, index_vector) < 0 && 
+  if( getCosAngle(palm_to_index_vector, index_vector) > threshhold &&
+      getCosAngle(palm_to_pinky_vector, pinky_vector) > threshhold &&
       getCosAngle(index_vector, middle_vector) < 0 &&
-      getCosAngle(index_vector, ring_vector) < 0 &&
-      getCosAngle(index_vector, pinky_vector) < 0 )
+      getCosAngle(index_vector, ring_vector) < 0)
       return constants.OK;
 
   return constants.HOVER;
