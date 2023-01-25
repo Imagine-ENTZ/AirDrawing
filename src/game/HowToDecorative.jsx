@@ -12,7 +12,6 @@ function DecorativeGameLobby() {
         <div className="main-container-how-decorative">
             
         </div>
-
     );
 };
 

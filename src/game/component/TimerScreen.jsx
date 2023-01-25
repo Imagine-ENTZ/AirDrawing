@@ -24,7 +24,7 @@ function TimerScreen({ onClose }) {
         <div className="over-lay">
             <div className="modal-wrap">
                 <div className="contents">
-                    <div className="introductory-phrase">It will be filmed in 5 seconds!</div>
+                    {/* <div className="introductory-phrase">It will be filmed in 5 seconds!</div> */}
                     <div className="count-down">{count}</div>
                 </div>
             </div>
