@@ -59,7 +59,7 @@ function Canvas(props) {
       return;
     }
 
-    if(handGesture.current == constants.OK && isTesting.current == constants.IS_TESTING){
+    if(props.isTesting == constants.IS_TESTING){
       return;
     }
 
@@ -256,6 +256,7 @@ function Canvas(props) {
       return;
     }
 
+    props.setIsTesting(constants.IS_TESTING);
     isTesting.current = constants.IS_TESTING;
     
     const image = fingerOfcanvasRef.current.toDataURL("image/png");

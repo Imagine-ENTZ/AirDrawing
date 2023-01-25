@@ -107,7 +107,7 @@
 
 /*timer progress bar*/
 .bar-container {
-  border-radius: 50px;
+  border-radius: 0px 50px 50px 0px;
 }
 
 

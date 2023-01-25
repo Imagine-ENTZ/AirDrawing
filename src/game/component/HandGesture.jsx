@@ -42,7 +42,6 @@ export const detectHandGesture = (landmarks) => {
   }
 
   // palm vector
-  let palm_to_thumb_vector = calculateVectorize(landmarks[0], landmarks[5])
   let palm_to_index_vector = calculateVectorize(landmarks[0], landmarks[5])
   let palm_to_middle_vector = calculateVectorize(landmarks[0], landmarks[9])
   let palm_to_ring_vector = calculateVectorize(landmarks[0], landmarks[13])
@@ -53,6 +52,17 @@ export const detectHandGesture = (landmarks) => {
   let middle_vector = calculateVectorize(landmarks[10], landmarks[12])
   let ring_vector = calculateVectorize(landmarks[14], landmarks[16])
   let pinky_vector = calculateVectorize(landmarks[18], landmarks[20])
+
+  //엄지손가락의 각도를 구하기위한 벡터
+  let thumCmcToMcp = calculateVectorize(landmarks[1], landmarks[2]);
+  let thumMcpToIp = calculateVectorize(landmarks[2], landmarks[3]);
+
+  if( getCosAngle(palm_to_index_vector, index_vector) < threshhold &&
+      getCosAngle(palm_to_middle_vector, middle_vector) < threshhold &&
+      getCosAngle(palm_to_ring_vector, ring_vector) < threshhold &&
+      getCosAngle(palm_to_pinky_vector, pinky_vector) < threshhold &&
+      getCosAngle(thumCmcToMcp, thumMcpToIp) >= 0.99 )
+      return constants.OK;
 
   if( getCosAngle(palm_to_index_vector, index_vector) > threshhold &&
       getCosAngle(palm_to_middle_vector, middle_vector) < threshhold && 
@@ -74,12 +84,6 @@ export const detectHandGesture = (landmarks) => {
     getCosAngle(index_vector, middle_vector) < 0 &&
     getCosAngle(index_vector, ring_vector) < 0)
     return constants.TRANSLATE;
-
-  if( getCosAngle(palm_to_index_vector, index_vector) > threshhold &&
-      getCosAngle(palm_to_pinky_vector, pinky_vector) > threshhold &&
-      getCosAngle(index_vector, middle_vector) < 0 &&
-      getCosAngle(index_vector, ring_vector) < 0)
-      return constants.OK;
 
   // if( getCosAngle(index_vector, index_vector) < 0 &&
   //     getCosAngle(index_vector, pinky_vector) > 0 &&

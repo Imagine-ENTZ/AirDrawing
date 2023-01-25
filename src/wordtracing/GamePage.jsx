@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from "react"
 import "./Game.css"
 import Canvas from "./component/Canvas"
+import CheckSpinner from "./component/CheckSpinner"
 import timer from "./img/clock.png"
-import titleLog from "./img/word_title_logo.png";
-import handedMode from "./img/handed_mode.png"
+// import handedMode from "./img/handed_mode.png"
 import ProgressBar from "@ramonak/react-progress-bar";
 import * as constants from "../utils/Constants"
 
@@ -14,6 +14,8 @@ function GamePage() {
   const wordToTest = useRef(null);         //현재 사용자가 작성해야 하는 단어
   const indexOfwordList = useRef(0);       //단어목록에서 현재 사용자가 작성해야하는 단어의 인덱스값
   const score = useRef(0);                 //현재 점수
+  // const isTesting = useRef(!constants.IS_TESTING);
+  const [isTesting, setIsTesting] = useState(!constants.IS_TESTING);
 
   useEffect(() => {
     if(wordWrittenByUser.current === null) {
@@ -28,6 +30,7 @@ function GamePage() {
       console.log("실패 -> 사용자["+wordWrittenByUser.current+"], 정답["+wordList[indexOfwordList.current]+"]");
     }
 
+    setIsTesting(!constants.IS_TESTING);
     indexOfwordList.current += 1;
     wordToTest.current = wordList[indexOfwordList.current];
 
@@ -54,6 +57,13 @@ function GamePage() {
     }  
   }, [])
 
+  const getLeftTime = () => {
+    let second = seconds < 10 ? `0${seconds}` : seconds;
+
+    return minutes + ":" + second;
+    // "{minutes}:{seconds < 10 ? `0${seconds}` : seconds}"
+  }
+
   const [minutes, setMinutes] = useState(3);
   const [seconds, setSeconds] = useState(0);
   const [timeLeft, setTimeLeft] = useState(minutes*60+seconds); //남은 시간
@@ -74,6 +84,10 @@ function GamePage() {
       }
       setTimeLeft(minutes*60+seconds);
     }, 1000);
+
+    if(timeLeft === 0){
+      console.log("총 점수 : " + score);
+    }
     
     return () => clearInterval(countdown);
   }, [minutes, seconds]);
@@ -84,12 +98,12 @@ function GamePage() {
       <div className='word-tracing-timer-container'>
         <div className='word-tracing-timer'>
           <div className='word-tracing-timer-gauge' style={{color: "white"}}>
-            {minutes}:{seconds < 10 ? `0${seconds}` : seconds} // {timeLeft}
+            {/* {minutes}:{seconds < 10 ? `0${seconds}` : seconds} // {timeLeft} */}
             <img className='word-tracing-timer-img' src={timer}/>
             <ProgressBar 
             className="word-tracing-timer-gauge-bar"
             completed={timeLeft}
-            customLabel={timeLeft+""}
+            customLabel={getLeftTime()}
             maxCompleted={totalTime.current}
             barContainerClassName="bar-container"
             labelColor="black"
@@ -110,7 +124,10 @@ function GamePage() {
       <div className='word-tracing-play-screen'>
         <div className='word-tracing-handed-mode-container'>
           <div className='word-tracing-handed-mode'>
-            <img className='word-tracing-handed-mode-img' src={handedMode} />
+
+
+            
+            {/* <img className='word-tracing-handed-mode-img' src={handedMode} /> */}
           </div>
         </div>
         <div className='word-tracing-sketckbook-container'>
@@ -121,11 +138,29 @@ function GamePage() {
             <div style={{
               width: (window.innerHeight * constants.HEIGHT_RATIO * (4.0 / 3.0)), 
               height: windowHeight,
-              margin: "auto"}}>
-              <Canvas
-              wordWrittenByUser={wordWrittenByUser}
-              wordToTest={wordToTest}
-              />
+              margin: "auto",
+              position: "relative"}}>
+                <Canvas
+                wordWrittenByUser={wordWrittenByUser}
+                wordToTest={wordToTest}
+                isTesting={isTesting}
+                setIsTesting={setIsTesting}
+                style={{ 
+                  position: "absolute",
+                  left: "0",
+                  top: "0",
+                  zIndex: "1"}}
+                />
+                <div style={{ 
+                  position: "absolute",
+                  left: "0",
+                  top: "0",
+                  width: (window.innerHeight * constants.HEIGHT_RATIO * (4.0 / 3.0)), 
+                  height: windowHeight,
+                  zIndex: "5"
+                }}>
+                  {isTesting && <CheckSpinner />}
+                </div>
             </div>
           </div>
         </div>
