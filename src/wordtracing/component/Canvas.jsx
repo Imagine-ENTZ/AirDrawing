@@ -10,15 +10,13 @@ import canvasPicture from "../img/canvas.png"
 import Tesseract from 'tesseract.js';
 
 function Canvas(props) {
-  const isTesting = useRef(props.isTesting);  //현재 단어의 정답 여부를 테스트 중인지 관리
+  const isTesting = useRef(!constants.IS_TESTING);  //현재 단어의 정답 여부를 테스트 중인지 관리
 
   const sendWordToParentComponent = (text) => {
     text = text.split("\n").join("");
     text = text.split(' ').join('');
     props.wordWrittenByUser.current = text;   //사용자가 작성한 영어단어 전달
   }
-
-  const wordList = ["apple", "Z", "cat", "Zoo", "b", "bread", "J"];
 
   const webcamRef = useRef(null);
   const canvasRef = useRef(null);
@@ -258,7 +256,6 @@ function Canvas(props) {
       return;
     }
 
-    props.getIsTesting(constants.IS_TESTING);
     isTesting.current = constants.IS_TESTING;
     
     const image = fingerOfcanvasRef.current.toDataURL("image/png");
@@ -289,7 +286,6 @@ function Canvas(props) {
       sendWordToParentComponent(result.data.text);  //부모 컴포넌트에 사용자가 쓴 단어 텍스트값 보내기
       console.log("결과값: " + result.data.text)
       isTesting.current = !constants.IS_TESTING;
-      props.getIsTesting(!constants.IS_TESTING);  //테스트 모드 종료
 
       fingerOfcontextRef.current.clearRect(0, 0, windowSize.width, windowSize.height); //검사 완료 후 글씨쓴 캔버스 초기화
     });
@@ -303,10 +299,10 @@ function Canvas(props) {
         height: "100%",
       }}>
       <div style={{
-        textShadow: "-1px 0 #000, 0 1px #000, 1px 0 #000, 0 -1px #000",
+        textShadow: "-2px 0 #000, 0 2px #000, 2px 0 #000, 0 -2px #000",
         position: "absolute", 
         width:"100%",
-        height: "80%",
+        height: "70%",
         bottom: "0",
         display: "flex",
         justifyContent: "center",
@@ -315,11 +311,12 @@ function Canvas(props) {
         // alignItems: "center",
         textAlign: "center",
         fontSize: "500%",
-        fontFamily: "Bungee_Outline",
+        fontFamily: "Fredoka_One",
         zIndex: 2,
-        color: "black",
+        color: "white",
       }}>
-        { wordList[5] }
+        {/* { wordList[5] } */}
+        { props.wordToTest.current }
       </div>
       {/* <div style={{
         position: "absolute", 

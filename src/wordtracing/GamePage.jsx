@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react"
 import "./Game.css"
 import Canvas from "./component/Canvas"
-import timer from "./img/timer.png"
+import timer from "./img/clock.png"
 import titleLog from "./img/word_title_logo.png";
 import handedMode from "./img/handed_mode.png"
 import ProgressBar from "@ramonak/react-progress-bar";
@@ -11,36 +11,41 @@ function GamePage() {
   const [windowHeight, setWindowHeight] = useState(window.innerHeight*constants.HEIGHT_RATIO);
 
   const wordWrittenByUser = useRef(null);  //사용자가 쓴 글자
-  const isTesting = useRef(!constants.IS_TESTING);
-  const indexOfwordList = useRef(0);  //단어목록에서 현재 사용자가 작성해야하는 단어의 인덱스값
-
-  const getIsTesting = (test) => {
-    isTesting.current = test;
-  }
+  const wordToTest = useRef(null);         //현재 사용자가 작성해야 하는 단어
+  const indexOfwordList = useRef(0);       //단어목록에서 현재 사용자가 작성해야하는 단어의 인덱스값
+  const score = useRef(0);                 //현재 점수
 
   useEffect(() => {
+    if(wordWrittenByUser.current === null) {
+      return;
+    }
 
-    if(wordWrittenByUser.current === "C"){ //현재 화면에 표시된 단어와 사용자가 작성한 단어가 일치하는지를 확인함
-      console.log("정답 -> 사용자["+wordWrittenByUser.current+"], 정답["+wordList[indexOfwordList]+"]");
+    if(wordWrittenByUser.current === wordList[indexOfwordList.current]){   //현재 화면에 표시된 단어와 사용자가 작성한 단어가 일치하는지를 확인함
+      console.log("정답 -> 사용자["+wordWrittenByUser.current+"], 정답["+wordList[indexOfwordList.current]+"]");
+      score.current += 100;
     }
     else{
-      console.log("실패 -> 사용자["+wordWrittenByUser.current+"], 정답["+wordList[indexOfwordList]+"]");
+      console.log("실패 -> 사용자["+wordWrittenByUser.current+"], 정답["+wordList[indexOfwordList.current]+"]");
     }
 
     indexOfwordList.current += 1;
-    isTesting.current = !constants.IS_TESTING;
+    wordToTest.current = wordList[indexOfwordList.current];
+
+    console.log("index: " + indexOfwordList.current + ", current word: " + wordToTest.current);
   }, [wordWrittenByUser.current])
   
   //단어목록
   const wordList = ["apple", "Z", "cat", "Zoo", "b", "bread", "J"];
+
+  useEffect(() => {
+    wordToTest.current = wordList[0];
+  }, [])
 
   const handleResize = () => {
     let height = window.innerHeight*constants.HEIGHT_RATIO;
 
     setWindowHeight(height);
   }
-
-  const score = useRef(0);
 
   useEffect(() => {
     window.addEventListener('resize', handleResize);
@@ -51,6 +56,8 @@ function GamePage() {
 
   const [minutes, setMinutes] = useState(3);
   const [seconds, setSeconds] = useState(0);
+  const [timeLeft, setTimeLeft] = useState(minutes*60+seconds); //남은 시간
+  const totalTime = useRef(minutes*60+seconds);  //게임의 총 시간
 
   useEffect(() => {
     const countdown = setInterval(() => {
@@ -65,6 +72,7 @@ function GamePage() {
           setSeconds(59);
         }
       }
+      setTimeLeft(minutes*60+seconds);
     }, 1000);
     
     return () => clearInterval(countdown);
@@ -76,13 +84,13 @@ function GamePage() {
       <div className='word-tracing-timer-container'>
         <div className='word-tracing-timer'>
           <div className='word-tracing-timer-gauge' style={{color: "white"}}>
-            {minutes}:{seconds < 10 ? `0${seconds}` : seconds}
+            {minutes}:{seconds < 10 ? `0${seconds}` : seconds} // {timeLeft}
             <img className='word-tracing-timer-img' src={timer}/>
             <ProgressBar 
             className="word-tracing-timer-gauge-bar"
-            completed={seconds}
-            customLabel={seconds}
-            maxCompleted={60} 
+            completed={timeLeft}
+            customLabel={timeLeft+""}
+            maxCompleted={totalTime.current}
             barContainerClassName="bar-container"
             labelColor="black"
             labelAlignment="center"
@@ -116,8 +124,7 @@ function GamePage() {
               margin: "auto"}}>
               <Canvas
               wordWrittenByUser={wordWrittenByUser}
-              isTesting={isTesting.current}
-              getIsTesting={getIsTesting}
+              wordToTest={wordToTest}
               />
             </div>
           </div>
