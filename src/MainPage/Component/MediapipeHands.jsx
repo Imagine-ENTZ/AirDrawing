@@ -33,14 +33,15 @@ function MediapipeHands({ roomid, sender }) {
   useEffect(() => {
     let radius = 20;
 
+
     switch (HandGesture.current) {
+
       case constants.DRAW:
         contextRef.current.beginPath();
         contextRef.current.moveTo(fingerPosition.x, fingerPosition.y);
         contextRef.current.lineTo(preFingerPositionX.current, preFingerPositionY.current);
         contextRef.current.stroke();
         contextRef.current.closePath();
-
         const obj = {
           "startX": fingerPosition.x,
           "startY": fingerPosition.y,
@@ -51,13 +52,17 @@ function MediapipeHands({ roomid, sender }) {
           dataChannel.current.send(JSON.stringify(obj));
 
 
+
+
         break;
       case constants.ERASE:
         contextRef.current.save();
         contextRef.current.beginPath();
+
         contextRef.current.arc(fingerPosition.x, fingerPosition.y, radius, 0, 2 * Math.PI, true);
         contextRef.current.clip();
         contextRef.current.clearRect(fingerPosition.x - radius, fingerPosition.y - radius, radius * 2, radius * 2);
+
         contextRef.current.restore();
         break;
     }
@@ -158,7 +163,30 @@ function MediapipeHands({ roomid, sender }) {
   };
 
 
+
   /////////////////////////////
+
+    startX.current = nativeEvent.clientX - canvasOffSetY.current;
+    startY.current = nativeEvent.clientY - canvasOffSetX.current;
+
+    setIsDrawing3(true);
+  };
+
+  const drawRectangle = ({ nativeEvent }) => {
+    if (!isDrawing3) {
+      return;
+    }
+
+    nativeEvent.preventDefault();
+    nativeEvent.stopPropagation();
+
+    const newMouseX = nativeEvent.clientX - canvasOffSetY.current;
+    const newMouseY = nativeEvent.clientY - canvasOffSetX.current;
+
+    const rectWidht = newMouseX - startX.current;
+    const rectHeight = newMouseY - startY.current;
+    
+
 
 
 
@@ -242,6 +270,7 @@ function MediapipeHands({ roomid, sender }) {
           default:
         }
       },
+
     );
   };
   const connect = () => {
@@ -410,7 +439,6 @@ function MediapipeHands({ roomid, sender }) {
 
 
 
-
   return (
     <div>
       <div className="top">
@@ -486,6 +514,7 @@ function MediapipeHands({ roomid, sender }) {
           style={{ width: "800px", height: "600px" }}
         />
       </div>
+
     </div>
   )
 }
