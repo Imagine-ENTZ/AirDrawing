@@ -1,0 +1,183 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Corben:700');
+
+body {
+	background-color: #060919;
+}
+
+.main-container-menu {
+	display: flex;
+	width: 100vw;
+	height: 100vh;
+}
+
+.left-container-menu {
+	width: 57%;
+	height: 100%;
+}
+
+.left-top-container-menu {
+	width: 100%;
+	height: 12%;
+}
+
+.left-body-container-menu {
+	width: 100%;
+	height: 88%;
+}
+
+.right-container-menu {
+	width: 43%;
+	height: 100%;
+}
+
+.selection {
+	border-radius: 28px;
+	border: 1px solid white;
+	cursor: pointer;
+	background-color: transparent;
+	color: white;
+	font-family: 'Montserrat', sans-serif;
+	font-weight: 700;
+	font-size: 15px;
+	width: 170px;
+	padding: 20px 90px;
+	text-align: center;
+	margin-top: 20px;
+	/* margin:20px;
+    border-radius:28px;
+	border:1px solid white;
+	display:inline-block;
+	cursor:pointer;
+	background-color:transparent;
+    color:white;
+	font-family: 'Montserrat', sans-serif;
+    font-weight: 700; 
+	font-size:15px;
+	padding:17px 100px;
+    display:flex; */
+}
+
+.selection:hover {
+	box-shadow: 0 0 10px 0 blue inset, 0 0 10px 4px blue;
+}
+
+.selection:focus {
+	box-shadow: 0 0 10px 0 blue inset, 0 0 10px 4px blue;
+}
+
+.direction-frame-menu {
+	position: relative;
+	top: 15%;
+	left: 1.5%;
+	width: 7%;
+
+	padding: 1% 0.5%;
+	border-radius: 15px;
+	border: 1px solid white;
+	cursor: pointer;
+	background-color: transparent;
+
+	align-content: center;
+}
+
+.direction-image-menu {
+	position: relative;
+	margin: auto;
+	display: block;
+	width: 70%;
+}
+
+.next-menu-sentence {
+	position: relative;
+	top: 10%;
+}
+
+
+.safety {
+	font-size: 50px;
+	font-family: 'Space Grotesk', sans-serif;
+	font-weight: bold;
+	color: white;
+
+	position: relative;
+	top: 16%;
+	left: 35%;
+
+}
+
+.sentence {
+	white-space: pre-line;
+	line-height: 80px;
+
+	font-size: 100px;
+	font-family: 'Space Grotesk', sans-serif;
+	font-weight: bold;
+	color: white;
+
+	position: relative;
+	top: 18%;
+	left: 35%;
+
+}
+
+.button-list {
+	text-align: center;
+
+	position: relative;
+	top: 26%;
+}
+
+.user-name {
+	color: #FF9B01;
+}
+
+
+
+.hero {
+	background-image: radial-gradient(50% 176% at 0 0);
+	min-height: 100vh;
+
+	position: relative;
+	overflow: hidden;
+	display: flex;
+	justify-content: center;
+	align-content: center;
+
+}
+
+.snow {
+	position: absolute;
+	min-width: 100vw;
+	min-height: 100vh;
+	height: 100%;
+	width: 100%;
+	top: 0;
+	left: 0;
+}
+
+.snow .svg {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+}
+
+#snow-top-layer {
+	will-change: transform;
+	transform: translateY(-768px);
+	animation: fall 22.5s infinite linear;
+}
+
+#snow-bottom-layer {
+	will-change: transform;
+	transform: translateY(-768px);
+	animation: fall 45s infinite linear;
+}
+
+@keyframes fall {
+
+	100% {
+		transform: translateY(0);
+	}
+
+}
