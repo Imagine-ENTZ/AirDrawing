@@ -4,16 +4,15 @@ import { Hands, HAND_CONNECTIONS } from "@mediapipe/hands/hands";
 import { drawConnectors, drawLandmarks } from "@mediapipe/drawing_utils/drawing_utils";
 import { Camera } from "@mediapipe/camera_utils/camera_utils";
 import "./MediapipeHands.css"
-import { detectHandGesture } from "./HandGesture";
-import { preprocessImage } from "./PreprocessImage";
-import frame from "./frame.png";
-import * as constants from "../../utils/Constants";
 
-import Tesseract from 'tesseract.js';
+import { detectHandGesture } from "./HandGesture"
+import * as constants from "../../utils/Constants"
 
-import DrawRectangle from "./DrawRectangle";
+import * as StompJs from "@stomp/stompjs";
+import * as SockJS from "sockjs-client";
 
-function MediapipeHands() {
+function MediapipeHands({ roomid, sender }) {
+
   const webcamRef = useRef(null);
   const canvasRef = useRef(null);
 
@@ -29,49 +28,6 @@ function MediapipeHands() {
     y: 0
   });
 
-  // 프레임 변수
-  const frameImage = new Image();
-  frameImage.src =  frame;
-
-  //사각형 그리기 변수
-  const canvasRef3 = useRef(null);
-  const contextRef3 = useRef(null);
-
-  const canvasOffSetX = useRef(null);
-  const canvasOffSetY = useRef(null);
-  //const startX = useRef(null);
-  //const startY = useRef(null);
-  const [isDrawing3, setIsDrawing3] = useState(false);
-
-  // 캐릭터 변수
-  const canvasRef4 = useRef(null);
-  const contextRef4 = useRef(null);
-
-
-  let dragok = false;
-  let startX;
-  let startY;
-  const shapes = useRef([]);
-
-
-  // // 사각형 캔버스 
-  // useEffect(() => {
-  //   const canvas = canvasRef3.current;
-  //   canvas.height = constants.CANVAS_HEIGHT;
-  //   canvas.width = constants.CANVAS_WIDTH;
-
-  //   const context = canvas.getContext("2d");
-  //   context.lineCap = "round";
-  //   context.strokeStyle = "blue";
-  //   context.lineWidth = 6;
-  //   contextRef3.current = context;
-
-  //   const canvasOffSet = canvas.getBoundingClientRect();
-
-  //   console.log(canvasOffSet);
-  //   canvasOffSetX.current = canvasOffSet.top;
-  //   canvasOffSetY.current = canvasOffSet.left;
-  // }, []);
 
   // 손그리기 캔버스
   useEffect(() => {
@@ -80,13 +36,23 @@ function MediapipeHands() {
     switch (HandGesture.current) {
       case constants.DRAW:
         contextRef.current.beginPath();
-        contextRef.current.moveTo(preFingerPositionX.current, preFingerPositionY.current);
-        contextRef.current.lineTo(fingerPosition.x, fingerPosition.y);
+        contextRef.current.moveTo(fingerPosition.x, fingerPosition.y);
+        contextRef.current.lineTo(preFingerPositionX.current, preFingerPositionY.current);
         contextRef.current.stroke();
         contextRef.current.closePath();
+
+        const obj = {
+          "startX": fingerPosition.x,
+          "startY": fingerPosition.y,
+          "lastX": preFingerPositionX.current,
+          "lastY": preFingerPositionY.current,
+        }
+        // if (dataChannel.current)
+        //   dataChannel.current.send(JSON.stringify(obj));
+
+
         break;
       case constants.ERASE:
-        console.log("ERASE");
         contextRef.current.save();
         contextRef.current.beginPath();
         contextRef.current.arc(fingerPosition.x, fingerPosition.y, radius, 0, 2 * Math.PI, true);
@@ -102,37 +68,11 @@ function MediapipeHands() {
     }
 
     //cam 화면을 벗어나면 
-    if (fingerPosition.x < 125 || fingerPosition.x > constants.DRAWING_WIDTH + 125 || fingerPosition.y < 0 || fingerPosition.y > constants.DRAWING_HEIGHT) {
+    if (fingerPosition.x < 0 || fingerPosition.x > constants.CANVAS_WIDTH || fingerPosition.y < 0 || fingerPosition.y > constants.CANVAS_HEIGHT) {
       preFingerPositionX.current = null;
       preFingerPositionY.current = null;
     }
-  }, [fingerPosition]);
-
-  // 단어 적는 프레임 
-  useEffect(() => {
-    const canvas = canvasRef3.current;
-    canvas.height = constants.CANVAS_HEIGHT;
-    canvas.width = constants.CANVAS_WIDTH;
-    if (!canvasRef3) return;
-    const ctx = canvasRef3.current.getContext("2d");
-    frameImage.onload = function () {
-      ctx.drawImage(frameImage, 125, 0); // 프레임 위치 나중에 손 봐야함
-      console.log("width:" + frameImage.width + ", height:" + frameImage.height);
-    };
-  }, [canvasRef3]);
-
-  useEffect(() => {
-    const canvas = canvasRef4.current;
-    canvas.height = constants.CANVAS_HEIGHT;
-    canvas.width = constants.CANVAS_WIDTH;
-
-    const context = canvas.getContext("2d");
-    contextRef4.current = context;
-
-    const canvasOffSet = canvas.getBoundingClientRect();
-    canvasOffSetX.current = canvasOffSet.left;
-    canvasOffSetY.current = canvasOffSet.top;
-  }, [canvasRef4]);
+  }, [fingerPosition])
 
   useEffect(() => {
     const hands = new Hands({
@@ -159,16 +99,14 @@ function MediapipeHands() {
       camera.start();
     }
 
-    
     const canvas = canvasRef2.current;
     canvas.height = constants.CANVAS_HEIGHT;
     canvas.width = constants.CANVAS_WIDTH;
 
     const context = canvas.getContext("2d");
-    context.globalAlpha = 0.1;
     context.lineCap = "round";
-    context.strokeStyle = "black";
-    context.lineWidth = 15;
+    context.strokeStyle = "blue";
+    context.lineWidth = 8;
     contextRef.current = context;
 
     hands.onResults(onResults);
@@ -189,7 +127,13 @@ function MediapipeHands() {
     canvasCtx.scale(-1, 1);  // 뒤집기 
 
     // 캔버스 이미지 그리기
-    canvasCtx.drawImage(results.image, 0, 0, canvasElement.width, canvasElement.height);
+    canvasCtx.drawImage(
+      results.image,
+      0,
+      0,
+      canvasElement.width,
+      canvasElement.height
+    );
 
     // 손가락 부분 그리기
     if (results.multiHandLandmarks) {
@@ -203,365 +147,345 @@ function MediapipeHands() {
       }
 
       // 손가락 포인트 값
-      const x = calculateX(parseInt(constants.CANVAS_WIDTH - results.multiHandLandmarks[0][8].x * constants.CANVAS_WIDTH));
-      const y = calculateY(parseInt(results.multiHandLandmarks[0][8].y * constants.CANVAS_HEIGHT));
-
-      // 손가락 포인트 값
-      // const x = parseInt(constants.CANVAS_WIDTH - results.multiHandLandmarks[0][8].x * constants.CANVAS_WIDTH);
-      // const y = parseInt(results.multiHandLandmarks[0][8].y * constants.CANVAS_HEIGHT);
+      const x = parseInt(constants.CANVAS_WIDTH - results.multiHandLandmarks[0][8].x * constants.CANVAS_WIDTH);
+      const y = parseInt(results.multiHandLandmarks[0][8].y * constants.CANVAS_HEIGHT);
 
       HandGesture.current = detectHandGesture(results.multiHandLandmarks[0]);  //현재 그리기 모드
       setFingerPosition({ x: x, y: y });
     }
+    //save한 곳으로 이동
     canvasCtx.restore();
   };
 
-  const calculateX = (beforeX) => {
-    if (beforeX > constants.DRAWING_WIDTH + 125 || beforeX < 125) {
-      beforeX = preFingerPositionX;
-    }
-    return beforeX;
-  }
 
-  const calculateY = (beforeY) => {
-    if (beforeY > constants.DRAWING_HEIGHT || beforeY < 0) {
-      beforeY = preFingerPositionY;
-    }
-    return beforeY;
-  }
+  /////////////////////////////
 
-  // 이모지 넣어주는 함수 
-  const setEmoji = (emojiName) => {
-    const canvas = canvasRef4.current;
-    canvas.height = constants.CANVAS_HEIGHT;
-    canvas.width = constants.CANVAS_WIDTH;
-    const ctx = canvas.getContext('2d'); 
-    const image = new Image();
 
-    image.src = "https://emojiapi.dev/api/v1/" + emojiName + "/50.png";
 
-    image.onerror = function () {
-      draw();
-    }
-  
-    image.onload = function () {
-      //ctx.drawImage(image, 125, 0);
-      shapes.current.push({
-        x:300, y:0, width:50, height:50, fill:image.src, isDragging: false
-      });
-      draw();
-      console.log("thisissetimage " + shapes.current.length);
-      console.log("success!");
-    }
-  }
 
-  function rect(r) {
-    const image = new Image();
-    image.src = r.fill;
-    // canvasRef4.current.getContext('2d').fillStyle = image;
-    // canvasRef4.current.getContext('2d').fillRect(r.x, r.y, r.width, r.height);
-    // const image = new Image();
-    // image.src = r.fill;
-    image.onload = function() {
-    canvasRef4.current.getContext('2d').drawImage(image, r.x, r.y, r.width, r.height);
-    }
-  }
 
-  function clear() {
-    canvasRef4.current.getContext('2d').clearRect(0, 0, constants.CANVAS_WIDTH, constants.CANVAS_HEIGHT);
-  }
 
-  function draw() {
-    console.log("thisisdraw " + shapes.current.length);
-    // redraw each shape in the shapes[] array
-    for (let i = 0; i < shapes.current.length; i++) {
-      // decide if the shape is a rect or circle
-      // (it's a rect if it has a width property)
-      if (shapes.current[i].width) {
-        rect(shapes.current[i]);
-      } 
-    }
-    clear();
-  }
-  
+  const muteBtn = useRef(null);
+  const cameraBtn = useRef(null);
+  const videoRef = useRef(null);
+  const anotherVideoRef = useRef(null);
 
-  // handle mousedown events
-function myDown({ nativeEvent }) {
-  // tell the browser we're handling this mouse event
-  nativeEvent.preventDefault();
-  nativeEvent.stopPropagation();
+  const client = useRef({});
 
-  // get the current mouse position
-  const mx = parseInt(nativeEvent.clientX - canvasOffSetX.current);
-  const my = parseInt(nativeEvent.clientY - canvasOffSetY.current);
+  let muted = false;
+  let cameraOff = false;
+  let stream;
+  let myPeerConnection;
 
-  console.log("x:" + mx + ", y:" + my);
-  console.log("myDown" + dragok);
-  // test each shape to see if mouse is inside
-  dragok = false;
-  console.log("thisisDown " + shapes.current.length);
-  for (let i = 0; i < shapes.current.length; i++) {
-    var s = shapes.current[i];
-    console.log("xx:" + s.x + ", yy:" + s.y);
-    // decide if the shape is a rect or circle
-    if (s.width) {
-      // test if the mouse is inside this rect
-      if (
-        !dragok &&
-        mx > s.x &&
-        mx < s.x + s.width &&
-        my > s.y &&
-        my < s.y + s.height
-      ) {
-        // if yes, set that rects isDragging=true
-        dragok = true;
-        s.isDragging = true;
-      }
-    } else {
-      const dx = s.x - mx;
-      const dy = s.y - my;
-      // test if the mouse is inside this circle
-      if (!dragok && dx * dx + dy * dy < s.r * s.r) {
-        dragok = true;
-        s.isDragging = true;
-      }
-    }
-  }
-  // save the current mouse position
-  startX = mx;
-  startY = my;
-}
+  const dataChannel = useRef();
 
-// handle mouseup events
-function myUp({ nativeEvent }) {
-  // tell the browser we're handling this mouse event
-  nativeEvent.preventDefault();
-  nativeEvent.stopPropagation();
 
-  console.log("myUp" + dragok);
-  // clear all the dragging flags
-  dragok = false;
-  for (let i = 0; i < shapes.current.length; i++) {
-    shapes.current[i].isDragging = false;
-  }
-}
+  const subscribe = () => {
 
-// handle mouse moves
-function myMove({ nativeEvent }) {
-  // if we're dragging anything...
-  if (dragok) {
-    console.log("drag ok! - myMove");
-    // tell the browser we're handling this mouse event
-    nativeEvent.preventDefault();
-    nativeEvent.stopPropagation();
+    client.current.subscribe(
+      `/sub/gameroom/${roomid}`,
+      async ({ body }) => {
+        const data = JSON.parse(body);
+        // console.log(body);
+        switch (data.type) {
+          case 'ENTER':
+            if (data.sender !== sender) {
+              console.log("sneder  " + data.sender);
+              const offer = await myPeerConnection.createOffer();
+              console.log("@@offer : ", (offer));
+              myPeerConnection.setLocalDescription(offer);
+              client.current.publish({
+                destination: `/pub/gameroom/${roomid}`,
+                body: JSON.stringify({
+                  type: 'OFFER',
+                  room_id: roomid,//param.roomId,
+                  sender: sender,
+                  offer: JSON.stringify(offer),
+                }),
+              });
+              console.log("진입" + offer + "그리거 " + sender)
+              console.log('오퍼전송');
 
-    // get the current mouse position
-    const mx = parseInt(nativeEvent.clientX - canvasOffSetX.current);
-    const my = parseInt(nativeEvent.clientY - canvasOffSetY.current);
+            }
+            break;
 
-    // calculate the distance the mouse has moved
-    // since the last mousemove
-    const dx = mx - startX;
-    const dy = my - startY;
+          case 'OFFER':
+            if (data.sender !== sender) {
+              console.log('오퍼수신');
+              myPeerConnection.setRemoteDescription(JSON.parse(data.offer));
+              const answer = await myPeerConnection.createAnswer();
+              myPeerConnection.setLocalDescription(answer);
+              client.current.publish({
+                destination: `/pub/gameroom/${roomid}`,
+                body: JSON.stringify({
+                  type: 'ANSWER',
+                  room_id: roomid,//param.roomId,
+                  sender: sender,
+                  answer: JSON.stringify(answer),
+                }),
+              });
+              console.log('엔서전송');
+            }
+            break;
+          case 'ANSWER':
+            if (data.sender !== sender) {
+              console.log('엔서수신');
+              myPeerConnection.setRemoteDescription(JSON.parse(data.answer));
+            }
+            break;
+          case 'ICE':
+            if (data.sender !== sender) {
+              console.log("아이스 수신 " + data.sender + " " + data.ice);
+              myPeerConnection.addIceCandidate(JSON.parse(data.ice));
+            }
+            break;
+          default:
+        }
+      },
+    );
+  };
+  const connect = () => {
+    client.current = new StompJs.Client({
+      webSocketFactory: () => new SockJS("http://localhost:8080/gameroom"),
 
-    // move each rect that isDragging
-    // by the distance the mouse has moved
-    // since the last mousemove
-    for (let i = 0; i < shapes.current.length; i++) {
-      const s = shapes.current[i];
-      if (s.isDragging) {
-        s.x += dx;
-        s.y += dy;
-      }
-    }
+      debug: function (str) {
+        // console.log(str);
+      },
+      // reconnectDelay: 5000,
+      // heartbeatIncoming: 4000,
+      // heartbeatOutgoing: 4000,
+      onConnect: () => {
+        subscribe();
+        client.current.publish({
+          destination: `/pub/gameroom/${roomid}`,
+          body: JSON.stringify({
+            type: 'ENTER',
+            room_id: roomid,//param.roomId,
+            sender: sender,
+          }),
+        });
+      },
+      onStompError: (frame) => {
+        console.log(`Broker reported error: ${frame.headers.message}`);
+        console.log(`Additional details: ${frame.body}`);
+      },
+    });
+    client.current.activate();
 
-    // redraw the scene with the new rect positions
-    draw();
-
-    // reset the starting mouse position for the next mousemove
-    startX = mx;
-    startY = my;
-  }
-  else {
-  console.log("drag no ok! - myMove");
-  }
-}
-
-  // // 사각형 그리기 함수
-  // const startDrawingRectangle = ({ nativeEvent }) => {
-  //   nativeEvent.preventDefault();
-  //   nativeEvent.stopPropagation();
-
-  //   startX.current = nativeEvent.clientX - canvasOffSetY.current;
-  //   startY.current = nativeEvent.clientY - canvasOffSetX.current;
-
-  //   setIsDrawing3(true);
-  // };
-
-  // const drawRectangle = ({ nativeEvent }) => {
-  //   if (!isDrawing3) {
-  //     return;
-  //   }
-
-  //   nativeEvent.preventDefault();
-  //   nativeEvent.stopPropagation();
-
-  //   const newMouseX = nativeEvent.clientX - canvasOffSetY.current;
-  //   const newMouseY = nativeEvent.clientY - canvasOffSetX.current;
-
-  //   const rectWidht = newMouseX - startX.current;
-  //   const rectHeight = newMouseY - startY.current;
-
-  //   contextRef3.current.clearRect(0, 0, canvasRef3.current.width, canvasRef3.current.height);
-
-  //   contextRef3.current.strokeRect(startX.current, startY.current, rectWidht, rectHeight);
-  // };
-
-  // const stopDrawingRectangle = () => {
-  //   setIsDrawing3(false);
-  //   canvasRef2.current.focus();
-  // };
-
-  // 이미지 저장
-  const spaceDown = (e) => {
-    if (e.key === ' ') {
-      console.log("space click");
-      //const image = canvasRef2.current.toDataURL("image/png"); // 이걸로 바로하면 흑백 처리 안됨
-      //const image = converToGray();
-      const image = preprocessImage(canvasRef2.current, constants.CANVAS_WIDTH, constants.CANVAS_HEIGHT);
-
-      // 이미지 저장
-      // const a = document.createElement("a");
-      // a.href = image;
-      // a.setAttribute("download", "hong.png");
-      // a.click();
-      saveImage(image);
-    }
+  };
+  const disconnect = () => {
+    client.current.deactivate();
   };
 
-  const saveImage = (imgDataUrl) => {
-    var blobBin = atob(imgDataUrl.split(',')[1]);	// base64 데이터 디코딩
-    var array = [];
-    for (var i = 0; i < blobBin.length; i++) {
-      array.push(blobBin.charCodeAt(i));
+  function onClickCameraOffHandler() {
+    stream.getVideoTracks().forEach((track) => {
+      track.enabled = !track.enabled;
+    });
+    if (!cameraOff) {
+      cameraBtn.current.innerText = 'OFF';
+      cameraOff = !cameraOff;
+    } else {
+      cameraBtn.current.innerText = 'ON';
+      cameraOff = !cameraOff;
+    }
+  }
+  function onClickMuteHandler() {
+    stream.getAudioTracks().forEach((track) => {
+      track.enabled = !track.enabled;
+    });
+    if (!muted) {
+      muteBtn.current.innerText = 'Unmute';
+      muted = !muted;
+    } else {
+      muteBtn.current.innerText = 'Mute';
+      muted = !muted;
+    }
+  }
+
+  const getMedia = async () => {
+    try {
+      // 컴퓨터의 카메라 장치만 가져옴
+      stream = await navigator.mediaDevices.getUserMedia({
+
+        audio: true,
+        video: true,
+      });
+      if (videoRef.current) {
+        videoRef.current.srcObject = stream;
+      }
+    } catch (e) {
+      console.error(e);
     }
 
-    var file = new Blob([new Uint8Array(array)], { type: 'image/png' });	// Blob 생성
-    const image = URL.createObjectURL(file);
+  };
 
-    Tesseract.recognize(image, 'eng', {
-      logger: (m) => {
-        console.log(m);
-
-      },
-    })
-      .catch((err) => {
-        console.error(err);
-      })
-      .then((result) => {
-        console.log("결과값 + " + result.data.text);
-        setEmoji(result.data.text);
-      });
-
-    canvasRef2.current.getContext('2d').clearRect(0, 0, constants.CANVAS_WIDTH, constants.CANVAS_HEIGHT); // 저장 후 지우기
+  function handleIce(data) {
+    client.current.publish({
+      destination: `/pub/gameroom/${roomid}`,
+      body: JSON.stringify({
+        type: 'ICE',
+        room_id: roomid,//param.roomId,
+        sender: sender,
+        ice: JSON.stringify(data.candidate),
+      }),
+    });
+    console.log('아이스전송 ', data.sender + " " + data);
   }
+
+  function handleAddStream(data) {
+    anotherVideoRef.current.srcObject = data.stream;
+    console.log('got an stream from my peer');
+    console.log("Peer's Stream", data.stream);
+    console.log('My stream', stream);
+  }
+
+  function handleChannel(event) {
+    dataChannel.current = event.channel;
+  }
+
+  function clickSend() {
+    console.log("전송됨 ");
+    dataChannel.current.send("문자가 전송된다잉");
+  }
+
+
+  function makeOtherDrawing(event) {
+    console.log("받은 문자의 내용 : " + event.data);
+    const obj = JSON.parse(event.data);
+
+
+    contextRef.current.beginPath();
+    contextRef.current.moveTo(obj.startX, obj.startY);
+    contextRef.current.lineTo(obj.lastX, obj.lastY);
+    contextRef.current.stroke();
+    contextRef.current.closePath();
+
+    // contextRef3.current.clearRect(0, 0, canvasRef3.current.width, canvasRef3.current.height);
+    // contextRef3.current.strokeRect(obj.startX, obj.startY, obj.lastX, obj.lastY);
+  }
+  async function makeConnection() {
+    myPeerConnection = new RTCPeerConnection({
+      iceServers: [
+        {
+          urls: [
+            'stun:stun.l.google.com:19302',
+            'stun:stun1.l.google.com:19302',
+            'stun:stun2.l.google.com:19302',
+            'stun:stun3.l.google.com:19302',
+            'stun:stun4.l.google.com:19302',
+          ],
+        },
+      ],
+    });
+
+    myPeerConnection.addEventListener('icecandidate', handleIce);
+    myPeerConnection.addEventListener('addstream', handleAddStream); // 스트림 받기
+    myPeerConnection.addEventListener('datachannel', handleChannel);
+    stream.getTracks().forEach((track) => {
+      myPeerConnection.addTrack(track, stream);
+    });
+  }
+
+  async function makeMessageConnection() {
+    dataChannel.current = await myPeerConnection.createDataChannel("chat", { reliable: true });
+
+    dataChannel.current.addEventListener("error", (error) => console.log("데이터채널의 오류 : " + error));
+    dataChannel.current.addEventListener("close", () => console.log("데이터채널의 닫김"));
+    dataChannel.current.addEventListener("open", () => console.log("데이터채널 열림"));
+    dataChannel.current.addEventListener("message", makeOtherDrawing);
+
+  }
+
+  async function fetchData() {
+    await getMedia();
+    makeConnection();
+    connect();
+    makeMessageConnection();
+  }
+  useEffect(() => {
+    fetchData();
+
+  }, []);
+
+
+
+
 
   return (
     <div>
-      <Webcam
-        className="webcam"
-        audio={false}
-        mirrored={true}
-        ref={webcamRef}
-        style={{
-          position: "absolute",
-          top: 100,
-          marginLeft: "auto",
-          marginRight: "auto",
-          left: "0",
-          right: "0",
-          textAlign: "center",
-          zIndex: 9,
-          width: constants.CANVAS_WIDTH,
-          height: constants.CANVAS_HEIGHT,
-        }}
-      />
-      <canvas
-        ref={canvasRef}
-        mirrored={true}
-        style={{
-          position: "absolute",
-          top: 100,
-          marginLeft: "auto",
-          marginRight: "auto",
-          left: "0",
-          right: "0",
-          textAlign: "center",
-          zIndex: 9,
-          width: constants.CANVAS_WIDTH,
-          height: constants.CANVAS_HEIGHT,
-        }}>
-      </canvas>
-      
-      <canvas
-        className="canvas"
-        ref={canvasRef2}
-        mirrored={true}
-        tabIndex={0}
-        onKeyDown={spaceDown}
-        style={{
-          position: "absolute",
-          top: 100,
-          marginLeft: "auto",
-          marginRight: "auto",
-          left: "0",
-          right: "0",
-          textAlign: "center",
-          zIndex: 9,
-          width: constants.CANVAS_WIDTH,
-          height: constants.CANVAS_HEIGHT,
-        }}>
-      </canvas>
+      <div className="top">
 
-      <canvas
-        ref={canvasRef3}
-        // onMouseDown={startDrawingRectangle}
-        // onMouseMove={drawRectangle}
-        // onMouseUp={stopDrawingRectangle}
-        // onMouseLeave={stopDrawingRectangle}
-        style={{
-          position: "absolute",
-          top: 100,
-          marginLeft: "auto",
-          marginRight: "auto",
-          left: "0",
-          right: "0",
-          textAlign: "center",
-          zIndex: 9,
-          width: constants.CANVAS_WIDTH,
-          height: constants.CANVAS_HEIGHT,
-        }}>
-      </canvas>
-
-      <canvas
-        ref={canvasRef4}
-        onMouseUp={myUp}
-        onMouseMove={myMove}
-        onMouseDown={myDown}
-        style={{
-          position: "absolute",
-          top: 100,
-          marginLeft: "auto",
-          marginRight: "auto",
-          left: "0",
-          right: "0",
-          textAlign: "center",
-          zIndex: 11,
-          width: constants.CANVAS_WIDTH,
-          height: constants.CANVAS_HEIGHT,
-        }}>
-      </canvas>
-
+        <Webcam
+          className="webcam"
+          audio={false}
+          mirrored={true}
+          ref={webcamRef}
+          style={{
+            position: "absolute",
+            marginLeft: "auto",
+            marginRight: "auto",
+            left: "0",
+            right: "0",
+            textAlign: "center",
+            zIndex: 9,
+            width: constants.CANVAS_WIDTH,
+            height: constants.CANVAS_HEIGHT,
+          }}
+        />
+        <canvas
+          ref={canvasRef}
+          mirrored={true}
+          style={{
+            position: "absolute",
+            marginLeft: "auto",
+            marginRight: "auto",
+            left: "0",
+            right: "0",
+            textAlign: "center",
+            zIndex: 9,
+            width: constants.CANVAS_WIDTH,
+            height: constants.CANVAS_HEIGHT,
+          }}>
+        </canvas>
+        <canvas
+          className="canvas"
+          ref={canvasRef2}
+          mirrored={true}
+          tabIndex={0}
+          style={{
+            position: "absolute",
+            marginLeft: "auto",
+            marginRight: "auto",
+            left: "0",
+            right: "0",
+            textAlign: "center",
+            zIndex: 9,
+            width: constants.CANVAS_WIDTH,
+            height: constants.CANVAS_HEIGHT,
+          }}>
+        </canvas>
+      </div>
+      <div className="bottom">
+        <button ref={muteBtn} onClick={onClickMuteHandler}>
+          Mute
+        </button>
+        <button ref={cameraBtn} onClick={onClickCameraOffHandler}>
+          camera OFF
+        </button>
+        <button onClick={() => client.current.deactivate()}>
+          나가기
+        </button>
+        <button
+          onClick={clickSend}>
+          문자보내기
+        </button>
+        <video
+          ref={anotherVideoRef}
+          autoPlay={true}
+          playsInline={true}
+          style={{ width: "800px", height: "600px" }}
+        />
+      </div>
     </div>
   )
 }
