@@ -22,3 +22,6 @@ export const GAME_FRAME_HEIGHT_RATIO = 0.4;
 export const GAME_FRAME_POSITION_X_RATIO = 0.205;
 
 export const GAME_EMOJI_RATIO = 0.34
+
+export const LOGIN_URL = `http://localhost:8080/member/login`
+export const REGISTER_URL = `http://localhost:8080/member/`
