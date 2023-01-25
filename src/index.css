@@ -2,7 +2,7 @@ body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif, 'Silkscreen', 'Bungee_Outline';
+    sans-serif, 'Silkscreen', 'Fredoka_One';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -18,6 +18,17 @@ code {
 }
 
 @font-face {
-  font-family: "Bungee_Outline";
-  src: url(./assets/fonts/Bungee_Outline/BungeeOutline-Regular.ttf);
+  font-family: "Fredoka_One";
+  src: url(./assets/fonts/Fredoka_One/FredokaOne-Regular.ttf);
+}
+
+@keyframes rotator {
+  0% {
+    -webkit-transform: rotate(-45deg) translateZ(0);
+    transform: rotate(-45deg) translateZ(0);
+  }
+  100% {
+    -webkit-transform: rotate(315deg) translateZ(0);
+    transform: rotate(315deg) translateZ(0);
+  }
 }

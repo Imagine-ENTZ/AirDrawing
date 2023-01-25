@@ -1,0 +1,36 @@
+.over-lay {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.2);
+    z-index: 9999;
+}
+
+.modal-wrap {
+    width: 30%;
+    /* height: fit-content; */
+    border-radius: 15px;
+    background-color: transparent;
+    position: relative;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+
+.introductory-phrase {
+    font-size:20px;
+    padding-top:10%;
+    color:#fff;
+}
+
+.count-down {
+    font-size: 200px;
+    font-weight: 600;
+    color:#fff;
+    text-align: center;
+}

@@ -4,6 +4,10 @@ import { useNavigate } from "react-router-dom";
 
 function Menu() {
     const navigate = useNavigate();
+    
+    const navigateToMain = () => {
+        navigate("/main");
+    };
 
     const sentence = {
         0: 'Choose\nGame\nAnd\nJoin it!'
@@ -17,8 +21,8 @@ function Menu() {
             </div>
             <div className="right-container-menu">
                 <div className="button-list">
-                    <button onClick={() => navigate("/main")} className="selection button1">FOLLOW-UP</button>
-                    <button onClick={() => navigate("/word-tracing")} className="selection button2">FOLLOW-UP</button>
+                    <button onClick={navigateToMain} className="selection button1">FOLLOW-UP</button>
+                    <button className="selection button2">FOLLOW-UP</button>
                     <button className="selection button3">FOLLOW-UP</button>
                     <button className="selection button4">FOLLOW-UP</button>
                 </div>

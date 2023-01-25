@@ -21,7 +21,7 @@
 }
 
 .word-tracing-timer-img{
-  height: 100%;
+  height: 80%;
 }
 /* display: inline-block; margin: 0 5px;  float: right; */
 
@@ -56,25 +56,26 @@
 .word-tracing-play-screen{
   width: 60%;
   margin-left: 20%;
-  height: 65%;
+  height: 60%;
   display: flex;
-
 }
 
 .word-tracing-handed-mode-container{
-  width: 17.5%;
+  width: 30%;
   height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.word-tracing-handed-mode{
+/* .word-tracing-handed-mode{
   width: 100%;
+  height: 100%;
+  background: red;
   display: flex;
   position:relative;
   margin-left: auto;
-}
+} */
 
 .word-tracing-handed-mode-img{
   width: 100%;
@@ -82,19 +83,23 @@
 }
 
 .word-tracing-sketckbook-container{
-  width: 60%;
+  width: 70%;
   height: 100%;
 }
 
 .word-tracing-footer-container{
   width: 100%;
-  height: 10%;
+  height: 15%;
 }
 
 .word-tracing-footer-title{
-  width: 100%;
+  margin-left: 20%;
+  width: 60%;
   height: 100%;
   color: rgb(255, 187, 0);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .word-tracing-footer-title-img{
@@ -107,7 +112,7 @@
 
 /*timer progress bar*/
 .bar-container {
-  border-radius: 50px;
+  border-radius: 0px 50px 50px 0px;
 }
 
 
