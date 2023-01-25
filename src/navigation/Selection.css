@@ -1,0 +1,204 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Corben:700');
+
+body {
+  background-color: #060919;
+}
+
+.main-container-selection {
+  width: 100vw;
+  height: 100vh;
+}
+
+.high-container-selection {
+  display: flex;
+  width: 100%;
+  height: 70%;
+}
+
+.bottom-container-selection {
+  width: 100%;
+  height: 30%;
+}
+
+.left-container-selection {
+  width: 54%;
+  height: 100%;
+}
+
+.left-container-selection-top {
+  width: 100%;
+  height: 12%;
+}
+
+.left-container-selection-middle {
+  width: 100%;
+  height: 88%;
+}
+
+.right-container-selection {
+  width: 46%;
+  height: 100%;
+}
+
+
+
+.selection-button-list {
+  text-align: center;
+  position: relative;
+  top: 42%;
+  left: 3%;
+}
+
+.two-selection {
+  border-radius: 28px;
+  border: 2px solid white;
+  cursor: pointer;
+  background-color: transparent;
+  color: white;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 15px;
+  width: 250px;
+  padding: 20px 90px;
+
+  margin: 20px;
+  display: grid;
+  /*
+	padding:17px 100px;*/
+
+}
+
+.two-selection:hover,
+.two-selection:focus {
+  box-shadow: 0 0 10px 0 blue inset, 0 0 10px 4px blue;
+}
+
+.selection-sentence {
+  white-space: pre-line;
+  line-height: 80px;
+
+  font-size: 90px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: bold;
+  color: white;
+
+  position: relative;
+  top: 24%;
+  left: 40%;
+}
+
+.direction-frame {
+  position: relative;
+  top: 15%;
+  left: 1.5%;
+  width: 7%;
+  
+  padding:1% 0.5%;
+  border-radius: 15px;
+  border: 1px solid white;
+  cursor: pointer;
+  background-color: transparent;
+
+  align-content: center;
+}
+
+.direction-image {
+  position: relative;
+  margin: auto;
+  display: block;
+  width: 70%;
+}
+
+/*
+  .wave {
+    opacity: .4;
+    position: absolute;
+    top: 55%;
+    left: 50%;
+    background: blue;
+    width: 500px;
+    height: 500px;
+    margin-left: -250px;
+    margin-top: -250px;
+    transform-origin: 50% 48%;
+    border-radius: 43%;
+    animation: drift 3000ms infinite linear;
+  }
+  .wave.-three {
+    animation: drift 5000ms infinite linear;
+  }
+  
+  .wave.-two {
+    animation: drift 7000ms infinite linear;
+    opacity: .1;
+    background: rgb(243, 212, 100);
+  }
+
+  .frame {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top: 40%;
+    left: 30%;
+    width: 800px;
+    height: 400px;
+    margin-top: -200px;
+    margin-left: -200px;
+    border-radius: 2px;
+    box-shadow: 4px 8px 16px 0 rgba(0,0,0,0.1);
+  }
+ 
+  
+  @keyframes drift {
+    from { transform: rotate(0deg); }
+    from { transform: rotate(360deg); }
+  }
+*/
+
+/* %로 고치기 */
+.waves {
+  position: relative;
+  top: 150px;
+  width: 100%;
+  height: 15vh;
+  min-height: 100px;
+  max-height: 150px;
+}
+
+/* Animation */
+
+.parallax>use {
+  animation: move-forever 25s cubic-bezier(.55, .5, .45, .5) infinite;
+}
+
+.parallax>use:nth-child(1) {
+  animation-delay: -2s;
+  animation-duration: 7s;
+}
+
+.parallax>use:nth-child(2) {
+  animation-delay: -3s;
+  animation-duration: 10s;
+}
+
+.parallax>use:nth-child(3) {
+  animation-delay: -4s;
+  animation-duration: 13s;
+}
+
+.parallax>use:nth-child(4) {
+  animation-delay: -5s;
+  animation-duration: 20s;
+}
+
+@keyframes move-forever {
+  0% {
+    transform: translate3d(-90px, 0, 0);
+  }
+
+  100% {
+    transform: translate3d(85px, 0, 0);
+  }
+}
