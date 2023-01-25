@@ -6,11 +6,8 @@
     "@mediapipe/camera_utils": "^0.3.1640029074",
     "@mediapipe/drawing_utils": "^0.3.1620248257",
     "@mediapipe/hands": "^0.3.1626903359",
-<<<<<<< HEAD
     "@stomp/stompjs": "^6.1.2",
-=======
     "@ramonak/react-progress-bar": "^5.0.3",
->>>>>>> ming-taro
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
