@@ -28,7 +28,7 @@ function Menu() {
             <div className="right-container-menu">
                 <div className="button-list">
                     <div onClick={() => navigate("/main")} className="selection button1">FOLLOW-UP</div>
-                    <div className="selection button2">WORD-TRACING GAME</div>
+                    <div className="selection button2" onClick={() => navigate("/word-tracing")}>WORD-TRACING GAME</div>
                     <div onClick={() => navigate("/decorative")} className="selection button3">DECORATIVE GAME</div>
                     <div className="selection button4">FOLLOW-UP</div>
                 </div>

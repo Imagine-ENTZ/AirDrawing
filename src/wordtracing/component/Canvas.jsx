@@ -3,7 +3,7 @@ import Webcam from "react-webcam";
 import { Hands, HAND_CONNECTIONS } from "@mediapipe/hands/hands";
 import { drawConnectors, drawLandmarks } from "@mediapipe/drawing_utils/drawing_utils";
 import { Camera } from "@mediapipe/camera_utils/camera_utils";
-import { detectHandGesture } from "../../MainPage/Component/HandGesture"
+import { detectHandGesture } from "../../game/component/HandGesture"
 import * as constants from "../../utils/Constants"
 import "../Game.css"
 import canvasPicture from "../img/canvas.png" 
