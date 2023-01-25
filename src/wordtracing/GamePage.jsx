@@ -6,6 +6,7 @@ import timer from "./img/clock.png"
 // import handedMode from "./img/handed_mode.png"
 import ProgressBar from "@ramonak/react-progress-bar";
 import * as constants from "../utils/Constants"
+import HandedMode from './component/HandedMode'
 
 function GamePage() {
   const [windowHeight, setWindowHeight] = useState(window.innerHeight*constants.HEIGHT_RATIO);
@@ -100,6 +101,7 @@ function GamePage() {
           <div className='word-tracing-timer-gauge' style={{color: "white"}}>
             {/* {minutes}:{seconds < 10 ? `0${seconds}` : seconds} // {timeLeft} */}
             <img className='word-tracing-timer-img' src={timer}/>
+            
             <ProgressBar 
             className="word-tracing-timer-gauge-bar"
             completed={timeLeft}
@@ -123,22 +125,17 @@ function GamePage() {
 
       <div className='word-tracing-play-screen'>
         <div className='word-tracing-handed-mode-container'>
-          <div className='word-tracing-handed-mode'>
-
-
-            
-            {/* <img className='word-tracing-handed-mode-img' src={handedMode} /> */}
-          </div>
+          <HandedMode />
         </div>
         <div className='word-tracing-sketckbook-container'>
           <div style={{
               width: "100%",
-              height: "60%",
+              height: "60%"
           }}>
             <div style={{
               width: (window.innerHeight * constants.HEIGHT_RATIO * (4.0 / 3.0)), 
               height: windowHeight,
-              margin: "auto",
+              marginLeft: "auto",
               position: "relative"}}>
                 <Canvas
                 wordWrittenByUser={wordWrittenByUser}
@@ -171,9 +168,7 @@ function GamePage() {
           <div style={{
             fontFamily: "Silkscreen",
             fontSize: "2em",
-            display: "flex",
-            marginLeft: "auto",
-            width: "20%"
+            display: "flex"
           }}>
             Word Tracing
           </div>
