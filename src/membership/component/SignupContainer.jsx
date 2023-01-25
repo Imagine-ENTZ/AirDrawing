@@ -11,7 +11,7 @@ function SignupContainer() {
     const navigate = useNavigate();
 
     const navigateToLoginAgain = () => {
-        //navigate("/login");
+        
         console.log(values.name , values.email, values.password, values.repassword)
         if (values.password === values.repassword) {
             axios.post(constants.REGISTER_URL,
@@ -30,7 +30,7 @@ function SignupContainer() {
                         })
                     }
                     else {
-                        navigate("/lobby");
+                        navigate("/login");
                     }
                 })
                 .catch((Error) => { console.log("에러", Error) })

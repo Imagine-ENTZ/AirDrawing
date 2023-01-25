@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, {  useState } from "react";
 import "../Login.css";
 import line from '../img/line.png';
 import Direction from "../img/direction-arrow.png";
