@@ -8,8 +8,14 @@ import { useNavigate } from "react-router-dom";
 
 import * as constants from "../utils/Constants";
 
+import { useLocation } from "react-router-dom";
 
-function TwoDecorativeGame(props) {
+function TwoDecorativeGame() {
+
+
+    const location = useLocation();
+    const code = location.state.code;
+
     const navigate = useNavigate();
 
     const [windowHeight, setWindowHeight] = useState(window.innerHeight * constants.TWO_DECORATIVE_GAME_HEIGHT_RATIO);
@@ -22,10 +28,13 @@ function TwoDecorativeGame(props) {
     }
 
     useEffect(() => {
+
+        console.log(code);
         window.addEventListener('resize', handleResize);
         return () => {
             window.removeEventListener('resize', handleResize);
         }
+       
     }, [])
 
     // 모달창 (타이머)
@@ -65,7 +74,7 @@ function TwoDecorativeGame(props) {
                     <div className="best-top-left-decoration-game-two">
                     </div>
                     <div className="best-top-right-decoration-game-two">
-                        <div className="on-off-button-two-decorative" onClick={() => navigate("/2p-decorative")}>
+                        <div className="on-off-button-two-decorative" onClick={() =>  navigate("/2p-decorative")}>
                             <img className="on-off-image-two-decorative" src={OnOff} alt="END"></img>
                         </div>
                     </div>

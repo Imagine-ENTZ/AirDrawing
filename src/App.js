@@ -38,7 +38,7 @@ function App() {
         <Route path="/decorative/howto/3" element={<HowToDecorativeGame3 />} />
         <Route path="/decorative/howto/4" element={<HowToDecorativeGame4 />} />
         <Route path="/2p-decorative" element={<TwoDecorativeLobby />} />
-        <Route path="/2p-decorative/game" element={<TwoDecorativeGame />} />
+        <Route path= "/2p-decorative/game/:code" element={<TwoDecorativeGame />} />
         <Route path="/2p-lobby" element={<TwoGameLobby />} />
         {/* <Route path="/detail/:id" element={<Detail />} />
       <Route path="/mypage/*" element={<MyPage />} /> */}

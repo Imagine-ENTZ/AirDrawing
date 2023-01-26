@@ -72,7 +72,7 @@ const TwoGameScreen = forwardRef((props, ref) => {
 
         switch (HandGesture.current) {
             case constants.DRAW:
-                console.log("DRAW");
+                // console.log("DRAW");
                 contextRef.current.fillStyle = "#"
                 contextRef.current.beginPath();
                 contextRef.current.moveTo(preFingerPositionX.current, preFingerPositionY.current);

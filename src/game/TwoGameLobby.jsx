@@ -9,6 +9,7 @@ import axios from 'axios';
 import * as constants from "../utils/Constants"
 import { type } from "@testing-library/user-event/dist/type";
 import Modal from 'react-modal';
+import Select from "react-select";
 
 
 const customStyles = {
@@ -36,27 +37,55 @@ function Menu() {
         name: '',
         type: '',
     }])
-
     //모달창 변수
     const [modalIsOpen, setModalIsOpen] = useState(false);
-    const [content, setContent] = useState({
-        name: "",
-        gametype: 0,
-    });
 
+    // 방생성 방이름
     const [modalTitle, setModalTitle] = useState("");
+   
+    const gameType = [
+        { value: "1", label: "WordTracing" },
+        { value: "2", label: "DecorateGame" },
+    ]
+     // 방생성 방타입
+     const [selectType, setSelectType] = useState(gameType[0]);
 
+    // 모달 열고 닫기
     function openModal() {
         setModalIsOpen(true);
     }
-
     function closeModal() {
         setModalIsOpen(false);
     }
     const handleInputTitle = (e) => {
         setModalTitle(e.target.value)
     }
+    // 방만들기 완료 버튼
+    const makeRoomButton = () => {
+        axios.post(constants.GAMEROOM_URL,
+            {
+                name: modalTitle,
+                type: selectType.value,
+                full: 0,
+            })
+            .then((res) => {
 
+                if (res.data.result == "FAIL") {
+                    console.log("방 등록 실패");
+                }
+                else {
+                    // 이제 2명 게임 방으로 이동
+                    navigate(`/2p-decorative/game/${res.data["room"].code}` , {
+                        state: {
+                            code: res.data["room"].code,
+                          }
+                    });
+                    // console.log(res.data["room"]);
+                    
+                }
+            })
+            .catch((Error) => { console.log("에러", Error) })
+    }
 
     useEffect(() => {
 
@@ -131,30 +160,23 @@ function Menu() {
                             <div className="make_room_modal">
                                 <div className="make_room_top">
                                     <h2>Please enter room name!</h2>
-                                    <div  className="making-back-button">BACK</div>
+                                    <div onClick={closeModal} className="making-back-button">BACK</div>
                                 </div>
 
                                 <div className="modal_input-list">
                                     <div className="contact-form">
                                         <div>
-                                            <input className="input-class" id="Name" name="name" type="text"></input>
+                                            <input onChange={handleInputTitle} className="input-class" id="Name" name="name" type="text"></input>
                                             <label className="label-class" for="Name">ROOM NAME</label>
                                         </div>
                                     </div>
                                     <div className="contact-form">
-                                        <div>
-                                            <input className="input-class" id="Password" name="password" type="password"></input>
-                                            <label className="label-class" for="Password">PASSWORD</label>
+                                        <div className="modal-select-inner">
+                                            <Select className="modal-select" options={gameType} onChange={setSelectType} defaultValue={gameType[0]}></Select>
                                         </div>
                                     </div>
-                                    <button className="login-button make_room_start_button" >GET STARTED</button>
+                                    <button onClick={makeRoomButton} className="login-button make_room_start_button" >GET STARTED</button>
                                 </div>
-
-
-                                <div>
-                                    <div onClick={console.log("sf")} className="selection button1">FOLLOW-UP</div>
-                                </div>
-
                             </div>
 
                         </Modal>
