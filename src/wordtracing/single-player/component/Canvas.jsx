@@ -3,10 +3,10 @@ import Webcam from "react-webcam";
 import { Hands, HAND_CONNECTIONS } from "@mediapipe/hands/hands";
 import { drawConnectors, drawLandmarks } from "@mediapipe/drawing_utils/drawing_utils";
 import { Camera } from "@mediapipe/camera_utils/camera_utils";
-import { detectHandGesture } from "../../game/component/HandGesture"
-import * as constants from "../../utils/Constants"
+import { detectHandGesture } from "../../../game/component/HandGesture"
+import * as constants from "../../../utils/Constants"
 import "../Game.css"
-import canvasPicture from "../img/canvas.png" 
+import canvasPicture from "../../img/canvas_picture.png" 
 import Tesseract from 'tesseract.js';
 
 function Canvas(props) {
@@ -59,7 +59,7 @@ function Canvas(props) {
       return;
     }
 
-    if(handGesture.current == constants.OK && isTesting.current == constants.IS_TESTING){
+    if(props.isTesting == constants.IS_TESTING){
       return;
     }
 
@@ -125,7 +125,7 @@ function Canvas(props) {
     const context = canvas.getContext("2d");
     context.lineCap = "round";
     context.strokeStyle = "orange";
-    context.lineWidth = 10;
+    context.lineWidth = 8;
 
     fingerOfcontextRef.current = context;
 
@@ -239,7 +239,7 @@ function Canvas(props) {
       // pointOfContextRef.current.fillStyle = contextRef.current.strokeStyle;
       // pointOfContextRef.current.fillRect();
       pointOfContextRef.current.lineWidth = 3;
-      pointOfContextRef.current.strokeStyle = "ffa03b";
+      pointOfContextRef.current.strokeStyle = "rgb(207, 145, 255)";
       pointOfContextRef.current.stroke();
       pointOfContextRef.current.closePath();
 
@@ -256,6 +256,7 @@ function Canvas(props) {
       return;
     }
 
+    props.setIsTesting(constants.IS_TESTING);
     isTesting.current = constants.IS_TESTING;
     
     const image = fingerOfcanvasRef.current.toDataURL("image/png");
@@ -302,7 +303,7 @@ function Canvas(props) {
         textShadow: "-2px 0 #000, 0 2px #000, 2px 0 #000, 0 -2px #000",
         position: "absolute", 
         width:"100%",
-        height: "70%",
+        height: "65%",
         bottom: "0",
         display: "flex",
         justifyContent: "center",

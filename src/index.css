@@ -21,3 +21,14 @@ code {
   font-family: "Fredoka_One";
   src: url(./assets/fonts/Fredoka_One/FredokaOne-Regular.ttf);
 }
+
+@keyframes rotator {
+  0% {
+    -webkit-transform: rotate(-45deg) translateZ(0);
+    transform: rotate(-45deg) translateZ(0);
+  }
+  100% {
+    -webkit-transform: rotate(315deg) translateZ(0);
+    transform: rotate(315deg) translateZ(0);
+  }
+}
