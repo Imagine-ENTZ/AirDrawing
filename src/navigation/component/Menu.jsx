@@ -12,25 +12,25 @@ function Menu() {
 
     return (
         <div className="main-container-menu">
-            <div className="left-container-menu">
-                <div className="left-top-container-menu">
-                    <div className="direction-frame-menu" onClick={() => navigate("/")}>
-                        <img className="direction-image-menu" src={Direction} alt="direct" />
-                    </div>
-                </div>
-                <div className="left-body-container-menu">
-                    <div className="next-menu-sentence">
-                    <div className="safety"><span>Welcome, </span><span className="user-name">ENSHARP</span></div>
-                    <div className="sentence">{sentence[0]}</div>
-                    </div>
+            <div className="top-container-menu">
+                <div className="direction-frame-menu" onClick={() => navigate("/")}>
+                    <img className="direction-image-menu" src={Direction} alt="direct" />
                 </div>
             </div>
-            <div className="right-container-menu">
-                <div className="button-list">
-                    <div onClick={() => navigate("/main")} className="selection button1">FOLLOW-UP</div>
-                    <div className="selection button2" onClick={() => navigate("/word-tracing")}>WORD-TRACING GAME</div>
-                    <div onClick={() => navigate("/decorative")} className="selection button3">DECORATIVE GAME</div>
-                    <div onClick={() => navigate("/2p-lobby")} className="selection button4">2P - DECORATIVE GAME</div>
+
+            <div className="body-container-menu">
+                <div className="left-container-menu">
+                    <div className="next-menu-sentence">
+                        <div className="safety"><span>Welcome, </span><span className="user-name">ENSHARP</span></div>
+                        <div className="sentence">{sentence[0]}</div>
+                    </div>
+                </div>
+                <div className="right-container-menu">
+                    <div className="button-list">
+                        <div className="selection button2" onClick={() => navigate("/word-tracing")}>WORD-TRACING GAME</div>
+                        <div className="selection button3" onClick={() => navigate("/decorative")}>DECORATIVE GAME</div>
+                        <div className="selection button4" onClick={() => navigate("/2p-lobby")}>2P GAME</div>
+                    </div>
                 </div>
             </div>
         </div>

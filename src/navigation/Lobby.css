@@ -6,29 +6,32 @@ body {
 }
 
 .main-container-menu {
-	display: flex;
 	width: 100vw;
 	height: 100vh;
+}
+
+.top-container-menu {
+	width: 100%;
+	height: 12%;
+	/* background-color:pink; */
+}
+
+.body-container-menu {
+	display: flex;
+	width:100%;
+	height:88%;
 }
 
 .left-container-menu {
 	width: 57%;
 	height: 100%;
-}
-
-.left-top-container-menu {
-	width: 100%;
-	height: 12%;
-}
-
-.left-body-container-menu {
-	width: 100%;
-	height: 88%;
+	/* background-color:aquamarine */
 }
 
 .right-container-menu {
 	width: 43%;
 	height: 100%;
+	/* background-color:blueviolet */
 }
 
 .selection {
@@ -68,24 +71,25 @@ body {
 
 .direction-frame-menu {
 	position: relative;
-	top: 15%;
-	left: 1.5%;
-	width: 7%;
+    top: 15%;
+    left: 1%;
+    /* width: 50px; */
+    width:4.5%;
+    height: 60%;
 
-	padding: 1% 0.5%;
-	border-radius: 15px;
-	border: 1px solid white;
-	cursor: pointer;
-	background-color: transparent;
+    /* padding: 8px; */
+    border-radius: 15px;
+    border: 1px solid white;
+    cursor: pointer;
+    background-color: transparent;
 
-	align-content: center;
+    display: flex;
 }
 
 .direction-image-menu {
 	position: relative;
-	margin: auto;
-	display: block;
-	width: 70%;
+    margin: auto;
+    height: 70%;
 }
 
 .next-menu-sentence {
@@ -125,7 +129,8 @@ body {
 	text-align: center;
 
 	position: relative;
-	top: 26%;
+	top: 23%;
+	left: 3%;
 }
 
 .user-name {

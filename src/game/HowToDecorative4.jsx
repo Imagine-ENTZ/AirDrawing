@@ -17,19 +17,18 @@ function HowToDecorative3() {
         <div className="main-container-how-decorative">
             <StarRain />
             <div className="top-container-how-decorative">
-                <div className="top-left-container-how-decorative"></div>
-                <div className="top-right-container-how-decorative">
-                    <div className="on-off-button-how-decorative" onClick={() => navigate("/decorative")}>
-                        <img className="on-off-image-how-decorative" src={onoff} alt="END"></img>
-                    </div>
+                {/* <div className="top-same-container-how-decorative-end"> */}
+                <div className="on-off-button-how-decorative" onClick={() => navigate("/decorative")}>
+                    <img className="on-off-image-how-decorative" src={onoff} alt="END"></img>
                 </div>
+                {/* </div> */}
             </div>
             <div className="body-container-how-decorative">
                 <div className="left-body-container-how-decorative">
-                    <img className="arrow-image-how-2-decorative" onClick={() => navigate("/decorative/howto/3")} src={LeftArrow} alt="right" />
+                    <img className="arrow-image-how-2-decorative" onClick={() => navigate("/decorative/howto/4")} src={LeftArrow} alt="right" />
                 </div>
                 <div className="center-container-how-decorative">
-                    <img className="how-to-image-decorative" src={HowTo4} alt="how-to-game-4" />
+                    <img className="how-to-image-decorative" src={HowTo4} alt="how-to-game-5" />
                 </div>
                 <div className="right-body-container-how-decorative">
 

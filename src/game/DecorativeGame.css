@@ -45,25 +45,24 @@
 
 .on-off-button {
     position: relative;
-    top: 15%;
-    left: 15%;
-    width: 50%;
+    top: 9%;
+    right: 9%;
+    float:right;
+    width:80%;
+    height: 80%;
 
-    padding: 10%;
-    border-radius: 10px;
+    border-radius: 15px;
     border: 1px solid white;
     cursor: pointer;
     background-color: transparent;
-    color: white;
 
-    align-content: center;
+    display:flex;
 }
 
 .on-off-image {
     position: relative;
     margin: auto;
-    display: block;
-    width: 80%;
+    height: 70%;
 }
 
 .middle-top-container-decoration-game {

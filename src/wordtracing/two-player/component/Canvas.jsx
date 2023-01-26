@@ -6,7 +6,7 @@ import { Camera } from "@mediapipe/camera_utils/camera_utils";
 import { detectHandGesture } from "../../../game/component/HandGesture"
 import * as constants from "../../../utils/Constants"
 import "../Game.css"
-import canvasPicture from "../../img/canvas_picture.png" 
+import canvasPicture from "../../img/canvas_with_transparent_bg.png"
 import Tesseract from 'tesseract.js';
 
 function Canvas(props) {
@@ -15,6 +15,7 @@ function Canvas(props) {
   const sendWordToParentComponent = (text) => {
     text = text.split("\n").join("");
     text = text.split(' ').join('');
+    console.log("사용자가 쓴 글씨 : [" + text + "]")
     props.wordWrittenByUser.current = text;   //사용자가 작성한 영어단어 전달
   }
 
@@ -51,44 +52,26 @@ function Canvas(props) {
       height: window.innerHeight*constants.HEIGHT_RATIO
   });
 
-  // 손그리기 캔버스
   useEffect(() => {
-    let radius = 20;
+    //영어 단어 스펠링 도안 캔버스
+    const spellingArtCanvas = spellingArtOfCanvasRef.current;
+    spellingArtCanvas.width = windowSize.width;
+    spellingArtCanvas.height = windowSize.height;
 
-    if(handGesture.current == constants.DRAW && (preFingerPositionX == null || preFingerPositionY == null)){
-      return;
+    const spellingArtOfContext = spellingArtCanvas.getContext("2d");
+
+    let spellingArtImg = new Image();
+    spellingArtImg.src = canvasPicture;
+
+    if (!spellingArtOfContextRef) return;
+
+    spellingArtImg.onload = () => {
+      spellingArtOfContext.drawImage(
+        spellingArtImg, 0, 0, spellingArtCanvas.width, spellingArtCanvas.height);
     }
 
-    if(props.isTesting == constants.IS_TESTING){
-      return;
-    }
-
-    switch(handGesture.current){
-      case constants.DRAW:
-        fingerOfcontextRef.current.beginPath();
-        fingerOfcontextRef.current.moveTo(preFingerPositionX.current, preFingerPositionY.current);
-        fingerOfcontextRef.current.lineTo(fingerPosition.x, fingerPosition.y);
-        fingerOfcontextRef.current.stroke();
-        fingerOfcontextRef.current.closePath();   
-        break;
-      case constants.ERASE:
-        fingerOfcontextRef.current.save();
-        fingerOfcontextRef.current.beginPath();
-        fingerOfcontextRef.current.arc(fingerPosition.x, fingerPosition.y, radius, 0, 2*Math.PI, true);
-        fingerOfcontextRef.current.clip();
-        fingerOfcontextRef.current.clearRect(fingerPosition.x - radius, fingerPosition.y - radius, radius*2, radius*2);
-        fingerOfcontextRef.current.restore();
-        break;
-      case constants.OK:
-        checkIfWordsMatch();
-        break;
-    }
-
-    if (fingerOfcontextRef.current) {
-      preFingerPositionX.current = fingerPosition.x;
-      preFingerPositionY.current = fingerPosition.y;
-    }
-  }, [fingerPosition])
+    spellingArtOfContextRef.current = spellingArtOfContext;
+  }, [])
 
   useEffect(() => {
     const hands = new Hands({
@@ -129,24 +112,6 @@ function Canvas(props) {
 
     fingerOfcontextRef.current = context;
 
-    //영어 단어 스펠링 도안 캔버스
-    const spellingArtCanvas = spellingArtOfCanvasRef.current;
-    spellingArtCanvas.width = windowSize.width;
-    spellingArtCanvas.height = windowSize.height;
-
-    const spellingArtOfContext = spellingArtCanvas.getContext("2d");
-
-    let spellingArtImg = new Image();
-
-    spellingArtImg.src = canvasPicture;
-    spellingArtImg.onload = () => {
-      spellingArtOfContext.drawImage(
-        spellingArtImg, 0, 0, spellingArtCanvas.width, spellingArtCanvas.height);
-    }
-    spellingArtOfContext.fillRect(0, 0, spellingArtCanvas.width, spellingArtCanvas.height);
-
-    spellingArtOfContextRef.current = spellingArtOfContext;
-
     //현재 8번 포인트가 가리키는 지점 표시
     const pointOfCanvas = pointOfCanvasRef.current;
     pointOfCanvas.width = windowSize.width;
@@ -155,9 +120,9 @@ function Canvas(props) {
     const pointOfContext = pointOfCanvas.getContext("2d");
     pointOfContextRef.current = pointOfContext;
 
-    // pointOfContext.lineCap = "round";
-    // pointOfContext.strokeStyle = "orange";
-    // pointOfContext.lineWidth = 8;
+    pointOfContext.lineCap = "round";
+    pointOfContext.strokeStyle = "orange";
+    pointOfContext.lineWidth = 8;
   }, []);
 
   //윈도우 화면 resize시 캔버스와
@@ -177,6 +142,45 @@ function Canvas(props) {
       window.removeEventListener('resize', handleResize);
     }  
   }, [])
+
+  // 손그리기 캔버스
+  useEffect(() => {
+    let radius = 20;
+
+    if(handGesture.current == constants.DRAW && (preFingerPositionX == null || preFingerPositionY == null)){
+      return;
+    }
+
+    if(props.isTesting == constants.IS_TESTING){
+      return;
+    }
+
+    switch(handGesture.current){
+      case constants.DRAW:
+        fingerOfcontextRef.current.beginPath();
+        fingerOfcontextRef.current.moveTo(preFingerPositionX.current, preFingerPositionY.current);
+        fingerOfcontextRef.current.lineTo(fingerPosition.x, fingerPosition.y);
+        fingerOfcontextRef.current.stroke();
+        fingerOfcontextRef.current.closePath();   
+        break;
+      case constants.ERASE:
+        fingerOfcontextRef.current.save();
+        fingerOfcontextRef.current.beginPath();
+        fingerOfcontextRef.current.arc(fingerPosition.x, fingerPosition.y, radius, 0, 2*Math.PI, true);
+        fingerOfcontextRef.current.clip();
+        fingerOfcontextRef.current.clearRect(fingerPosition.x - radius, fingerPosition.y - radius, radius*2, radius*2);
+        fingerOfcontextRef.current.restore();
+        break;
+      case constants.OK:
+        checkIfWordsMatch();
+        break;
+    }
+
+    if (fingerOfcontextRef.current) {
+      preFingerPositionX.current = fingerPosition.x;
+      preFingerPositionY.current = fingerPosition.y;
+    }
+  }, [fingerPosition])
 
   const getCurrentHandGesture = () => {    
     switch(handGesture.current){
@@ -256,7 +260,7 @@ function Canvas(props) {
       return;
     }
 
-    props.setIsTesting(constants.IS_TESTING); //현재 테스트중임을 gamepage에 알림 -> 확인중 아이콘을 띄움
+    props.setIsTesting(constants.IS_TESTING);   //현재 테스트중임을 gamepage에 알림 -> 확인중 아이콘을 띄움
     isTesting.current = constants.IS_TESTING;
     
     const image = fingerOfcanvasRef.current.toDataURL("image/png");
@@ -284,9 +288,9 @@ function Canvas(props) {
       console.error(err);
     })
     .then((result) => {
+      isTesting.current = !constants.IS_TESTING;
       sendWordToParentComponent(result.data.text);  //부모 컴포넌트에 사용자가 쓴 단어 텍스트값 보내기
       console.log("결과값: " + result.data.text)
-      isTesting.current = !constants.IS_TESTING;
 
       fingerOfcontextRef.current.clearRect(0, 0, windowSize.width, windowSize.height); //검사 완료 후 글씨쓴 캔버스 초기화
     });
@@ -299,7 +303,7 @@ function Canvas(props) {
         position: "relative",
         height: "100%",
       }}>
-      <div style={{
+      {/* <div style={{
         textShadow: "-2px 0 #000, 0 2px #000, 2px 0 #000, 0 -2px #000",
         position: "absolute", 
         width:"100%",
@@ -307,30 +311,13 @@ function Canvas(props) {
         bottom: "0",
         display: "flex",
         justifyContent: "center",
-        // marginTop: "10px",
-        // marginRight: "10px",
-        // alignItems: "center",
         textAlign: "center",
         fontSize: "500%",
         fontFamily: "Fredoka_One",
         zIndex: 2,
         color: "white",
       }}>
-        {/* { wordList[5] } */}
         { props.wordToTest.current }
-      </div>
-      {/* <div style={{
-        position: "absolute", 
-        width:"100%",
-        height:"100%",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        textAlign: "center",
-        fontSize: "20px",
-        color: "white",
-        zIndex: 16,
-      }}>
       </div> */}
       <Webcam
         audio={false}
@@ -344,9 +331,7 @@ function Canvas(props) {
           zIndex: 1,
           width: "100%",
           height: "100%",
-          backgroundColor: '(0, 0, 0, 0.5)',
-          // objectFit: "cover", 
-          // objectPosition: "center"
+          backgroundColor: '(0, 0, 0, 0.5)'
         }}
       />
       <canvas
@@ -359,9 +344,7 @@ function Canvas(props) {
           textAlign: "center",
           zIndex: 1,
           width: "100%",
-          height: "100%",
-          // objectFit: "cover", 
-          // objectPosition: "center"
+          height: "100%"
         }}>
       </canvas>
       <canvas
@@ -374,9 +357,7 @@ function Canvas(props) {
           textAlign: "center",
           zIndex: 3,
           width: "100%",
-          height: "100%",
-          // objectFit: "cover", 
-          // objectPosition: "center"
+          height: "100%"
         }}>
       </canvas>
       <canvas
@@ -389,10 +370,7 @@ function Canvas(props) {
           textAlign: "center",
           zIndex: 1,
           width: "100%",
-          height: "100%",
-          background: "transparent"
-          // objectFit: "cover", 
-          // objectPosition: "center"
+          height: "100%"
         }}>
       </canvas>
       <canvas
@@ -406,9 +384,7 @@ function Canvas(props) {
           textAlign: "center",
           zIndex: 4,
           width: "100%",
-          height: "100%",
-          // objectFit: "cover", 
-          // objectPosition: "center"
+          height: "100%"
         }}>
       </canvas>
     </div>

@@ -10,6 +10,7 @@ import * as constants from "../utils/Constants"
 import { type } from "@testing-library/user-event/dist/type";
 import Modal from 'react-modal';
 import Select from "react-select";
+// import TwoGameLobbyContainer from "./component/TwoGameLobbyContainer.jsx";
 
 
 const customStyles = {
@@ -28,8 +29,9 @@ const customStyles = {
 };
 
 
-function Menu() {
-    const navigate = useNavigate();
+
+
+function TwoGameLobby() {
 
     // 방리스트 변수
     const [inputData, setInputData] = useState([{
@@ -138,7 +140,7 @@ function Menu() {
 
 
     return (
-        <div className="main-container-two-lobby">
+        <div className="hero">
             <Snow />
             <div className="top-container-two-lobby">
                 <div className="direction-frame-two-lobby" onClick={() => navigate("/lobby")}>
@@ -215,8 +217,9 @@ function Menu() {
 
                 </div>
             </div>
+            {/* <TwoGameLobbyContainer /> */}
         </div>
     );
 };
 
-export default Menu;
+export default TwoGameLobby;
