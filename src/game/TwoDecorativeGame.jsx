@@ -12,7 +12,9 @@ import { useLocation } from "react-router-dom";
 
 function TwoDecorativeGame() {
 
+    const anotherVideoRef = useRef(null);
 
+    /// 파라미터로 방 코드 받음
     const location = useLocation();
     const code = location.state.code;
 
@@ -28,13 +30,14 @@ function TwoDecorativeGame() {
     }
 
     useEffect(() => {
-
         console.log(code);
+        console.log(code + 1);
+
         window.addEventListener('resize', handleResize);
         return () => {
             window.removeEventListener('resize', handleResize);
         }
-       
+
     }, [])
 
     // 모달창 (타이머)
@@ -74,7 +77,7 @@ function TwoDecorativeGame() {
                     <div className="best-top-left-decoration-game-two">
                     </div>
                     <div className="best-top-right-decoration-game-two">
-                        <div className="on-off-button-two-decorative" onClick={() =>  navigate("/2p-decorative")}>
+                        <div className="on-off-button-two-decorative" onClick={() => navigate("/2p-decorative")}>
                             <img className="on-off-image-two-decorative" src={OnOff} alt="END"></img>
                         </div>
                     </div>
@@ -100,7 +103,7 @@ function TwoDecorativeGame() {
                     <div className="body-container-of-left-decoration-game-two">
                         <div className="screen-admin-decoration-game-two">
                             <div style={{ width: (window.innerHeight * constants.TWO_DECORATIVE_GAME_HEIGHT_RATIO * (4.0 / 3.0)), height: windowHeight, margin: "auto" }}>
-                                <TwoGameScreen getData={setNumber} getWord={setWord} ref={gameScreenRef} />
+                                <TwoGameScreen getData={setNumber} getWord={setWord} ref={gameScreenRef} roomid={code} sender={code} anotherVideoRef={anotherVideoRef} />
                             </div>
                         </div>
                     </div>
@@ -113,7 +116,12 @@ function TwoDecorativeGame() {
 
                 <div className="right-body-container-decoration-game-two">
                     <div className="body-container-of-right-decoration-game-two">
-
+                        <video
+                            ref={anotherVideoRef}
+                            autoPlay={true}
+                            playsInline={true}
+                            style={{ width: "800px", height: "600px" }}
+                        />
                     </div>
                     <div className="bottom-of-right-container-decoration-game-two">
                         <div className="emoji-record-opponent">

@@ -36,7 +36,7 @@ function MainPage() {
     <div className='mainpage'>
 
 
-      <form onSubmit={handleSubmit}>
+      {/* <form onSubmit={handleSubmit}>
         <input
           type="text"
           name="email"
@@ -44,11 +44,11 @@ function MainPage() {
           onChange={handleChange}
         />
         <button type="submit">로그인</button>
-      </form>
+      </form> */}
 
 
 
-      <div className="main">
+      {/* <div className="main">
         <div className="button-list">
           <div className="selection button1">FOLLOW-UP</div>
           <div className="selection button2" >WORD-TRACING GAME</div>
@@ -58,9 +58,10 @@ function MainPage() {
             );
           })};
         </div>
-      </div>
+      </div> */}
 
-      {/* {isTrue ?  <MediapipeHands roomid={123}  sender ={values.email} /> : null} */}
+      {/* {isTrue ?  <MediapipeHands roomid={17}  sender ={values.email} /> : null} */}
+      <MediapipeHands roomid={35}  sender ={"asdf"} /> 
 
 
 
