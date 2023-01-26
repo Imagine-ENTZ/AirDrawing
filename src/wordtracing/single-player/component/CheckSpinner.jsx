@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react"
-import loading from "../img/loading.png";
+import loading from "../../img/loading.png";
 
 function CheckSpinner(){
   return(
