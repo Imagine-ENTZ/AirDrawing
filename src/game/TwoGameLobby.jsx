@@ -27,9 +27,6 @@ const customStyles = {
     },
 };
 
-
-
-
 function TwoGameLobby() {
 
     const navigate = useNavigate();
