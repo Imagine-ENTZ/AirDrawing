@@ -1,23 +1,129 @@
 .main-container-how-decorative {
     width: 100vw;
     height: 100vh;
-    background-color: blue;
 }
 
 .top-container-how-decorative {
-    width:100%;
-    height:10%;
-    background-color: beige;
+    display: flex;
+    width: 100%;
+    height: 12%;
+}
+
+.direction-frame-how-decorative {
+    position: relative;
+    top: 10%;
+    left: 1.5%;
+    width: 4%;
+    height:50%;
+
+    padding: 0.5% 0.5%;
+    border-radius: 15px;
+    border: 1px solid white;
+    cursor: pointer;
+    background-color: transparent;
+
+    align-content: center;
+    display:flex;
+}
+
+.direction-image-how-decorative {
+    position: relative;
+    margin: auto;
+    width: 70%;
+}
+
+.top-left-container-how-decorative {
+    width:88%;
+    height:100%;
+}
+
+.top-right-container-how-decorative {
+    width:12%;
+    height:100%;
+    display:flex;
+}
+
+.on-off-button-how-decorative {
+    position: relative;
+    top: 8%;
+    left:40%;
+    width: 50%;
+    height:80%;
+
+    padding: 0.5% 0.5%;
+    border-radius: 10px;
+    border: 1px solid white;
+    cursor: pointer;
+    background-color: transparent;
+    color: white;
+
+    display:flex;
+}
+
+.on-off-image-how-decorative {
+    position: relative;
+    margin: auto;
+    width: 70%;
 }
 
 .body-container-how-decorative {
-    width:100%;
-    height:60%;
-    background-color: olivedrab
+    display: flex;
+    width: 100%;
+    height: 60%;
+}
+
+.left-body-container-how-decorative {
+    width: 27%;
+    height: 100%;
+    display: flex;
+}
+
+/* HowToDecorative2 에서 쓰임 */
+.arrow-image-how-2-decorative {
+    height: 15%;
+    margin: auto;
+}
+
+.center-container-how-decorative {
+    width: 46%;
+    height: 100%;
+    display: flex;
+}
+
+.how-to-image-decorative {
+    width: 100%;
+    margin: auto;
+}
+
+.right-body-container-how-decorative {
+    width: 27%;
+    height: 100%;
+    display: flex;
+}
+
+.arrow-image-how-1-decorative {
+    height: 15%;
+    margin: auto;
 }
 
 .bottom-container-how-decorative {
-    width:100%;
-    height:30%;
-    background-color: orchid;
+    width: 100%;
+    height: 19%;
+}
+
+.howto-sentence-1-decorative {
+    position: relative;
+    top: 13%;
+
+    white-space: pre-wrap;
+    color: white;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 30px;
+    text-align: center;
+}
+
+.bottom-of-bottom-container-how-decorative {
+    width: 100%;
+    height: 9%;
 }

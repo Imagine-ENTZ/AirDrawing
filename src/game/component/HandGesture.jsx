@@ -42,6 +42,7 @@ export const detectHandGesture = (landmarks) => {
   }
 
   // palm vector
+  let palm_to_thumb_vector = calculateVectorize(landmarks[0], landmarks[5])
   let palm_to_index_vector = calculateVectorize(landmarks[0], landmarks[5])
   let palm_to_middle_vector = calculateVectorize(landmarks[0], landmarks[9])
   let palm_to_ring_vector = calculateVectorize(landmarks[0], landmarks[13])
@@ -53,13 +54,14 @@ export const detectHandGesture = (landmarks) => {
   let ring_vector = calculateVectorize(landmarks[14], landmarks[16])
   let pinky_vector = calculateVectorize(landmarks[18], landmarks[20])
 
-  // console.log(getCosAngle(palm_to_index_vector, index_vector))
-
-  if (getCosAngle(palm_to_index_vector, index_vector) > threshhold &&
-    getCosAngle(index_vector, middle_vector) < 0 &&
-    getCosAngle(index_vector, ring_vector) < 0 &&
-    getCosAngle(index_vector, pinky_vector) < 0)
-    return constants.DRAW;
+  if( getCosAngle(palm_to_index_vector, index_vector) > threshhold &&
+      getCosAngle(palm_to_middle_vector, middle_vector) < threshhold && 
+      getCosAngle(palm_to_ring_vector, ring_vector) < threshhold && 
+      getCosAngle(palm_to_pinky_vector, pinky_vector) < threshhold && 
+      getCosAngle(index_vector, middle_vector) < 0 &&
+      getCosAngle(index_vector, ring_vector) < 0 &&
+      getCosAngle(index_vector, pinky_vector) < 0 )
+      return constants.DRAW;
 
   if (getCosAngle(palm_to_index_vector, index_vector) > threshhold &&
     getCosAngle(palm_to_middle_vector, middle_vector) > threshhold &&
@@ -72,6 +74,18 @@ export const detectHandGesture = (landmarks) => {
     getCosAngle(index_vector, middle_vector) < 0 &&
     getCosAngle(index_vector, ring_vector) < 0)
     return constants.TRANSLATE;
+
+  if( getCosAngle(palm_to_index_vector, index_vector) > threshhold &&
+      getCosAngle(palm_to_pinky_vector, pinky_vector) > threshhold &&
+      getCosAngle(index_vector, middle_vector) < 0 &&
+      getCosAngle(index_vector, ring_vector) < 0)
+      return constants.OK;
+
+  // if( getCosAngle(index_vector, index_vector) < 0 &&
+  //     getCosAngle(index_vector, pinky_vector) > 0 &&
+  //     getCosAngle(index_vector, middle_vector) < 0 &&
+  //     getCosAngle(index_vector, ring_vector) < 0)
+  //     return constants.OK;
 
   return constants.HOVER;
 }

@@ -11,6 +11,8 @@ import * as constants from "../../utils/Constants";
 
 import Tesseract from 'tesseract.js';
 
+import DrawRectangle from "./DrawRectangle";
+
 function MediapipeHands() {
   const webcamRef = useRef(null);
   const canvasRef = useRef(null);
@@ -77,8 +79,6 @@ function MediapipeHands() {
 
     switch (HandGesture.current) {
       case constants.DRAW:
-        console.log("DRAW");
-        contextRef.current.fillStyle = "#"
         contextRef.current.beginPath();
         contextRef.current.moveTo(preFingerPositionX.current, preFingerPositionY.current);
         contextRef.current.lineTo(fingerPosition.x, fingerPosition.y);
@@ -159,11 +159,13 @@ function MediapipeHands() {
       camera.start();
     }
 
+    
     const canvas = canvasRef2.current;
     canvas.height = constants.CANVAS_HEIGHT;
     canvas.width = constants.CANVAS_WIDTH;
 
     const context = canvas.getContext("2d");
+    context.globalAlpha = 0.1;
     context.lineCap = "round";
     context.strokeStyle = "black";
     context.lineWidth = 15;
@@ -181,7 +183,6 @@ function MediapipeHands() {
 
     canvasElement.width = videoWidth;
     canvasElement.height = videoHeight;
-
     canvasCtx.save(); //현재상태를 저장
     canvasCtx.clearRect(0, 0, videoWidth, videoHeight);   // 직사각형 영역의 픽셀을 투명한 검은색으로 설정
     canvasCtx.translate(videoWidth, 0); // 비디오 가로만큼 이동해서 손그릴 캔버스를 웹캠과 일치하도록 설정
@@ -501,6 +502,7 @@ function myMove({ nativeEvent }) {
           height: constants.CANVAS_HEIGHT,
         }}>
       </canvas>
+      
       <canvas
         className="canvas"
         ref={canvasRef2}

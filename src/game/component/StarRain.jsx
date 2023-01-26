@@ -4,7 +4,7 @@ import "./StarRain.css";
 const StarRain = () => {
 
     return (
-        <div>
+        <div className="star-div">
             <div id="stars"></div>
             <div id="stars2"></div>
             <div id="stars3"></div>

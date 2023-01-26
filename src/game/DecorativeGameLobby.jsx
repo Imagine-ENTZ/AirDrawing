@@ -25,8 +25,8 @@ function DecorativeGameLobby() {
                 </div>
                 <div className="left-bottom-container-decoration">
                     <div className="decoration-button-list">
-                        <div className="start-or-how-decoration" onClick={() => navigate("/decorative/game")}>START</div>
-                        <div className="start-or-how-decoration">HOW TO PLAY</div>
+                        <div className="start-or-how-decoration button1_deco" onClick={() => navigate("/decorative/game")}>START</div>
+                        <div className="start-or-how-decoration button2_deco" onClick={() => navigate("/decorative/howto")}>HOW TO PLAY</div>
                     </div>
                 </div>
             </div>
