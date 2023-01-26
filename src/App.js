@@ -5,8 +5,11 @@ import LobbyPage from "./navigation/Lobby.jsx";
 import LoginPage from "./membership/Login.jsx";
 import SignupPage from "./membership/Signup.jsx";
 import SelectionPage from "./navigation/Selection.jsx";
+
 import WordTracingPage from './wordtracing/single-player/WordTracingPage.jsx';
 import GamePage from './wordtracing/single-player/GamePage.jsx';
+import GamePageForTwo from './wordtracing/two-player/GamePage.jsx';
+
 import DecorativeGamePage from "./game/DecorativeGameLobby.jsx";
 import DecorationGamePage from "./game/DecorativeGame.jsx";
 import HowToDecorativeGame from "./game/HowToDecorative.jsx";
@@ -27,8 +30,11 @@ function App() {
         <Route path="/login-or-signup" element={<HomePage />} />
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/login" element={<LoginPage />} />
+
         <Route path="/word-tracing" element={<WordTracingPage />} />
         <Route path="/word-tracing/play" element={<GamePage />} />
+        <Route path="/2p-word-tracing/play" element={<GamePageForTwo />} />
+        
         <Route path="/main" element={<MainPage />} />
         <Route path="/selection" element={<SelectionPage />} />
         <Route path="/decorative" element={<DecorativeGamePage />} />
