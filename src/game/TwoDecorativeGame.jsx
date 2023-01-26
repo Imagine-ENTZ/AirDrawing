@@ -12,10 +12,10 @@ import * as constants from "../utils/Constants";
 function TwoDecorativeGame(props) {
     const navigate = useNavigate();
 
-    const [windowHeight, setWindowHeight] = useState(window.innerHeight * constants.GAME_SCREEN_HEIGHT_RATIO);
+    const [windowHeight, setWindowHeight] = useState(window.innerHeight * constants.TWO_DECORATIVE_GAME_HEIGHT_RATIO);
 
     const handleResize = () => {
-        let height = window.innerHeight * constants.GAME_SCREEN_HEIGHT_RATIO;
+        let height = window.innerHeight * constants.TWO_DECORATIVE_GAME_HEIGHT_RATIO;
         console.log(height)
 
         setWindowHeight(height);
