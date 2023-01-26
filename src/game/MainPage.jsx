@@ -11,8 +11,8 @@ function MainPage() {
   const [isTrue, setIsTure] = useState(false);
 
   const [values, setValues] = useState({
-    email: "",
-    password: "",
+    roomid: "",
+    sender: "",
   })
 
 
@@ -36,15 +36,21 @@ function MainPage() {
     <div className='mainpage'>
 
 
-      {/* <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit}>
         <input
           type="text"
-          name="email"
-          value={values.email}
+          name="roomid"
+          value={values.roomid}
+          onChange={handleChange}
+        />
+         <input
+          type="text"
+          name="sender"
+          value={values.sender}
           onChange={handleChange}
         />
         <button type="submit">로그인</button>
-      </form> */}
+      </form>
 
 
 
@@ -60,8 +66,8 @@ function MainPage() {
         </div>
       </div> */}
 
-      {/* {isTrue ?  <MediapipeHands roomid={17}  sender ={values.email} /> : null} */}
-      <MediapipeHands roomid={35}  sender ={"asdf"} /> 
+      {isTrue ?  <MediapipeHands roomid={values.roomid}  sender ={values.sender} /> : null}
+      {/* <MediapipeHands roomid={35}  sender ={"asdf"} />  */}
 
 
 

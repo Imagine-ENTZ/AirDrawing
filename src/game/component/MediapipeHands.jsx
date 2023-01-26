@@ -182,7 +182,7 @@ function MediapipeHands({ roomid, sender }) {
 
   const subscribe = () => {
 
-    console.log("방번호는 " + roomid);
+    console.log("방번호는 " + roomid   + "샌더" + sender);
     client.current.subscribe(
       `/sub/play/${roomid}`,
       async ({ body }) => {

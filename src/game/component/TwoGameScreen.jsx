@@ -536,7 +536,7 @@ const TwoGameScreen = forwardRef((props, ref) => {
     const dataChannel = useRef();
 
     // function1
-    const subscribe = async() => {
+    const subscribe = () => {
 
       
         console.log(props.roomid, props.sender)
@@ -546,6 +546,7 @@ const TwoGameScreen = forwardRef((props, ref) => {
             async ({ body }) => {
                 const data = JSON.parse(body);
                 // console.log(body);
+                console.log("내이름은" + props.sender);
                 switch (data.type) {
                     case 'ENTER':
                         if (data.sender !== props.sender) {
@@ -562,7 +563,7 @@ const TwoGameScreen = forwardRef((props, ref) => {
                                     offer: JSON.stringify(offer),
                                 }),
                             });
-                            console.log("진입" + offer + "그리거 " + props.sender)
+                            console.log("진입" + offer + "그리더 : " + props.sender)
                             console.log('오퍼전송');
 
                         }
@@ -594,7 +595,7 @@ const TwoGameScreen = forwardRef((props, ref) => {
                         break;
                     case 'ICE':
                         if (data.sender !== props.sender) {
-                            console.log("아이스 수신 " + data.sender + " " + data.ice);
+                            console.log("아이스 수신 값 : " + data.ice);
                             myPeerConnection.addIceCandidate(JSON.parse(data.ice));
                         }
                         break;
@@ -610,14 +611,13 @@ const TwoGameScreen = forwardRef((props, ref) => {
             webSocketFactory: () => new SockJS("http://localhost:8080/play"),
 
             debug: function (str) {
-                // console.log(str);
+                console.log(str);
             },
             // reconnectDelay: 5000,
             // heartbeatIncoming: 4000,
             // heartbeatOutgoing: 4000,
-            onConnect: async() => {
-                await subscribe();
-                // console.log("connet한다");
+            onConnect: () => {
+                subscribe();
                 client.current.publish({
                     destination: `/pub/play`,
                     body: JSON.stringify({
@@ -664,7 +664,7 @@ const TwoGameScreen = forwardRef((props, ref) => {
                 ice: JSON.stringify(data.candidate),
             }),
         });
-        console.log('아이스전송 ', data.sender + " " + data);
+        console.log('아이스전송', data.candidate);
     }
     //function5
     function handleAddStream(data) {
@@ -724,7 +724,7 @@ const TwoGameScreen = forwardRef((props, ref) => {
     //function10
     async function fetchData() {
         await getMedia();
-        await makeConnection();
+        makeConnection();
         connect();
         makeMessageConnection();
     }

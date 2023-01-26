@@ -78,6 +78,7 @@ function Menu() {
                     navigate(`/2p-decorative/game/${res.data["room"].code}` , {
                         state: {
                             code: res.data["room"].code,
+                            sender : res.data["room"].code + 1,
                           }
                     });
                     // console.log(res.data["room"]);
@@ -87,6 +88,28 @@ function Menu() {
             .catch((Error) => { console.log("에러", Error) })
     }
 
+    // 생성된 방 리스트 클릭
+    const selectRoomButton = (index) => {
+
+        console.log(index);
+        console.log(inputData[index].code);
+        console.log(inputData[index].type);
+        
+
+        //민지 게임으로 이동
+        if( inputData[index].type == 1) {
+            navigate(`/2p-decorative/game/${inputData[index].code}` , {
+            state: {
+                code: inputData[index].code,
+                sender : inputData[index].code + 2,
+            }
+        });
+        }
+        //영림이 게임으로 이동
+        else {
+            
+        }
+    }
     useEffect(() => {
 
         axios.get(constants.GAMEROOM_URL)
@@ -136,12 +159,10 @@ function Menu() {
 
                         <SimpleBarReact className="simplebar">
                             {inputData.map((item, index) => {
-
                                 if (index != 0) {
                                     return (
-
-                                        <div className="selection_roomlist">
-                                            <div className="selection_roomlist_inner">
+                                        <div key={index} onClick={ () => {selectRoomButton(index)}} className="selection_roomlist">
+                                            <div  className="selection_roomlist_inner">
                                                 <div className="selection_roomlist_name"> {item.name}</div>
                                                 <div className="selection_roomlist_type">Game Type : {item.type}</div>
                                             </div>
