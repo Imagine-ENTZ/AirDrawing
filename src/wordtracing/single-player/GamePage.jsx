@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useRef } from "react"
 import "./Game.css"
 import Canvas from "./component/Canvas"
-import CheckSpinner from "./component/CheckSpinner"
-import timer from "./img/clock.png"
+import CheckSpinner from "../component/CheckSpinner"
+import timer from "../img/clock.png"
 // import handedMode from "./img/handed_mode.png"
 import ProgressBar from "@ramonak/react-progress-bar";
-import * as constants from "../utils/Constants"
+import * as constants from "../../utils/Constants"
 import HandedMode from './component/HandedMode'
 
 function GamePage() {
@@ -17,20 +17,26 @@ function GamePage() {
   const score = useRef(0);                 //현재 점수
   // const isTesting = useRef(!constants.IS_TESTING);
   const [isTesting, setIsTesting] = useState(!constants.IS_TESTING);
+  
+  const correction = useRef(false);
+  const failure = useRef(false);
 
   useEffect(() => {
     if(wordWrittenByUser.current === null) {
       return;
     }
 
-    if(wordWrittenByUser.current === wordList[indexOfwordList.current]){   //현재 화면에 표시된 단어와 사용자가 작성한 단어가 일치하는지를 확인함
+    if(wordWrittenByUser.current.toUpperCase() === wordList[indexOfwordList.current].toUpperCase()){   //현재 화면에 표시된 단어와 사용자가 작성한 단어가 일치하는지를 확인함
       console.log("정답 -> 사용자["+wordWrittenByUser.current+"], 정답["+wordList[indexOfwordList.current]+"]");
+      correction.current = true;     //정답표시
       score.current += 100;
     }
     else{
-      console.log("실패 -> 사용자["+wordWrittenByUser.current+"], 정답["+wordList[indexOfwordList.current]+"]");
+      console.log("오답 -> 사용자["+wordWrittenByUser.current+"], 정답["+wordList[indexOfwordList.current]+"]");
+      failure.current = true;
     }
 
+    wordWrittenByUser.current = null;   //사용자가 작성하는 단어 초기화
     setIsTesting(!constants.IS_TESTING);
     indexOfwordList.current += 1;
     wordToTest.current = wordList[indexOfwordList.current];
@@ -39,7 +45,8 @@ function GamePage() {
   }, [wordWrittenByUser.current])
   
   //단어목록
-  const wordList = ["apple", "Z", "cat", "Zoo", "b", "bread", "J"];
+  const wordList = ["apple", "z", "cat", "Zoo", "b", "happy", "bread", "J", "ball", "car", "bird",
+  "purple", "farm", "duck", "grape"];
 
   useEffect(() => {
     wordToTest.current = wordList[0];
@@ -93,6 +100,32 @@ function GamePage() {
     return () => clearInterval(countdown);
   }, [minutes, seconds]);
 
+  const setEmotion = () => {
+    console.log(isTesting);
+
+    if(isTesting){
+      return <CheckSpinner spinnerType={constants.LOADING}/>;
+    }
+    
+    if(correction.current){
+      showEmojiDuringOneSecond(correction);
+      return <CheckSpinner spinnerType={constants.CORRECTION}/>;
+    }
+
+    if(failure.current){
+      showEmojiDuringOneSecond(failure);
+      return <CheckSpinner spinnerType={constants.FAILURE}/>;
+    }
+
+    return null;
+  }
+
+  const showEmojiDuringOneSecond = (isShow) => {
+    setTimeout(function(){
+      isShow.current = false;
+    }, 1000);
+  }
+
   return (    
     <div className='word-tracing-play-container'>
 
@@ -129,8 +162,8 @@ function GamePage() {
         </div>
         <div className='word-tracing-sketckbook-container'>
           <div style={{
-              width: "100%",
-              height: "60%"
+            width: "100%",
+            height: "60%"
           }}>
             <div style={{
               width: (window.innerHeight * constants.HEIGHT_RATIO * (4.0 / 3.0)), 
@@ -156,7 +189,7 @@ function GamePage() {
                   height: windowHeight,
                   zIndex: "5"
                 }}>
-                  {isTesting && <CheckSpinner />}
+                  {setEmotion()}
                 </div>
             </div>
           </div>

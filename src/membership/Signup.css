@@ -4,15 +4,21 @@ body {
     background-color: #060919;
 }
 
-.main-container {
-    display: flex;
+.main-container-signup {
     width: 100vw;
     height: 100vh;
 }
 
-.left-container {
+.body-container-signup {
+    display: flex;
+    width: 100%;
+    height: 88%;
+}
+
+.left-container-signup {
     width: 52%;
     height: 100%;
+    /* background-color: aqua; */
 }
 
 .right-container {
@@ -24,18 +30,18 @@ body {
     justify-content: center;*/
 }
 
-.left-topoftop-container-signup {
-    width:100%;
-    height:12%;
-}
-
-.left-top-container {
+.left-top-container-signup {
     width: 100%;
     height: 13%;
     /* background-color: "inherit"; */
 }
 
-.left-body-container {
+.sign-up-frame {
+    position: relative;
+    top:10%;
+}
+
+.left-body-container-signup {
     width: 100%;
     height: 75%;
 }
@@ -53,7 +59,7 @@ body {
     color: white;
 
     position: relative;
-    top:-14%;
+    top:10%;
     left: 40%;
 }
 
@@ -61,13 +67,13 @@ body {
     width: 10%;
 
     position: relative;
-    top: -30%;
+    top: -100%;
     left: 70%;
 }
 
-.input-list {
+.input-list-signup {
     position: relative;
-    top: 1%;
+    top: 10%;
     left: 30%;
 }
 

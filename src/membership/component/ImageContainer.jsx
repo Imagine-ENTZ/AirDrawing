@@ -1,12 +1,12 @@
 import React from "react";
-import "../Login.css";
+import "./ImageContainer.css";
 import homeimage from '../img/mainimagetrue.png';
 
 function ImageContainer() {
 
     return (
-        <div className="right-container">
-                <img className="home-image" src={homeimage} alt="homeimage"/>
+        <div className="right-container-top">
+                <img className="home-image-top" src={homeimage} alt="homeimage"/>
             </div>
     );
 };

@@ -4,45 +4,31 @@ body {
     background-color: #060919;
 }
 
-.main-container {
-    display: flex;
+.main-container-login {
     width: 100vw;
     height: 100vh;
 }
 
-.left-container {
+.body-container-login {
+    display: flex;
+    width:100%;
+    height:88%;
+}
+
+.left-container-login {
     width: 52%;
     height: 100%;
-}
-
-.right-container {
-    width: 48%;
-    height: 100%;
-    /*
-    display: flex;
-    align-items: center;
-    justify-content: center;*/
-}
-
-.left-topoftop-container-login {
-    width:100%;
-    height:12%;
+    /* background-color: antiquewhite; */
 }
 
 .left-top-container-login {
     width: 100%;
-    height: 23%;
+    height: 35%;
 }
 
 .left-body-container-login {
     width: 100%;
     height: 65%;
-}
-
-.home-image {
-    width: 80%;
-    position: relative;
-    top: 15%;
 }
 
 .top-title-login {
@@ -52,7 +38,7 @@ body {
     color: white;
 
     position: relative;
-    top: 39%;
+    top: 37%;
     left: 45%;
 }
 
@@ -64,9 +50,9 @@ body {
     left: 67%;
 }
 
-.input-list {
+.input-list-login {
     position: relative;
-    top: 1%;
+    top: -5%;
     left: 30%;
 }
 
@@ -159,25 +145,3 @@ button {
 .login-button:hover {
     box-shadow: 0 0 10px 0 blue inset, 0 0 10px 4px blue;
 }
-
-.direction-frame-login {
-    position: relative;
-    top: 15%;
-    left: 1.5%;
-    width: 7%;
-    
-    padding:1% 0.5%;
-    border-radius: 15px;
-    border: 1px solid white;
-    cursor: pointer;
-    background-color: transparent;
-  
-    align-content: center;
-  }
-  
-  .direction-image-login {
-    position: relative;
-    margin: auto;
-    display: block;
-    width: 70%;
-  }

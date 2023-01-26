@@ -1,0 +1,177 @@
+body {
+    background-color: #060919;
+}
+
+.main-container-two-lobby {
+    width: 100vw;
+    height: 100vh;
+}
+
+.top-container-two-lobby {
+    width: 100%;
+    height: 12%;
+    /* background-color: pink; */
+}
+
+.body-container-two-lobby {
+    display: flex;
+    width: 100%;
+    height: 88%;
+    /* background-color: gray */
+}
+
+.left-container-two-lobby {
+    width: 20%;
+    height: 100%;
+    /* background-color: pink; */
+}
+
+.center-container-two-lobby {
+    width: 60%;
+    height: 100%;
+    /* background-color: cadetblue; */
+}
+
+.center-top-container-two-lobby {
+    width: 100%;
+    height: 10%;
+    /* background-color: greenyellow; */
+}
+
+.choose-sentence {
+    font-size: 50px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: bold;
+    color: white;
+
+    position: relative;
+    text-align: center;
+    top: -50%;
+}
+
+.center-ofcenter-container-two-lobby {
+    width: 100%;
+    height: 80%;
+    background-color: grey;
+}
+
+.center-bottom-container-two-lobby {
+    width: 100%;
+    height: 10%;
+    /* background-color: greenyellow; */
+}
+
+.right-container-two-lobby {
+    width: 20%;
+    height: 100%;
+    /* background-color: blue; */
+}
+
+.right-top-container-two-lobby {
+    width: 100%;
+    height: 10%;
+    /* background-color: rebeccapurple; */
+}
+
+.right-body-container-two-lobby {
+    width: 100%;
+    height: 90%;
+}
+
+.selection:hover {
+    box-shadow: 0 0 10px 0 blue inset, 0 0 10px 4px blue;
+}
+
+.selection:focus {
+    box-shadow: 0 0 10px 0 blue inset, 0 0 10px 4px blue;
+}
+
+.direction-frame-two-lobby {
+    position: relative;
+    top: 15%;
+    left: 1%;
+    width: 50px;
+
+    padding: 8px;
+    border-radius: 15px;
+    border: 1px solid white;
+    cursor: pointer;
+    background-color: transparent;
+
+    display: flex;
+}
+
+.direction-image-two-lobby {
+    position: relative;
+    margin: auto;
+    width: 80%;
+}
+
+.making-button {
+    position: relative;
+    top:30%;
+    left: 8%;
+    border-radius: 28px;
+    border: 1px solid white;
+    cursor: pointer;
+    background-color: transparent;
+    color: white;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    width: 80px;
+    padding: 10px 40px;
+    text-align: center;
+}
+
+.making-button:hover {
+	box-shadow: 0 0 10px 0 blue inset, 0 0 10px 4px blue;
+}
+
+.hero {
+    background-image: radial-gradient(50% 176% at 0 0);
+    min-height: 100vh;
+
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+
+}
+
+.snow {
+    position: absolute;
+    min-width: 100vw;
+    min-height: 100vh;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+}
+
+.snow .svg {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+#snow-top-layer {
+    will-change: transform;
+    transform: translateY(-768px);
+    animation: fall 22.5s infinite linear;
+}
+
+#snow-bottom-layer {
+    will-change: transform;
+    transform: translateY(-768px);
+    animation: fall 45s infinite linear;
+}
+
+@keyframes fall {
+
+    100% {
+        transform: translateY(0);
+    }
+
+}

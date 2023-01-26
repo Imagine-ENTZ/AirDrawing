@@ -1,59 +1,69 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@800&family=Space+Grotesk&display=swap');
 
 .main-container-decoration {
-  display: flex;
   width: 100vw;
   height: 100vh;
   background: linear-gradient(#174fa9, #000000);
   background-color: #174fa9;
 }
 
+.top-container-decoration {
+  width: 100%;
+  height: 12%;
+  /* background-color: pink; */
+}
+
+.direction-frame-decoration {
+  position: relative;
+    top: 15%;
+    left: 1%;
+    /* width: 50px; */
+    width:4.5%;
+    height: 60%;
+
+    /* padding: 8px; */
+    border-radius: 15px;
+    border: 1px solid white;
+    cursor: pointer;
+    background-color: transparent;
+
+    display: flex;
+}
+
+.direction-image-decoration {
+  position: relative;
+    margin: auto;
+    height: 70%;
+}
+
+.body-container-decoration {
+  width: 100%;
+  height: 88%;
+  display: flex;
+}
+
 .left-container-decoration {
   width: 60%;
   height: 100%;
+  /* background-color:grey; */
 }
 
 .right-container-decoration {
   width: 40%;
   height: 100%;
+  /* background-color: cyan; */
 }
-
-.left-topoftop-container-decoration {
-  width: 100%;
-  height: 12%;
-}
-
-.direction-frame-decoration {
-  position: relative;
-  top: 15%;
-  left: 1.5%;
-  width: 7%;
-
-  padding: 1% 0.5%;
-  border-radius: 15px;
-  border: 1px solid white;
-  cursor: pointer;
-  background-color: transparent;
-
-  align-content: center;
-}
-
-.direction-image-decoration {
-  position: relative;
-  margin: auto;
-  display: block;
-  width: 70%;
-}
-
 
 .left-top-container-decoration {
   width: 100%;
-  height: 48%;
+  height: 55%;
+  /* background-color: antiquewhite; */
 }
 
 .left-bottom-container-decoration {
   width: 100%;
-  height: 40%;
+  height: 45%;
+  /* background-color:blue */
 }
 
 .decoration-sentence {
@@ -72,6 +82,7 @@
 
 .decoration-button-list {
   position: relative;
+  top: 7%;
   left: 20%;
 }
 
@@ -87,9 +98,14 @@
   width: 150px;
   padding: 20px 90px;
   text-align: center;
-  margin-top: 20px;
+  /* margin-top: 20px; */
   /*
 	padding:17px 100px;*/
+}
+
+.button2_deco {
+  position: relative;
+  margin-top:2%;
 }
 
 .start-or-how-decoration:hover,

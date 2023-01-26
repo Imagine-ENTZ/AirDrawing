@@ -1,10 +1,10 @@
 
 import React, { useState, useEffect, useRef } from "react"
-import drawMode from "../img/handedmode/draw_mode.png"
-import eraseMode from "../img/handedmode/erase_mode.png"
-import hoverMode from "../img/handedmode/hover_mode.png"
-import okMode from "../img/handedmode/ok_mode.png"
-import resetMode from "../img/handedmode/reset_mode.png"
+import drawMode from "../../img/handedmode/draw_mode.png"
+import eraseMode from "../../img/handedmode/erase_mode.png"
+import hoverMode from "../../img/handedmode/hover_mode.png"
+import okMode from "../../img/handedmode/ok_mode.png"
+import resetMode from "../../img/handedmode/reset_mode.png"
 
 function HandedMode() {
   const handedModeImageStyle = {

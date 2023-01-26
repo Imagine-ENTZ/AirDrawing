@@ -1,23 +1,122 @@
 .main-container-how-decorative {
     width: 100vw;
     height: 100vh;
-    background-color: blue;
 }
 
 .top-container-how-decorative {
-    width:100%;
-    height:10%;
-    background-color: beige;
+    width: 100%;
+    height: 12%;
+    /* background-color: pink; */
+}
+
+.direction-frame-how-decorative {
+    position: relative;
+    top: 15%;
+    left: 1%;
+    /* width: 50px; */
+    width:4.5%;
+    height: 60%;
+
+    /* padding: 8px; */
+    border-radius: 15px;
+    border: 1px solid white;
+    cursor: pointer;
+    background-color: transparent;
+
+    display: flex;
+}
+
+.direction-image-how-decorative {
+    position: relative;
+    margin: auto;
+    height: 70%;
+}
+
+.top-same-container-how-decorative-end {
+    width: 100%;
+    height: 100%;
+}
+
+.on-off-button-how-decorative {
+    position: relative;
+    top: 15%;
+    right: 1%;
+    float:right;
+    width: 50px;
+
+    padding: 8px;
+    border-radius: 15px;
+    border: 1px solid white;
+    cursor: pointer;
+    background-color: transparent;
+
+    display:flex;
+}
+
+.on-off-image-how-decorative {
+    position: relative;
+    margin: auto;
+    width: 80%;
 }
 
 .body-container-how-decorative {
-    width:100%;
-    height:60%;
-    background-color: olivedrab
+    display: flex;
+    width: 100%;
+    height: 60%;
+}
+
+.left-body-container-how-decorative {
+    width: 27%;
+    height: 100%;
+    display: flex;
+}
+
+/* HowToDecorative2 에서 쓰임 */
+.arrow-image-how-2-decorative {
+    height: 15%;
+    margin: auto;
+}
+
+.center-container-how-decorative {
+    width: 46%;
+    height: 100%;
+    display: flex;
+}
+
+.how-to-image-decorative {
+    width: 100%;
+    margin: auto;
+}
+
+.right-body-container-how-decorative {
+    width: 27%;
+    height: 100%;
+    display: flex;
+}
+
+.arrow-image-how-1-decorative {
+    height: 15%;
+    margin: auto;
 }
 
 .bottom-container-how-decorative {
-    width:100%;
-    height:30%;
-    background-color: orchid;
+    width: 100%;
+    height: 19%;
+}
+
+.howto-sentence-1-decorative {
+    position: relative;
+    top: 13%;
+
+    white-space: pre-wrap;
+    color: white;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 30px;
+    text-align: center;
+}
+
+.bottom-of-bottom-container-how-decorative {
+    width: 100%;
+    height: 9%;
 }
