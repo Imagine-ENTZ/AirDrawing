@@ -49,11 +49,13 @@
 .left-top-container-decoration {
   width: 100%;
   height: 48%;
+  /* background-color: antiquewhite; */
 }
 
 .left-bottom-container-decoration {
   width: 100%;
   height: 40%;
+  /* background-color:blue */
 }
 
 .decoration-sentence {
@@ -66,12 +68,13 @@
   color: white;
 
   position: relative;
-  top: 10%;
+  top: 6%;
   left: 20%;
 }
 
 .decoration-button-list {
   position: relative;
+  top: 7%;
   left: 20%;
 }
 
@@ -87,9 +90,14 @@
   width: 150px;
   padding: 20px 90px;
   text-align: center;
-  margin-top: 20px;
+  /* margin-top: 20px; */
   /*
 	padding:17px 100px;*/
+}
+
+.button2_deco {
+  position: relative;
+  margin-top:2%;
 }
 
 .start-or-how-decoration:hover,
