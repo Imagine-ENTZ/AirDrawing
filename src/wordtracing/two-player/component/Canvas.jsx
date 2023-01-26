@@ -15,6 +15,7 @@ function Canvas(props) {
   const sendWordToParentComponent = (text) => {
     text = text.split("\n").join("");
     text = text.split(' ').join('');
+    console.log("사용자가 쓴 글씨 : [" + text + "]")
     props.wordWrittenByUser.current = text;   //사용자가 작성한 영어단어 전달
   }
 
@@ -287,9 +288,9 @@ function Canvas(props) {
       console.error(err);
     })
     .then((result) => {
+      isTesting.current = !constants.IS_TESTING;
       sendWordToParentComponent(result.data.text);  //부모 컴포넌트에 사용자가 쓴 단어 텍스트값 보내기
       console.log("결과값: " + result.data.text)
-      isTesting.current = !constants.IS_TESTING;
 
       fingerOfcontextRef.current.clearRect(0, 0, windowSize.width, windowSize.height); //검사 완료 후 글씨쓴 캔버스 초기화
     });

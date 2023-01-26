@@ -5,6 +5,8 @@ import ProgressBar from "@ramonak/react-progress-bar";
 import * as constants from "../../utils/Constants"
 import Canvas from './component/Canvas';
 import CheckSpinner from "../single-player/component/CheckSpinner"
+import failed from "../img/emotion/crying.png"
+import incorrect from "../img/emotion/thinking.png"
 
 function GamePage() {
   const [windowHeight, setWindowHeight] = useState(window.innerHeight*constants.HEIGHT_RATIO);
@@ -20,6 +22,18 @@ function GamePage() {
   const wordList = ["purple", "apple", "z", "cat", "Zoo", "b", "happy", "bread", "J", "ball", "car", "bird",
   "farm", "duck", "grape"];
 
+  const [correction, setCorrection] = useState(false);
+  const [incorrection, setIncorrection] = useState(false);
+  const [failure, setFailure] = useState(false);
+
+  const loadingStyle = { 
+    position: "absolute",
+    left: "0",
+    top: "0",
+    width: (window.innerHeight * constants.HEIGHT_RATIO * (4.0 / 3.0)), 
+    height: windowHeight,
+    zIndex: "5"}
+
   useEffect(() => {
     wordToTest.current = wordList[0];
   }, [])
@@ -31,14 +45,17 @@ function GamePage() {
 
     if(wordWrittenByUser.current.toUpperCase() === wordList[indexOfwordList.current].toUpperCase()){   //현재 화면에 표시된 단어와 사용자가 작성한 단어가 일치하는지를 확인함
       console.log("정답 -> 사용자["+wordWrittenByUser.current+"], 정답["+wordList[indexOfwordList.current]+"]");
+      setCorrection(true);
       userScore.current += 100;
-      indexOfwordList.current += 1;
+      indexOfwordList.current += 1;  //정답인 경우에만 다음 단어로 넘어감
       wordToTest.current = wordList[indexOfwordList.current];
     }
     else{
-      console.log("실패 -> 사용자["+wordWrittenByUser.current+"], 정답["+wordList[indexOfwordList.current]+"]");
+      console.log("오답 -> 사용자["+wordWrittenByUser.current+"], 정답["+wordList[indexOfwordList.current]+"]");
+      setIncorrection(true);
     }
 
+    wordWrittenByUser.current = null;   //사용자가 작성하는 단어 초기화
     setIsTesting(!constants.IS_TESTING);
 
     console.log("index: " + indexOfwordList.current + ", current word: " + wordToTest.current);
@@ -91,6 +108,25 @@ function GamePage() {
     
     return () => clearInterval(countdown);
   }, [minutes, seconds]);
+
+  useEffect(()=>{
+    let timer = setTimeout(()=>{ 
+      // alertSet(false) 
+    }, 1000);
+  });
+
+  const setEmotion = () => {
+    console.log(isTesting);
+
+    if(isTesting){
+      return <CheckSpinner />;
+    }
+    // else if(incorrection){
+    //   return <img src={incorrect} />;
+    // } 
+
+    return null;
+  }
 
 	return(
 		<div className='word-tracing-play-container'>
@@ -165,18 +201,13 @@ function GamePage() {
                     top: "0",
                     zIndex: "1"
                   }}/>
-                  <div style={{ 
-                    position: "absolute",
-                    left: "0",
-                    top: "0",
-                    width: (window.innerHeight * constants.HEIGHT_RATIO * (4.0 / 3.0)), 
-                    height: windowHeight,
-                    zIndex: "5"
-                  }}>
-                    {/* <CheckSpinner /> */}
+                  <div style={loadingStyle}>
+                    {/* {setEmotion()} */}
                     {isTesting && <CheckSpinner />}
-                  <div/>
-                </div>
+                  </div>
+                  {/* <div style={loadingStyle}>
+                    {!isTesting && incorrection && <img src={incorrect}>}
+                  </div> */}
               </div>
             </div>
           </div>

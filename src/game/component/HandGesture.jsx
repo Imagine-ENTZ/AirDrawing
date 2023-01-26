@@ -57,13 +57,6 @@ export const detectHandGesture = (landmarks) => {
   let thumCmcToMcp = calculateVectorize(landmarks[1], landmarks[2]);
   let thumMcpToIp = calculateVectorize(landmarks[2], landmarks[3]);
 
-  if( getCosAngle(palm_to_index_vector, index_vector) < threshhold &&
-      getCosAngle(palm_to_middle_vector, middle_vector) < threshhold &&
-      getCosAngle(palm_to_ring_vector, ring_vector) < threshhold &&
-      getCosAngle(palm_to_pinky_vector, pinky_vector) < threshhold &&
-      getCosAngle(thumCmcToMcp, thumMcpToIp) >= 0.99 )
-      return constants.OK;
-
   if( getCosAngle(palm_to_index_vector, index_vector) > threshhold &&
       getCosAngle(palm_to_middle_vector, middle_vector) < threshhold && 
       getCosAngle(palm_to_ring_vector, ring_vector) < threshhold && 
@@ -74,16 +67,24 @@ export const detectHandGesture = (landmarks) => {
       return constants.DRAW;
 
   if (getCosAngle(palm_to_index_vector, index_vector) > threshhold &&
-    getCosAngle(palm_to_middle_vector, middle_vector) > threshhold &&
-    getCosAngle(palm_to_ring_vector, ring_vector) > threshhold &&
-    getCosAngle(index_vector, pinky_vector) < 0)
-    return constants.ERASE;
+      getCosAngle(palm_to_middle_vector, middle_vector) > threshhold &&
+      getCosAngle(palm_to_ring_vector, ring_vector) > threshhold &&
+      getCosAngle(index_vector, pinky_vector) < 0)
+      return constants.ERASE;
 
   if (getCosAngle(palm_to_index_vector, index_vector) > threshhold &&
     getCosAngle(palm_to_pinky_vector, pinky_vector) > threshhold &&
     getCosAngle(index_vector, middle_vector) < 0 &&
     getCosAngle(index_vector, ring_vector) < 0)
     return constants.TRANSLATE;
+
+    if( getCosAngle(palm_to_index_vector, index_vector) < threshhold &&
+        getCosAngle(palm_to_middle_vector, middle_vector) < threshhold &&
+        getCosAngle(palm_to_ring_vector, ring_vector) < threshhold &&
+        getCosAngle(palm_to_pinky_vector, pinky_vector) < threshhold &&
+        getCosAngle(thumCmcToMcp, thumMcpToIp) >= 0.99 )
+        return constants.OK;
+
 
   // if( getCosAngle(index_vector, index_vector) < 0 &&
   //     getCosAngle(index_vector, pinky_vector) > 0 &&

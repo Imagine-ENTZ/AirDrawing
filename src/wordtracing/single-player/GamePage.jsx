@@ -28,9 +28,10 @@ function GamePage() {
       score.current += 100;
     }
     else{
-      console.log("실패 -> 사용자["+wordWrittenByUser.current+"], 정답["+wordList[indexOfwordList.current]+"]");
+      console.log("오답 -> 사용자["+wordWrittenByUser.current+"], 정답["+wordList[indexOfwordList.current]+"]");
     }
 
+    wordWrittenByUser.current = null;   //사용자가 작성하는 단어 초기화
     setIsTesting(!constants.IS_TESTING);
     indexOfwordList.current += 1;
     wordToTest.current = wordList[indexOfwordList.current];
