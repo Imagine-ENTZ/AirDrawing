@@ -35,7 +35,6 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
-  "proxy": "https://cdn-icons-png.flaticon.com",
   "eslintConfig": {
     "extends": [
       "react-app",
@@ -53,5 +52,6 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "proxy": "https://cdn-icons-png.flaticon.com"
 }

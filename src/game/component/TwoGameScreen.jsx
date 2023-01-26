@@ -423,15 +423,18 @@ const TwoGameScreen = forwardRef((props, ref) => {
         const image = new Image();
 
         const response =  axios.get(
-            'https://api.flaticon.com/v3/search/icons/{orderBy}?q='+emojiName, 
+            'https://api.flaticon.com/v3/search/icons/{orderBy}?q=' + emojiName, 
             {headers}
         ).then(res => {
             console.log(res.data);
             var source = res.data.data[2].images[512];
+            console.log(source);
             source = source.replace("https://cdn-icons-png.flaticon.com", "");
             image.crossOrigin = "anonymous";
             image.src = source;
         })
+        .catch((Error) =>console.log(Error))
+        console.log(image.src);
         
         //image.src = "https://emojiapi.dev/api/v1/" + emojiName + "/" + parseInt(windowSize.width * constants.GAME_EMOJI_RATIO) + ".png";
 
