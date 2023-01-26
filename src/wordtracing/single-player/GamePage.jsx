@@ -17,18 +17,23 @@ function GamePage() {
   const score = useRef(0);                 //현재 점수
   // const isTesting = useRef(!constants.IS_TESTING);
   const [isTesting, setIsTesting] = useState(!constants.IS_TESTING);
+  
+  const correction = useRef(false);
+  const failure = useRef(false);
 
   useEffect(() => {
     if(wordWrittenByUser.current === null) {
       return;
     }
 
-    if(wordWrittenByUser.current === wordList[indexOfwordList.current]){   //현재 화면에 표시된 단어와 사용자가 작성한 단어가 일치하는지를 확인함
+    if(wordWrittenByUser.current.toUpperCase() === wordList[indexOfwordList.current].toUpperCase()){   //현재 화면에 표시된 단어와 사용자가 작성한 단어가 일치하는지를 확인함
       console.log("정답 -> 사용자["+wordWrittenByUser.current+"], 정답["+wordList[indexOfwordList.current]+"]");
+      correction.current = true;     //정답표시
       score.current += 100;
     }
     else{
       console.log("오답 -> 사용자["+wordWrittenByUser.current+"], 정답["+wordList[indexOfwordList.current]+"]");
+      failure.current = true;
     }
 
     wordWrittenByUser.current = null;   //사용자가 작성하는 단어 초기화
@@ -95,6 +100,32 @@ function GamePage() {
     return () => clearInterval(countdown);
   }, [minutes, seconds]);
 
+  const setEmotion = () => {
+    console.log(isTesting);
+
+    if(isTesting){
+      return <CheckSpinner spinnerType={constants.LOADING}/>;
+    }
+    
+    if(correction.current){
+      showEmojiDuringOneSecond(correction);
+      return <CheckSpinner spinnerType={constants.CORRECTION}/>;
+    }
+
+    if(failure.current){
+      showEmojiDuringOneSecond(failure);
+      return <CheckSpinner spinnerType={constants.FAILURE}/>;
+    }
+
+    return null;
+  }
+
+  const showEmojiDuringOneSecond = (isShow) => {
+    setTimeout(function(){
+      isShow.current = false;
+    }, 1000);
+  }
+
   return (    
     <div className='word-tracing-play-container'>
 
@@ -158,7 +189,7 @@ function GamePage() {
                   height: windowHeight,
                   zIndex: "5"
                 }}>
-                  {isTesting && <CheckSpinner spinnerType={constants.LOADING}/>}
+                  {setEmotion()}
                 </div>
             </div>
           </div>
