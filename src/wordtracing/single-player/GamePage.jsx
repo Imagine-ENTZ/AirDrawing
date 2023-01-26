@@ -2,10 +2,10 @@ import React, { useState, useEffect, useRef } from "react"
 import "./Game.css"
 import Canvas from "./component/Canvas"
 import CheckSpinner from "./component/CheckSpinner"
-import timer from "./img/clock.png"
+import timer from "../img/clock.png"
 // import handedMode from "./img/handed_mode.png"
 import ProgressBar from "@ramonak/react-progress-bar";
-import * as constants from "../utils/Constants"
+import * as constants from "../../utils/Constants"
 import HandedMode from './component/HandedMode'
 
 function GamePage() {
