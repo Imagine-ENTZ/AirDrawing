@@ -12,33 +12,34 @@ function SignupContainer() {
 
     const navigateToLoginAgain = () => {
         
-        console.log(values.name , values.email, values.password, values.repassword)
-        if (values.password === values.repassword) {
-            axios.post(constants.REGISTER_URL,
-                {
-                    user: values.email,
-                    name : values.name,
-                    password: values.password,
-                })
-                .then((Response) => {
+        navigate("/login");
+        // console.log(values.name , values.email, values.password, values.repassword)
+        // if (values.password === values.repassword) {
+        //     axios.post(constants.REGISTER_URL,
+        //         {
+        //             user: values.email,
+        //             name : values.name,
+        //             password: values.password,
+        //         })
+        //         .then((Response) => {
     
-                    if (Response.data.result == "FAIL") {
-                        console.log("중복되는 ID가 있습니다");
-                        setValues({
-                            ...values,
-                            ["email"]:"",
-                        })
-                    }
-                    else {
-                        navigate("/login");
-                    }
-                })
-                .catch((Error) => { console.log("에러", Error) })
+        //             if (Response.data.result == "FAIL") {
+        //                 console.log("중복되는 ID가 있습니다");
+        //                 setValues({
+        //                     ...values,
+        //                     ["email"]:"",
+        //                 })
+        //             }
+        //             else {
+        //                 navigate("/login");
+        //             }
+        //         })
+        //         .catch((Error) => { console.log("에러", Error) })
 
-        }
-        else {
-            console.log("입력하신 패스워드가 다릅니다");
-        }
+        // }
+        // else {
+        //     console.log("입력하신 패스워드가 다릅니다");
+        // }
         
     };
 
