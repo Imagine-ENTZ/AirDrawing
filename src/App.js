@@ -10,6 +10,7 @@ import GamePage from './wordtracing/single-player/GamePage.jsx';
 import DecorativeGamePage from "./game/DecorativeGameLobby.jsx";
 import DecorationGamePage from "./game/DecorativeGame.jsx";
 import HowToDecorativeGame from "./game/HowToDecorative.jsx";
+import HowToDecorativeGamePlus from "./game/HowToDecorativePlus.jsx";
 import HowToDecorativeGame2 from "./game/HowToDecorative2.jsx";
 import HowToDecorativeGame3 from "./game/HowToDecorative3.jsx";
 import HowToDecorativeGame4 from "./game/HowToDecorative4.jsx";
@@ -33,9 +34,10 @@ function App() {
         <Route path="/decorative" element={<DecorativeGamePage />} />
         <Route path="/decorative/game" element={<DecorationGamePage />} />
         <Route path="/decorative/howto" element={<HowToDecorativeGame />} />
-        <Route path="/decorative/howto/2" element={<HowToDecorativeGame2 />} />
-        <Route path="/decorative/howto/3" element={<HowToDecorativeGame3 />} />
-        <Route path="/decorative/howto/4" element={<HowToDecorativeGame4 />} />
+        <Route path="/decorative/howto/2" element={<HowToDecorativeGamePlus />} />
+        <Route path="/decorative/howto/3" element={<HowToDecorativeGame2 />} />
+        <Route path="/decorative/howto/4" element={<HowToDecorativeGame3 />} />
+        <Route path="/decorative/howto/5" element={<HowToDecorativeGame4 />} />
         <Route path="/2p-lobby/decorative-play" element={<TwoDecorativeGame />} />
         <Route path="/2p-lobby" element={<TwoGameLobby />} />
         {/* <Route path="/detail/:id" element={<Detail />} />

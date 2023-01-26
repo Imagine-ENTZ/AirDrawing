@@ -14,23 +14,25 @@ function DecorativeGameLobby() {
     return (
         <div className="main-container-decoration">
             <StarRain />
-            <div className="left-container-decoration">
-                <div className="left-topoftop-container-decoration">
-                    <div className="direction-frame-decoration" onClick={() => navigate("/lobby")}>
-                        <img className="direction-image-decoration" src={Direction} alt="direct" />
-                    </div>
-                </div>
-                <div className="left-top-container-decoration">
-                    <div className="decoration-sentence">{decoration_sentence[0]}</div>
-                </div>
-                <div className="left-bottom-container-decoration">
-                    <div className="decoration-button-list">
-                        <div className="start-or-how-decoration button1_deco" onClick={() => navigate("/decorative/game")}>START</div>
-                        <div className="start-or-how-decoration button2_deco" onClick={() => navigate("/decorative/howto")}>HOW TO PLAY</div>
-                    </div>
+            <div className="top-container-decoration">
+                <div className="direction-frame-decoration" onClick={() => navigate("/lobby")}>
+                    <img className="direction-image-decoration" src={Direction} alt="direct" />
                 </div>
             </div>
-            <div className="right-container-decoration">
+            <div className="body-container-decoration">
+                <div className="left-container-decoration">
+                    <div className="left-top-container-decoration">
+                        <div className="decoration-sentence">{decoration_sentence[0]}</div>
+                    </div>
+                    <div className="left-bottom-container-decoration">
+                        <div className="decoration-button-list">
+                            <div className="start-or-how-decoration button1_deco" onClick={() => navigate("/decorative/game")}>START</div>
+                            <div className="start-or-how-decoration button2_deco" onClick={() => navigate("/decorative/howto")}>HOW TO PLAY</div>
+                        </div>
+                    </div>
+                </div>
+                <div className="right-container-decoration">
+                </div>
             </div>
         </div>
 

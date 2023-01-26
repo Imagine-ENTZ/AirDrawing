@@ -65,7 +65,7 @@ function TwoDecorativeGame(props) {
                     <div className="best-top-left-decoration-game-two">
                     </div>
                     <div className="best-top-right-decoration-game-two">
-                        <div className="on-off-button-two-decorative" onClick={() => navigate("/2p-decorative")}>
+                        <div className="on-off-button-two-decorative" onClick={() => navigate("/lobby")}>
                             <img className="on-off-image-two-decorative" src={OnOff} alt="END"></img>
                         </div>
                     </div>

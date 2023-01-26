@@ -1,4 +1,4 @@
-import React, {  useState } from "react";
+import React, { useState } from "react";
 import "../Signup.css";
 import line from '../img/line.png';
 import Direction from '../img/direction-arrow.png';
@@ -11,7 +11,7 @@ function SignupContainer() {
     const navigate = useNavigate();
 
     const navigateToLoginAgain = () => {
-        
+
         navigate("/login");
         // console.log(values.name , values.email, values.password, values.repassword)
         // if (values.password === values.repassword) {
@@ -22,7 +22,7 @@ function SignupContainer() {
         //             password: values.password,
         //         })
         //         .then((Response) => {
-    
+
         //             if (Response.data.result == "FAIL") {
         //                 console.log("중복되는 ID가 있습니다");
         //                 setValues({
@@ -40,14 +40,14 @@ function SignupContainer() {
         // else {
         //     console.log("입력하신 패스워드가 다릅니다");
         // }
-        
+
     };
 
     const [values, setValues] = useState({
         name: "",
         email: "",
-        password:"",
-        repassword:""
+        password: "",
+        repassword: ""
     })
 
 
@@ -60,18 +60,15 @@ function SignupContainer() {
 
 
     return (
-        <div className="left-container">
-            <div className="left-topoftop-container-signup">
-                <div className="direction-frame-signup" onClick={() => navigate("/selection")}>
-                    <img className="direction-image-signup" src={Direction} alt="direct" />
+        <div className="left-container-signup">
+            <div className="left-top-container-signup">
+                <div className="sign-up-frame">
+                    <div className="top-title-signup">SignUp</div>
+                    <img className="line-signup" src={line} alt="line" />
                 </div>
             </div>
-            <div className="left-top-container">
-                <div className="top-title-signup">SignUp</div>
-                <img className="line-signup" src={line} alt="line" />
-            </div>
-            <div className="left-body-container">
-                <div className="input-list">
+            <div className="left-body-container-signup">
+                <div className="input-list-signup">
                     <div className="contact-form">
                         <div>
                             <input value={values.name} onChange={handleChange} className="input-class" id="Name" name="name" type="text"></input>
