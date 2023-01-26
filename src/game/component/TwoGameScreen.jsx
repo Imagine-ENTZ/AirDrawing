@@ -15,8 +15,8 @@ import Tesseract from 'tesseract.js';
 const TwoGameScreen = forwardRef((props, ref) => {
 
     const [windowSize, setWindowSize] = useState({
-        width: window.innerHeight * constants.GAME_SCREEN_HEIGHT_RATIO * (4.0 / 3.0),
-        height: window.innerHeight * constants.GAME_SCREEN_HEIGHT_RATIO
+        width: window.innerHeight * constants.TWO_DECORATIVE_GAME_HEIGHT_RATIO * (4.0 / 3.0),
+        height: window.innerHeight * constants.TWO_DECORATIVE_GAME_HEIGHT_RATIO
     });
 
     useImperativeHandle(ref, () => ({
