@@ -8,6 +8,7 @@ import { detectHandGesture } from "./HandGesture";
 import { preprocessImage } from "./PreprocessImage";
 import frame from "./frame.png";
 import * as constants from "../../utils/Constants";
+import axios from 'axios';
 
 import Tesseract from 'tesseract.js';
 
@@ -22,6 +23,11 @@ const GameScreen = forwardRef((props, ref) => {
         // 부모 컴포넌트에서 사용할 함수를 선언
         captureImage
     }))
+
+    const headers = {
+        'Accept':'application/json',
+        'Authorization': constants.AUTHORIZATION_IMAGE
+      };
 
     // 웹캡 변수
     const webcamRef = useRef(null);
@@ -379,7 +385,6 @@ const GameScreen = forwardRef((props, ref) => {
             // a.setAttribute("download", "hong.png");
             // a.click();
             saveImage(image);
-            captureImage();
         }
     };
 
@@ -416,7 +421,19 @@ const GameScreen = forwardRef((props, ref) => {
         canvas.width = windowSize.width;
         canvas.height = windowSize.height;
         const image = new Image();
-        image.src = "https://emojiapi.dev/api/v1/" + emojiName + "/" + parseInt(windowSize.width * constants.GAME_EMOJI_RATIO) + ".png";
+
+        const response =  axios.get(
+            'https://api.flaticon.com/v3/search/icons/{orderBy}?q='+emojiName, 
+            {headers}
+        ).then(res => {
+            console.log(res.data);
+            var source = res.data.data[2].images[512];
+            source = source.replace("https://cdn-icons-png.flaticon.com", "");
+            image.crossOrigin = "anonymous";
+            image.src = source;
+        })
+        
+        //image.src = "https://emojiapi.dev/api/v1/" + emojiName + "/" + parseInt(windowSize.width * constants.GAME_EMOJI_RATIO) + ".png";
 
         //image.crossOrigin = "Anonymous";
         //image.setAttribute('crossOrigin', '');

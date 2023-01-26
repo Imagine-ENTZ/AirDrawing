@@ -108,7 +108,7 @@
 
 .body-container-of-left-decoration-game-two {
     width: 100%;
-    height: 70%;
+    height: 80%;
     background-color:brown;
 }
 
@@ -118,7 +118,7 @@
 
 .bottom-of-left-container-decoration-game-two {
     width: 100%;
-    height: 30%;
+    height: 20%;
     background-color:blueviolet;
 }
 
@@ -142,13 +142,13 @@
 
 .body-container-of-right-decoration-game-two {
     width: 100%;
-    height: 70%;
+    height: 80%;
     background-color:salmon;
 }
 
 .bottom-of-right-container-decoration-game-two {
     width: 100%;
-    height: 30%;
+    height: 20%;
     background-color: slateblue;
 }
 
