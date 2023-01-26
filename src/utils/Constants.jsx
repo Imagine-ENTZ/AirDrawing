@@ -27,6 +27,7 @@ export const TWO_DECORATIVE_GAME_HEIGHT_RATIO = 0.6;
 
 export const LOGIN_URL = `http://localhost:8080/member/login`
 export const REGISTER_URL = `http://localhost:8080/member/`
+export const GAMEROOM_URL = `http://localhost:8080/room/`
 
 export const AUTHORIZATION_IMAGE = 'bearer eyJ0eXAiOiJhdCtKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtbnpjTTZta2Z3NFM5UnB6RGc2UTVkWlVpS0FRYXp0SVd2MUFZYnNwc0JRZTNtTkkiLCJpc3MiOiJodHRwczpcL1wvYXBpLmZsYXRpY29uLmNvbVwvb2F1dGhcL3Rva2VuIiwiZXhwIjoxNjc0Nzk3NTUyLCJpYXQiOjE2NzQ3MTExNTIsImp0aSI6IjA3MWRkNzhmLTZmZDctNDA1My1hYzZmLWI0MDg4MmRmNjAwNiIsImNsaWVudF9pZCI6Im1uemNNNm1rZnc0UzlScHpEZzZRNWRaVWlLQVFhenRJV3YxQVlic3BzQlFlM21OSSJ9.QfhnBA5FLgzLuYtFpHkOCt5Yb4FaVHMvviXrZ3zWffg';
 
