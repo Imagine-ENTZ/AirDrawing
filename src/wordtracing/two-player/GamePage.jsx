@@ -213,11 +213,7 @@ function GamePage() {
                   }}/>
                   <div style={loadingStyle}>
                     {setEmotion()}
-                    {/* {isTesting && <CheckSpinner />} */}
                   </div>
-                  {/* <div style={loadingStyle}>
-                    {!isTesting && incorrection && <img src={incorrect}>}
-                  </div> */}
               </div>
             </div>
           </div>
