@@ -91,8 +91,8 @@ const TwoGameScreen = forwardRef((props, ref) => {
                     "lastX": preFingerPositionX.current,
                     "lastY": preFingerPositionY.current,
                 }
-                // if (dataChannel.current)
-                //     dataChannel.current.send(JSON.stringify(obj));
+                if (dataChannel.current != null)
+                    dataChannel.current.send(JSON.stringify(obj));
 
                 break;
             case constants.ERASE:

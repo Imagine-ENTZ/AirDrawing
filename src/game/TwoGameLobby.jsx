@@ -94,7 +94,7 @@ function Menu() {
         console.log(index);
         console.log(inputData[index].code);
         console.log(inputData[index].type);
-        
+
 
         //민지 게임으로 이동
         if( inputData[index].type == 1) {
@@ -164,7 +164,7 @@ function Menu() {
                                         <div key={index} onClick={ () => {selectRoomButton(index)}} className="selection_roomlist">
                                             <div  className="selection_roomlist_inner">
                                                 <div className="selection_roomlist_name"> {item.name}</div>
-                                                <div className="selection_roomlist_type">Game Type : {item.type}</div>
+                                                <div className="selection_roomlist_type">Game Type : {item.type == 1?  "WordTracing" :  "DecorateGame" }</div>
                                             </div>
                                         </div>
                                     );
