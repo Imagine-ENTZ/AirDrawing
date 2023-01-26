@@ -8,18 +8,55 @@ import 'simplebar-react/dist/simplebar.min.css';
 import axios from 'axios';
 import * as constants from "../utils/Constants"
 import { type } from "@testing-library/user-event/dist/type";
+import Modal from 'react-modal';
+
+
+const customStyles = {
+    content: {
+        top: '50%',
+        left: '50%',
+        right: 'auto',
+        bottom: 'auto',
+        marginRight: '-50%',
+        transform: 'translate(-50%, -50%)',
+        backgroundColor: 'black',
+        borderRadius: "20px",
+        width: "450px",
+        height: "300px"
+    },
+};
 
 
 function Menu() {
     const navigate = useNavigate();
 
-    const arr = ["방이름1", "방이름2", "방이름3", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a"];
-
+    // 방리스트 변수
     const [inputData, setInputData] = useState([{
         code: 0,
         name: '',
         type: '',
     }])
+
+    //모달창 변수
+    const [modalIsOpen, setModalIsOpen] = useState(false);
+    const [content, setContent] = useState({
+        name: "",
+        gametype: 0,
+    });
+
+    const [modalTitle, setModalTitle] = useState("");
+
+    function openModal() {
+        setModalIsOpen(true);
+    }
+
+    function closeModal() {
+        setModalIsOpen(false);
+    }
+    const handleInputTitle = (e) => {
+        setModalTitle(e.target.value)
+    }
+
 
     useEffect(() => {
 
@@ -43,7 +80,6 @@ function Menu() {
                 else {
                     console.log("게임방 리스트 불러오기 실패");
                 }
-                console.log(inputData);
             })
             .catch((Error) => { console.log("에러", Error) })
     }, [])
@@ -77,14 +113,51 @@ function Menu() {
 
                                         <div className="selection_roomlist">
                                             <div className="selection_roomlist_inner">
-                                                <div className="selection_roomlist_name">{item.name}</div>
-                                                <div className="selection_roomlist_type">{item.type}</div>
+                                                <div className="selection_roomlist_name"> {item.name}</div>
+                                                <div className="selection_roomlist_type">Game Type : {item.type}</div>
                                             </div>
                                         </div>
                                     );
                                 }
                             })};
                         </SimpleBarReact>
+
+                        <Modal
+                            // className="make_room_modal"
+                            isOpen={modalIsOpen}
+                            onRequestClose={closeModal}
+                            style={customStyles}
+                        >
+                            <div className="make_room_modal">
+                                <div className="make_room_top">
+                                    <h2>Please enter room name!</h2>
+                                    <div  className="making-back-button">BACK</div>
+                                </div>
+
+                                <div className="modal_input-list">
+                                    <div className="contact-form">
+                                        <div>
+                                            <input className="input-class" id="Name" name="name" type="text"></input>
+                                            <label className="label-class" for="Name">ROOM NAME</label>
+                                        </div>
+                                    </div>
+                                    <div className="contact-form">
+                                        <div>
+                                            <input className="input-class" id="Password" name="password" type="password"></input>
+                                            <label className="label-class" for="Password">PASSWORD</label>
+                                        </div>
+                                    </div>
+                                    <button className="login-button make_room_start_button" >GET STARTED</button>
+                                </div>
+
+
+                                <div>
+                                    <div onClick={console.log("sf")} className="selection button1">FOLLOW-UP</div>
+                                </div>
+
+                            </div>
+
+                        </Modal>
 
 
                     </div>
@@ -94,11 +167,9 @@ function Menu() {
                 </div>
                 <div className="right-container-two-lobby">
                     <div className="right-top-container-two-lobby">
-                        <div className="making-button">Make Room</div>
+                        <div onClick={openModal} className="making-button">Make Room</div>
                     </div>
-                    <div className="right-body-container-two-lobby">
 
-                    </div>
                 </div>
             </div>
         </div>

@@ -79,7 +79,7 @@ body {
 
 
 .direction-frame-two-lobby {
-    position: relative;
+    /* position: relative; */
     top: 15%;
     left: 1%;
     width: 50px;
@@ -173,17 +173,61 @@ body {
     text-align: center;
 }
 
+/* modal */
 
-
-.making-button:hover,.selection_roomlist:hover {
+.make_room_modal {
+   /* background-color: antiquewhite; */
+   background-color: black;
+   color: white;
+   height: 300px;
+   width: 450px;
+   overflow: hidden;
+  
+}
+.make_room_start_button {
+    margin-left: 40px;
+}
+.modal_input-list {
+    /* background-color: antiquewhite; */
+}
+.make_room_top {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content:space-between;
+    align-items: center;
+   
+}
+.making-button:hover,.selection_roomlist:hover ,.making-back-button:hover{
 	box-shadow: 0 0 10px 0 blue inset, 0 0 10px 4px blue;
      transform: scale(1.01);
 }
+.making-back-button{
+    /* position: relative; */
+    /* top:30%; */
+    /* left: 8%; */
+    border-radius: 30px;
+    border: 1px solid white;
+    cursor: pointer;
+    background-color: transparent;
+    color: white;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    padding: 2px 2px;
+    height: 30px;
+    width: 50px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
-
-.selection_roomlist:focus, .making-button:focus {
+.selection_roomlist:focus, .making-button:focus ,.making-back-button:focus{
     box-shadow: 0 0 10px 0 blue inset, 0 0 10px 4px blue;
 }
+
+
 
 .hero {
     background-image: radial-gradient(50% 176% at 0 0);
