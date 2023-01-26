@@ -30,10 +30,10 @@ export const GAME_EMOJI_RATIO = 0.34
 
 export const TWO_DECORATIVE_GAME_HEIGHT_RATIO = 0.6;
 
-export const LOGIN_URL = `http://localhost:8080/member/login`
-export const REGISTER_URL = `http://localhost:8080/member/`
-export const GAMEROOM_URL = `http://localhost:8080/room/`
-
+export const LOGIN_URL = `https://entz.azurewebsites.net/member/login`//`http://localhost:8080/member/login`
+export const REGISTER_URL = `https://entz.azurewebsites.net/member`//`http://localhost:8080/member/`
+export const GAMEROOM_URL = `https://entz.azurewebsites.net/room`//`http://localhost:8080/room/`
+export const SOCKET_JS = `https://entz.azurewebsites.net/play`;  //`http://localhost:8080/play`;
 
 export const AUTHORIZATION_IMAGE = 'Bearer eyJ0eXAiOiJhdCtKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtbnpjTTZta2Z3NFM5UnB6RGc2UTVkWlVpS0FRYXp0SVd2MUFZYnNwc0JRZTNtTkkiLCJpc3MiOiJodHRwczpcL1wvYXBpLmZsYXRpY29uLmNvbVwvb2F1dGhcL3Rva2VuIiwiZXhwIjoxNjc0ODEwMDE4LCJpYXQiOjE2NzQ3MjM2MTgsImp0aSI6ImNhNjIxYmMzLTBiMWUtNGQ5OS1iYTc5LTZiZWE5Zjc0Zjk3ZSIsImNsaWVudF9pZCI6Im1uemNNNm1rZnc0UzlScHpEZzZRNWRaVWlLQVFhenRJV3YxQVlic3BzQlFlM21OSSJ9.EG7oZq-D3LxYIf8QUKSrBpMzPfajkQQk3KAw4IPuJAg';
 

@@ -91,8 +91,8 @@ const TwoGameScreen = forwardRef((props, ref) => {
                     "lastX": preFingerPositionX.current,
                     "lastY": preFingerPositionY.current,
                 }
-                if (dataChannel.current != null)
-                    dataChannel.current.send(JSON.stringify(obj));
+                // if (dataChannel.current != null)
+                    // dataChannel.current.send(JSON.stringify(obj));
 
                 break;
             case constants.ERASE:
@@ -608,7 +608,7 @@ const TwoGameScreen = forwardRef((props, ref) => {
     //function2
     const connect = () => {
         client.current = new StompJs.Client({
-            webSocketFactory: () => new SockJS("http://localhost:8080/play"),
+            webSocketFactory: () => new SockJS(constants.SOCKET_JS),
 
             debug: function (str) {
                 console.log(str);

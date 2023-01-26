@@ -66,6 +66,7 @@ function MainPage() {
         </div>
       </div> */}
 
+
       {isTrue ?  <MediapipeHands roomid={values.roomid}  sender ={values.sender} /> : null}
       {/* <MediapipeHands roomid={35}  sender ={"asdf"} />  */}
 
