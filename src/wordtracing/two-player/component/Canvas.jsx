@@ -150,9 +150,9 @@ function Canvas(props) {
       return;
     }
 
-    // if(props.isTesting == constants.IS_TESTING){
-    //   return;
-    // }
+    if(props.isTesting == constants.IS_TESTING){
+      return;
+    }
 
     switch(handGesture.current){
       case constants.DRAW:
@@ -259,7 +259,7 @@ function Canvas(props) {
       return;
     }
 
-    props.setIsTesting(constants.IS_TESTING);
+    props.setIsTesting(constants.IS_TESTING);   //현재 테스트중임을 gamepage에 알림 -> 확인중 아이콘을 띄움
     isTesting.current = constants.IS_TESTING;
     
     const image = fingerOfcanvasRef.current.toDataURL("image/png");
@@ -302,7 +302,7 @@ function Canvas(props) {
         position: "relative",
         height: "100%",
       }}>
-      <div style={{
+      {/* <div style={{
         textShadow: "-2px 0 #000, 0 2px #000, 2px 0 #000, 0 -2px #000",
         position: "absolute", 
         width:"100%",
@@ -310,30 +310,13 @@ function Canvas(props) {
         bottom: "0",
         display: "flex",
         justifyContent: "center",
-        // marginTop: "10px",
-        // marginRight: "10px",
-        // alignItems: "center",
         textAlign: "center",
         fontSize: "500%",
         fontFamily: "Fredoka_One",
         zIndex: 2,
         color: "white",
       }}>
-        {/* { wordList[5] } */}
         { props.wordToTest.current }
-      </div>
-      {/* <div style={{
-        position: "absolute", 
-        width:"100%",
-        height:"100%",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        textAlign: "center",
-        fontSize: "20px",
-        color: "white",
-        zIndex: 16,
-      }}>
       </div> */}
       <Webcam
         audio={false}
@@ -347,9 +330,7 @@ function Canvas(props) {
           zIndex: 1,
           width: "100%",
           height: "100%",
-          backgroundColor: '(0, 0, 0, 0.5)',
-          // objectFit: "cover", 
-          // objectPosition: "center"
+          backgroundColor: '(0, 0, 0, 0.5)'
         }}
       />
       <canvas
@@ -362,9 +343,7 @@ function Canvas(props) {
           textAlign: "center",
           zIndex: 1,
           width: "100%",
-          height: "100%",
-          // objectFit: "cover", 
-          // objectPosition: "center"
+          height: "100%"
         }}>
       </canvas>
       <canvas
@@ -377,9 +356,7 @@ function Canvas(props) {
           textAlign: "center",
           zIndex: 3,
           width: "100%",
-          height: "100%",
-          // objectFit: "cover", 
-          // objectPosition: "center"
+          height: "100%"
         }}>
       </canvas>
       <canvas
@@ -393,8 +370,6 @@ function Canvas(props) {
           zIndex: 1,
           width: "100%",
           height: "100%"
-          // objectFit: "cover", 
-          // objectPosition: "center"
         }}>
       </canvas>
       <canvas
@@ -408,9 +383,7 @@ function Canvas(props) {
           textAlign: "center",
           zIndex: 4,
           width: "100%",
-          height: "100%",
-          // objectFit: "cover", 
-          // objectPosition: "center"
+          height: "100%"
         }}>
       </canvas>
     </div>

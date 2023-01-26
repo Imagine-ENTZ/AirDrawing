@@ -256,7 +256,7 @@ function Canvas(props) {
       return;
     }
 
-    props.setIsTesting(constants.IS_TESTING);
+    props.setIsTesting(constants.IS_TESTING); //현재 테스트중임을 gamepage에 알림 -> 확인중 아이콘을 띄움
     isTesting.current = constants.IS_TESTING;
     
     const image = fingerOfcanvasRef.current.toDataURL("image/png");

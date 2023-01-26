@@ -39,7 +39,8 @@ function GamePage() {
   }, [wordWrittenByUser.current])
   
   //단어목록
-  const wordList = ["apple", "Z", "cat", "Zoo", "b", "bread", "J"];
+  const wordList = ["apple", "z", "cat", "Zoo", "b", "happy", "bread", "J", "ball", "car", "bird",
+  "purple", "farm", "duck", "grape"];
 
   useEffect(() => {
     wordToTest.current = wordList[0];

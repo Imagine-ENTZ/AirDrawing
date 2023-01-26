@@ -4,6 +4,7 @@ import "./Game.css"
 import ProgressBar from "@ramonak/react-progress-bar";
 import * as constants from "../../utils/Constants"
 import Canvas from './component/Canvas';
+import CheckSpinner from "../single-player/component/CheckSpinner"
 
 function GamePage() {
   const [windowHeight, setWindowHeight] = useState(window.innerHeight*constants.HEIGHT_RATIO);
@@ -11,9 +12,37 @@ function GamePage() {
   const wordWrittenByUser = useRef(null);  //사용자가 쓴 글자
   const wordToTest = useRef(null);         //현재 사용자가 작성해야 하는 단어
   const indexOfwordList = useRef(0);       //단어목록에서 현재 사용자가 작성해야하는 단어의 인덱스값
-  const score = useRef(0);                 //현재 점수
+  const userScore = useRef(0);             //현재 플레이어의 점수
+  const opponentUserScore = useRef(0);     //상대 플레이어의 점수
 
   const [isTesting, setIsTesting] = useState(!constants.IS_TESTING);
+
+  const wordList = ["purple", "apple", "z", "cat", "Zoo", "b", "happy", "bread", "J", "ball", "car", "bird",
+  "farm", "duck", "grape"];
+
+  useEffect(() => {
+    wordToTest.current = wordList[0];
+  }, [])
+
+  useEffect(() => {
+    if(wordWrittenByUser.current === null) {
+      return;
+    }
+
+    if(wordWrittenByUser.current.toUpperCase() === wordList[indexOfwordList.current].toUpperCase()){   //현재 화면에 표시된 단어와 사용자가 작성한 단어가 일치하는지를 확인함
+      console.log("정답 -> 사용자["+wordWrittenByUser.current+"], 정답["+wordList[indexOfwordList.current]+"]");
+      userScore.current += 100;
+      indexOfwordList.current += 1;
+      wordToTest.current = wordList[indexOfwordList.current];
+    }
+    else{
+      console.log("실패 -> 사용자["+wordWrittenByUser.current+"], 정답["+wordList[indexOfwordList.current]+"]");
+    }
+
+    setIsTesting(!constants.IS_TESTING);
+
+    console.log("index: " + indexOfwordList.current + ", current word: " + wordToTest.current);
+  }, [wordWrittenByUser.current])
 
   const handleResize = () => {
     let height = window.innerHeight*constants.HEIGHT_RATIO;
@@ -57,7 +86,7 @@ function GamePage() {
     }, 1000);
 
     if(timeLeft === 0){
-      console.log("총 점수 : " + score);
+      console.log("총 점수 : " + userScore);
     }
     
     return () => clearInterval(countdown);
@@ -90,24 +119,24 @@ function GamePage() {
 			<div className='word-display-container'>
         <div style={{
           fontFamily: "Fredoka_One",
-          color: "white",
-          fontSize: "2em",
+          color: "#fdad1a",
+          fontSize: "3em",
           display: "flex",
           justifyContent: "center",
           alignItems: "center"
         }}>
-          Apple
+          { wordToTest.current }
         </div>
 			</div>
 
       <div className='word-tracing-for-two-score-container'>
         <div className='word-tracing-for-two-score-screen'>
           <div className='word-tracing-for-two-score'>
-            score: 100
+            score: {userScore.current}
           </div>
 
           <div className='word-tracing-for-two-score'>
-            score: 200
+            score: {opponentUserScore.current}
           </div>
         </div>
       </div>
@@ -136,6 +165,18 @@ function GamePage() {
                     top: "0",
                     zIndex: "1"
                   }}/>
+                  <div style={{ 
+                    position: "absolute",
+                    left: "0",
+                    top: "0",
+                    width: (window.innerHeight * constants.HEIGHT_RATIO * (4.0 / 3.0)), 
+                    height: windowHeight,
+                    zIndex: "5"
+                  }}>
+                    {/* <CheckSpinner /> */}
+                    {isTesting && <CheckSpinner />}
+                  <div/>
+                </div>
               </div>
             </div>
           </div>
