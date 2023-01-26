@@ -27,10 +27,9 @@ function Menu() {
             </div>
             <div className="right-container-menu">
                 <div className="button-list">
-                    <div onClick={() => navigate("/main")} className="selection button1">FOLLOW-UP</div>
                     <div className="selection button2" onClick={() => navigate("/word-tracing")}>WORD-TRACING GAME</div>
-                    <div onClick={() => navigate("/decorative")} className="selection button3">DECORATIVE GAME</div>
-                    <div onClick={() => navigate("/2p-decorative")} className="selection button4">2P - DECORATIVE GAME</div>
+                    <div className="selection button3" onClick={() => navigate("/decorative")}>DECORATIVE GAME</div>
+                    <div className="selection button4" onClick={() => navigate("/2p-lobby")}>2P GAME</div>
                 </div>
             </div>
         </div>

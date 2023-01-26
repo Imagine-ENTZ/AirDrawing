@@ -13,7 +13,6 @@ import HowToDecorativeGame from "./game/HowToDecorative.jsx";
 import HowToDecorativeGame2 from "./game/HowToDecorative2.jsx";
 import HowToDecorativeGame3 from "./game/HowToDecorative3.jsx";
 import HowToDecorativeGame4 from "./game/HowToDecorative4.jsx";
-import TwoDecorativeLobby from "./game/TwoDecorativeLobby.jsx";
 import TwoDecorativeGame from "./game/TwoDecorativeGame.jsx";
 import TwoGameLobby from "./game/TwoGameLobby.jsx";
 import { Routes, Route, BrowserRouter } from "react-router-dom";
@@ -37,8 +36,7 @@ function App() {
         <Route path="/decorative/howto/2" element={<HowToDecorativeGame2 />} />
         <Route path="/decorative/howto/3" element={<HowToDecorativeGame3 />} />
         <Route path="/decorative/howto/4" element={<HowToDecorativeGame4 />} />
-        <Route path="/2p-decorative" element={<TwoDecorativeLobby />} />
-        <Route path="/2p-decorative/game" element={<TwoDecorativeGame />} />
+        <Route path="/2p-lobby/decorative-play" element={<TwoDecorativeGame />} />
         <Route path="/2p-lobby" element={<TwoGameLobby />} />
         {/* <Route path="/detail/:id" element={<Detail />} />
       <Route path="/mypage/*" element={<MyPage />} /> */}
