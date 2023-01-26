@@ -22,3 +22,5 @@ export const GAME_FRAME_HEIGHT_RATIO = 0.4;
 export const GAME_FRAME_POSITION_X_RATIO = 0.205;
 
 export const GAME_EMOJI_RATIO = 0.34
+
+export const TWO_DECORATIVE_GAME_HEIGHT_RATIO = 0.53;

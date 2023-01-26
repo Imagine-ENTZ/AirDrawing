@@ -1,0 +1,164 @@
+.main-container-decoration-game-two {
+    width: 100vw;
+    height: 100vh;
+    background-color: black;
+}
+
+/*  */
+.top-container-decoration-game-two {
+    width: 100%;
+    height: 25%;
+    background-color: pink;
+}
+
+.best-top-container-decoration-game-two {
+    display: flex;
+    width: 100%;
+    height: 30%;
+    background-color:olive;
+}
+
+
+.best-top-left-decoration-game-two {
+    width: 88%;
+    height:100%;
+    background-color:yellowgreen;
+}
+
+/* on-off 버튼 누르는 곳 */
+.best-top-right-decoration-game-two {
+    width: 12%;
+    height: 100%;
+    background-color:gray;
+}
+
+.on-off-button-two-decorative {
+    position: relative;
+    top: 5%;
+    left:65%;
+    width: 20px;
+
+    padding: 10%;
+    border-radius: 10px;
+    border: 1px solid white;
+    cursor: pointer;
+    background-color: transparent;
+    color: white;
+
+    align-content: center;
+}
+
+.on-off-image-two-decorative {
+    position: relative;
+    margin: auto;
+    display: block;
+    width: 80%;
+}
+
+/* sentence 나오는 곳 */
+.middle-top-container-decoration-game-two {
+    width: 100%;
+    height: 35%;
+    background-color:orange;
+}
+
+.decoration-game-sentence-game-two {
+    font-size: 40px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: bold;
+    color: white;
+
+    position: relative;
+    text-align: center;
+    top: 5%;
+}
+
+/* 현재 인식 단어 */
+.bottom-of-top-container-decoration-game-two {
+    width: 100%;
+    height: 35%;
+    background-color:violet;
+}
+
+.screen-word-decoration-game-two {
+    text-align: center;
+    position: relative;
+    top: 18%;
+
+    font-size: 30px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: bold;
+    color: white;
+}
+
+/* 바디 레이아웃 */
+.body-container-decoration-game-two {
+    display: flex;
+    width:100%;
+    height: 75%;
+    background-color:cadetblue;
+}
+
+/* 현재 유저 레이아웃 */
+.left-body-container-decoration-game-two {
+    width: 50%;
+    height: 100%;
+    background-color:beige
+}
+
+.body-container-of-left-decoration-game-two {
+    width: 100%;
+    height: 70%;
+    background-color:brown;
+}
+
+.screen-admin-decoration-game-two {
+
+}
+
+.bottom-of-left-container-decoration-game-two {
+    width: 100%;
+    height: 30%;
+    background-color:blueviolet;
+}
+
+.emoji-record-decoration-game-two {
+    font-size: 20px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: bold;
+    color: white;
+
+    text-align: center;
+    position: relative;
+    top: 10%;
+}
+
+/* 상대방 레이아웃 */
+.right-body-container-decoration-game-two {
+    width: 50%;
+    height: 100%;
+    background-color:aquamarine;
+}
+
+.body-container-of-right-decoration-game-two {
+    width: 100%;
+    height: 70%;
+    background-color:salmon;
+}
+
+.bottom-of-right-container-decoration-game-two {
+    width: 100%;
+    height: 30%;
+    background-color: slateblue;
+}
+
+.emoji-record-opponent {
+    font-size: 20px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: bold;
+    color: white;
+
+    text-align: center;
+    position: relative;
+    top: 10%;
+}
