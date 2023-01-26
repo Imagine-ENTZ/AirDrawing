@@ -4,9 +4,7 @@ import "./Game.css"
 import ProgressBar from "@ramonak/react-progress-bar";
 import * as constants from "../../utils/Constants"
 import Canvas from './component/Canvas';
-import CheckSpinner from "../single-player/component/CheckSpinner"
-import failed from "../img/emotion/crying.png"
-import incorrect from "../img/emotion/thinking.png"
+import CheckSpinner from "../component/CheckSpinner"
 
 function GamePage() {
   const [windowHeight, setWindowHeight] = useState(window.innerHeight*constants.HEIGHT_RATIO);
@@ -19,12 +17,12 @@ function GamePage() {
 
   const [isTesting, setIsTesting] = useState(!constants.IS_TESTING);
 
-  const wordList = ["purple", "apple", "z", "cat", "Zoo", "b", "happy", "bread", "J", "ball", "car", "bird",
+  const wordList = ["red", "apple", "z", "cat", "Zoo", "b", "happy", "bread", "J", "ball", "car", "bird",
   "farm", "duck", "grape"];
 
-  const [correction, setCorrection] = useState(false);
-  const [incorrection, setIncorrection] = useState(false);
-  const [failure, setFailure] = useState(false);
+  const incorrection = useRef(false);
+  const correction = useRef(false);
+  const failure = useRef(false);
 
   const loadingStyle = { 
     position: "absolute",
@@ -45,14 +43,14 @@ function GamePage() {
 
     if(wordWrittenByUser.current.toUpperCase() === wordList[indexOfwordList.current].toUpperCase()){   //현재 화면에 표시된 단어와 사용자가 작성한 단어가 일치하는지를 확인함
       console.log("정답 -> 사용자["+wordWrittenByUser.current+"], 정답["+wordList[indexOfwordList.current]+"]");
-      setCorrection(true);
+      correction.current = true;
       userScore.current += 100;
       indexOfwordList.current += 1;  //정답인 경우에만 다음 단어로 넘어감
       wordToTest.current = wordList[indexOfwordList.current];
     }
     else{
       console.log("오답 -> 사용자["+wordWrittenByUser.current+"], 정답["+wordList[indexOfwordList.current]+"]");
-      setIncorrection(true);
+      incorrection.current = true;
     }
 
     wordWrittenByUser.current = null;   //사용자가 작성하는 단어 초기화
@@ -109,23 +107,35 @@ function GamePage() {
     return () => clearInterval(countdown);
   }, [minutes, seconds]);
 
-  useEffect(()=>{
-    let timer = setTimeout(()=>{ 
-      // alertSet(false) 
-    }, 1000);
-  });
 
   const setEmotion = () => {
     console.log(isTesting);
 
     if(isTesting){
-      return <CheckSpinner />;
+      return <CheckSpinner spinnerType={constants.LOADING}/>;
     }
-    // else if(incorrection){
-    //   return <img src={incorrect} />;
-    // } 
+    
+    if(incorrection.current){
+      showEmojiDuringOneSecond(incorrection);
+      return <CheckSpinner spinnerType={constants.INCORRECTION}/>;
+    } 
+    
+    if(correction.current){
+      showEmojiDuringOneSecond(correction);
+      return <CheckSpinner spinnerType={constants.CORRECTION}/>;
+    }
 
+    if(failure.current){
+      showEmojiDuringOneSecond(failure);
+      return <CheckSpinner spinnerType={constants.FAILURE}/>;
+    }
     return null;
+  }
+
+  const showEmojiDuringOneSecond = (isShow) => {
+    setTimeout(function(){
+      isShow.current = false;
+    }, 1000);
   }
 
 	return(
@@ -156,7 +166,7 @@ function GamePage() {
         <div style={{
           fontFamily: "Fredoka_One",
           color: "#fdad1a",
-          fontSize: "3em",
+          fontSize: "4em",
           display: "flex",
           justifyContent: "center",
           alignItems: "center"
@@ -202,8 +212,8 @@ function GamePage() {
                     zIndex: "1"
                   }}/>
                   <div style={loadingStyle}>
-                    {/* {setEmotion()} */}
-                    {isTesting && <CheckSpinner />}
+                    {setEmotion()}
+                    {/* {isTesting && <CheckSpinner />} */}
                   </div>
                   {/* <div style={loadingStyle}>
                     {!isTesting && incorrection && <img src={incorrect}>}
