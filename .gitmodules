@@ -1,0 +1,3 @@
+[submodule "AirDrawing"]
+	path = AirDrawing
+	url = https://github.com/Imagine-ENTZ/AirDrawing.git
