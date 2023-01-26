@@ -129,8 +129,8 @@ function GamePage() {
         </div>
         <div className='word-tracing-sketckbook-container'>
           <div style={{
-              width: "100%",
-              height: "60%"
+            width: "100%",
+            height: "60%"
           }}>
             <div style={{
               width: (window.innerHeight * constants.HEIGHT_RATIO * (4.0 / 3.0)), 
