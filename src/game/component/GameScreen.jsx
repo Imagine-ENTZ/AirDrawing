@@ -410,7 +410,7 @@ const GameScreen = forwardRef((props, ref) => {
         const image = new Image();
 
         const response =  axios.get(
-            '/v3/search/icons/{orderBy}?q='+emojiName, 
+            'https://api.flaticon.com/v3/search/icons/{orderBy}?q='+emojiName, 
             {headers}
         ).then(res => {
             // console.log(res.data);
