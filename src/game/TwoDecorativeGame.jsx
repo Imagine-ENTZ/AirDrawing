@@ -17,6 +17,8 @@ function TwoDecorativeGame() {
     const anotherVideoRef = useRef(null);
     const otherDrawingRef = useRef(null);
     const otherContextRef = useRef(null);
+    const otherEmojiRef = useRef(null);
+    const otherEmojiContextRef = useRef(null);
 
 
     /// 파라미터로 방 코드 받음
@@ -120,7 +122,7 @@ function TwoDecorativeGame() {
                     <div className="body-container-of-left-decoration-game-two">
                         <div className="screen-admin-decoration-game-two">
                             <div style={{ width: (window.innerHeight * constants.TWO_DECORATIVE_GAME_HEIGHT_RATIO * (4.0 / 3.0)), height: windowHeight, margin: "auto" }}>
-                                <TwoGameScreen getData={setNumber} getWord={setWord} ref={gameScreenRef} roomid={code} sender={Math.random().toString(36).substring(2, 11)} anotherVideoRef={anotherVideoRef} otherDrawingRef={otherDrawingRef} otherContextRef={otherContextRef} />
+                                <TwoGameScreen getData={setNumber} getWord={setWord} ref={gameScreenRef} roomid={code} sender={Math.random().toString(36).substring(2, 11)} anotherVideoRef={anotherVideoRef} otherDrawingRef={otherDrawingRef} otherContextRef={otherContextRef} otherEmojiRef={otherEmojiRef} />
                             </div>
                         </div>
                     </div>
@@ -133,20 +135,32 @@ function TwoDecorativeGame() {
 
                 <div className="right-body-container-decoration-game-two">
                     <div className="body-container-of-right-decoration-game-two">
+                        <div style={{
+                            position:"relative",
+                            height:"100%"
+                        }}>
                         <video
                             className="hong"
                             ref={anotherVideoRef}
                             autoPlay={true}
                             playsInline={true}
-                            style={{ width: (window.innerHeight * constants.TWO_DECORATIVE_GAME_HEIGHT_RATIO * (4.0 / 3.0)), height: windowHeight, margin: "auto" }}
+                            style={{
+                                position:"absolute",
+                                width: (window.innerHeight * constants.TWO_DECORATIVE_GAME_HEIGHT_RATIO * (4.0 / 3.0)),
+                                height: windowHeight,
+                                margin: "auto",
+                                zIndex:1,
+                                transform: "scaleX(-1)"
+                            }}
                         />
                         <canvas
                             className="canvas"
                             ref={otherDrawingRef}
                             mirrored={true}
-                            tabIndex={0}
+                            // tabIndex={0}s
                             //onKeyDown={f1Down}
                             style={{
+                                // background:"red",
                                 position: "absolute",
                                 marginLeft: "auto",
                                 marginRight: "auto",
@@ -158,6 +172,26 @@ function TwoDecorativeGame() {
                                 height: "100%",
                             }}>
                         </canvas>
+                        <canvas
+                            className="canvas"
+                            ref={otherEmojiRef}
+                            mirrored={true}
+                            // tabIndex={0}s
+                            //onKeyDown={f1Down}
+                            style={{
+                                // background:"red",
+                                position: "absolute",
+                                marginLeft: "auto",
+                                marginRight: "auto",
+                                left: "0",
+                                right: "0",
+                                textAlign: "center",
+                                zIndex: 11,
+                                width: "100%",
+                                height: "100%",
+                            }}>
+                        </canvas>
+                        </div>
                     </div>
                     <div className="bottom-of-right-container-decoration-game-two">
                         <div className="emoji-record-opponent">
