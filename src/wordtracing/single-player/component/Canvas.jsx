@@ -6,7 +6,7 @@ import { Camera } from "@mediapipe/camera_utils/camera_utils";
 import { detectHandGesture } from "../../../game/component/HandGesture"
 import * as constants from "../../../utils/Constants"
 import "../Game.css"
-import canvasPicture from "../../img/canvas_picture.png" 
+import canvasPicture from "../../img/canvas_with_transparent_bg.png"
 import Tesseract from 'tesseract.js';
 
 function Canvas(props) {
@@ -137,13 +137,14 @@ function Canvas(props) {
     const spellingArtOfContext = spellingArtCanvas.getContext("2d");
 
     let spellingArtImg = new Image();
-
     spellingArtImg.src = canvasPicture;
+
+    if (!spellingArtOfContextRef) return;
+
     spellingArtImg.onload = () => {
       spellingArtOfContext.drawImage(
         spellingArtImg, 0, 0, spellingArtCanvas.width, spellingArtCanvas.height);
     }
-    spellingArtOfContext.fillRect(0, 0, spellingArtCanvas.width, spellingArtCanvas.height);
 
     spellingArtOfContextRef.current = spellingArtOfContext;
 
@@ -311,7 +312,7 @@ function Canvas(props) {
         // marginRight: "10px",
         // alignItems: "center",
         textAlign: "center",
-        fontSize: "500%",
+        fontSize: "6em",
         fontFamily: "Fredoka_One",
         zIndex: 2,
         color: "white",

@@ -11,7 +11,7 @@ import Tesseract from 'tesseract.js';
 import * as StompJs from "@stomp/stompjs";
 import * as SockJS from "sockjs-client";
 
-function Canvas(props) {
+function OpponentCanvas(props) {
   const isTesting = useRef(!constants.IS_TESTING);  //현재 단어의 정답 여부를 테스트 중인지 관리
 
   const sendWordToParentComponent = (text) => {
@@ -164,15 +164,6 @@ function Canvas(props) {
         fingerOfcontextRef.current.lineTo(fingerPosition.x, fingerPosition.y);
         fingerOfcontextRef.current.stroke();
         fingerOfcontextRef.current.closePath();
-        // webRTC
-        const obj = {
-          "startX": preFingerPositionX.current, 
-          "startY": preFingerPositionY.current,
-          "lastX": fingerPosition.x,
-          "lastY": fingerPosition.y,
-        }
-        if (dataChannel.current != null)
-          dataChannel.current.send(JSON.stringify(obj));
         break;
       case constants.ERASE:
         fingerOfcontextRef.current.save();
@@ -308,221 +299,6 @@ function Canvas(props) {
 
   }
 
-  /////////////////////////////////////////////////////////
-  const videoRef = useRef(null);
-  // const anotherVideoRef = useRef(null);
-  const client = useRef({});
-
-  let stream;
-  let myPeerConnection;
-
-
-  const dataChannel = useRef();
-
-  // function1
-  const subscribe = () => {
-
-
-    console.log(props.roomid, props.sender)
-
-    client.current.subscribe(
-      `/sub/play/${props.roomid}`,
-      async ({ body }) => {
-        const data = JSON.parse(body);
-        // console.log(body);
-        console.log("내이름은" + props.sender);
-        switch (data.type) {
-          case 'ENTER':
-            if (data.sender !== props.sender) {
-              console.log("sneder  " + data.sender);
-              const offer = await myPeerConnection.createOffer();
-              console.log("@@offer : ", (offer));
-              myPeerConnection.setLocalDescription(offer);
-              client.current.publish({
-                destination: `/pub/play`,
-                body: JSON.stringify({
-                  type: 'OFFER',
-                  room_id: props.roomid,//param.roomId,
-                  sender: props.sender,
-                  offer: JSON.stringify(offer),
-                }),
-              });
-              console.log("진입" + offer + "그리더 : " + props.sender)
-              console.log('오퍼전송');
-
-            }
-            break;
-
-          case 'OFFER':
-            if (data.sender !== props.sender) {
-              console.log('오퍼수신');
-              myPeerConnection.setRemoteDescription(JSON.parse(data.offer));
-              const answer = await myPeerConnection.createAnswer();
-              myPeerConnection.setLocalDescription(answer);
-              client.current.publish({
-                destination: `/pub/play`,
-                body: JSON.stringify({
-                  type: 'ANSWER',
-                  room_id: props.roomid,//param.roomId,
-                  sender: props.sender,
-                  answer: JSON.stringify(answer),
-                }),
-              });
-              console.log('엔서전송');
-            }
-            break;
-          case 'ANSWER':
-            if (data.sender !== props.sender) {
-              console.log('엔서수신');
-              myPeerConnection.setRemoteDescription(JSON.parse(data.answer));
-            }
-            break;
-          case 'ICE':
-            if (data.sender !== props.sender) {
-              console.log("아이스 수신 값 : " + data.ice);
-              myPeerConnection.addIceCandidate(JSON.parse(data.ice));
-            }
-            break;
-          default:
-        }
-      },
-    );
-  };
-
-  //function2
-  const connect = () => {
-    client.current = new StompJs.Client({
-      webSocketFactory: () => new SockJS(constants.SOCKET_JS),
-
-      debug: function (str) {
-        console.log(str);
-      },
-      // reconnectDelay: 5000,
-      // heartbeatIncoming: 4000,
-      // heartbeatOutgoing: 4000,
-      onConnect: () => {
-        subscribe();
-        client.current.publish({
-          destination: `/pub/play`,
-          body: JSON.stringify({
-            type: 'ENTER',
-            room_id: props.roomid,//param.roomId,
-            sender: props.sender,
-          }),
-        });
-      },
-      onStompError: (frame) => {
-        console.log(`Broker reported error: ${frame.headers.message}`);
-        console.log(`Additional details: ${frame.body}`);
-      },
-    });
-    client.current.activate();
-
-  };
-  //function3
-  const getMedia = async () => {
-    try {
-      // 컴퓨터의 카메라 장치만 가져옴
-      stream = await navigator.mediaDevices.getUserMedia({
-
-        audio: true,
-        video: true,
-      });
-      if (videoRef.current) {
-        videoRef.current.srcObject = stream;
-      }
-
-    } catch (e) {
-      console.error(e);
-    }
-
-  };
-  //function4
-  function handleIce(data) {
-    client.current.publish({
-      destination: `/pub/play`,
-      body: JSON.stringify({
-        type: 'ICE',
-        room_id: props.roomid,//param.roomId,
-        sender: props.sender,
-        ice: JSON.stringify(data.candidate),
-      }),
-    });
-    console.log('아이스전송', data.candidate);
-  }
-  //function5
-  function handleAddStream(data) {
-    props.anotherVideoRef.current.srcObject = data.stream;
-    console.log('got an stream from my peer');
-    console.log("Peer's Stream", data.stream);
-    console.log('My stream', stream);
-  }
-  //function6
-  function handleChannel(event) {
-    dataChannel.current = event.channel;
-  }
-  //function7
-  function makeOtherDrawing(event) {
-    console.log("받은 문자의 내용 : " + event.data);
-    const obj = JSON.parse(event.data);
-
-    console.log("보냄 -> x: " + obj.startX + ", y: " + obj.startY);
-    props.setFingerPosition({ x: obj.startX, y: obj.startY});
-    // contextRef.current.beginPath();
-    // contextRef.current.moveTo(obj.startX, obj.startY);
-    // contextRef.current.lineTo(obj.lastX, obj.lastY);
-    // contextRef.current.stroke();
-    // contextRef.current.closePath();
-  }
-  //function8
-  async function makeConnection() {
-    myPeerConnection = new RTCPeerConnection({
-      iceServers: [
-        {
-          urls: [constants.STUN_SERVER],
-          username: "guest",
-          credential: "somepassword",
-        },
-        {
-          urls: [constants.TURN_SERVER],
-          username: "guest",
-          credential: "somepassword",
-        }
-      ],
-    });
-
-    myPeerConnection.addEventListener('icecandidate', handleIce);
-    myPeerConnection.addEventListener('addstream', handleAddStream); // 스트림 받기
-    myPeerConnection.addEventListener('datachannel', handleChannel);
-    stream.getTracks().forEach((track) => {
-      myPeerConnection.addTrack(track, stream);
-    });
-  }
-  //function9
-  async function makeMessageConnection() {
-    dataChannel.current = await myPeerConnection.createDataChannel("chat", { reliable: true });
-
-    dataChannel.current.addEventListener("error", (error) => console.log("데이터채널의 오류 : " + error));
-    dataChannel.current.addEventListener("close", () => console.log("데이터채널의 닫김"));
-    dataChannel.current.addEventListener("open", () => console.log("데이터채널 열림"));
-    dataChannel.current.addEventListener("message", makeOtherDrawing);
-
-  }
-  //function10
-  async function fetchData() {
-    await getMedia();
-    makeConnection();
-    connect();
-    makeMessageConnection();
-  }
-  //function11
-  useEffect(() => {
-    fetchData();
-
-  }, []);
-
-
-
   return (
     <div
       style={{
@@ -601,4 +377,4 @@ function Canvas(props) {
   )
 }
 
-export default Canvas;
+export default OpponentCanvas;

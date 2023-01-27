@@ -3,7 +3,6 @@ import "./Game.css"
 import Canvas from "./component/Canvas"
 import CheckSpinner from "../component/CheckSpinner"
 import timer from "../img/clock.png"
-// import handedMode from "./img/handed_mode.png"
 import ProgressBar from "@ramonak/react-progress-bar";
 import * as constants from "../../utils/Constants"
 import HandedMode from './component/HandedMode'
@@ -45,8 +44,8 @@ function GamePage() {
   }, [wordWrittenByUser.current])
   
   //단어목록
-  const wordList = ["apple", "z", "cat", "Zoo", "b", "happy", "bread", "J", "ball", "car", "bird",
-  "purple", "farm", "duck", "grape"];
+  const wordList = ["red", "apple", "z", "cat", "Zoo", "b", "happy", "bread", "J", "ball", "car", "bird",
+    "farm", "duck", "grape"];
 
   useEffect(() => {
     wordToTest.current = wordList[0];
@@ -152,7 +151,8 @@ function GamePage() {
 
       <div className='word-tracing-score-container'>
         <div className='word-tracing-score'>
-          score : {score.current}
+          <div>score : </div>
+          <div style={{marginLeft: "10px", color: "rgb(255, 187, 0)"}}> {score.current}</div>
         </div>
       </div>
 
