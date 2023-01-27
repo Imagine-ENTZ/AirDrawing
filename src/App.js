@@ -40,14 +40,14 @@ function App() {
         <Route path="/decorative" element={<DecorativeGamePage />} />
         <Route path="/decorative/game" element={<DecorationGamePage />} />
         <Route path="/decorative/howto" element={<HowToDecorativeGame />} />
+        <Route path= "/2p-decorative/game/:code" element={<TwoDecorativeGame />} />
         <Route path="/decorative/howto/2" element={<HowToDecorativeGamePlus />} />
         <Route path="/decorative/howto/3" element={<HowToDecorativeGame2 />} />
         <Route path="/decorative/howto/4" element={<HowToDecorativeGame3 />} />
         <Route path="/decorative/howto/5" element={<HowToDecorativeGame4 />} />
-        <Route path="/2p-lobby/decorative-play" element={<TwoDecorativeGame />} />
+
         <Route path="/2p-lobby" element={<TwoGameLobby />} />
-        {/* <Route path="/detail/:id" element={<Detail />} />
-      <Route path="/mypage/*" element={<MyPage />} /> */}
+        
       </Routes>
     </BrowserRouter>
   );

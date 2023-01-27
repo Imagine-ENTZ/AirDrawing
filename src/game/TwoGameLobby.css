@@ -1,3 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Corben:700');
+
 body {
     background-color: #060919;
 }
@@ -17,25 +20,21 @@ body {
     display: flex;
     width: 100%;
     height: 88%;
-    /* background-color: gray */
 }
 
 .left-container-two-lobby {
     width: 20%;
     height: 100%;
-    /* background-color: pink; */
 }
 
 .center-container-two-lobby {
     width: 60%;
     height: 100%;
-    /* background-color: cadetblue; */
 }
 
 .center-top-container-two-lobby {
     width: 100%;
     height: 10%;
-    /* background-color: greenyellow; */
 }
 
 .choose-sentence {
@@ -49,11 +48,7 @@ body {
     top: -50%;
 }
 
-.center-ofcenter-container-two-lobby {
-    width: 100%;
-    height: 80%;
-    background-color: grey;
-}
+
 
 .center-bottom-container-two-lobby {
     width: 100%;
@@ -78,13 +73,6 @@ body {
     height: 90%;
 }
 
-.selection:hover {
-    box-shadow: 0 0 10px 0 blue inset, 0 0 10px 4px blue;
-}
-
-.selection:focus {
-    box-shadow: 0 0 10px 0 blue inset, 0 0 10px 4px blue;
-}
 
 .direction-frame-two-lobby {
     position: relative;
@@ -107,7 +95,65 @@ body {
     width: 80%;
 }
 
-.making-button {
+.center-ofcenter-container-two-lobby {
+    width: 100%;
+    height: 80%;
+    /* background-color: gray; */
+    /* padding: 10px; */
+    
+}
+.simplebar {
+    background-color: transparent;
+    /* background-color: blueviolet; */
+    height: 100%;
+    width: 100%;
+}
+.simplebar-content {
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    
+}
+.selection_roomlist {
+
+	border-radius: 28px;
+	border: 1px solid white;
+	cursor: pointer;
+	background-color:transparent;
+	color: white;
+	font-family: 'Montserrat', sans-serif;
+	font-weight: 700;
+	font-size: 15px;
+	width: 100%;
+	padding: 40px 90px;
+	text-align: center;
+	margin-top: 20px;
+    z-index: 99;
+}
+.selection_roomlist_inner {
+    width: 100%;
+    height: 100%;
+    /* background-color: aqua; */
+    display: flex;
+    flex-direction: row;
+    text-align: center;
+}
+.selection_roomlist_name {
+    /* padding: 0px 20px; */
+    /* background-color: blue; */
+    text-align: center;
+    width: 70%;
+    font-size: 30px;
+}
+.selection_roomlist_type {
+    /* background-color: brown; */
+    width: 30%;
+    display: flex;
+    align-items: center;
+    font-size: 20px;
+    justify-content: center;
+}
+.making-button{
     position: relative;
     top:30%;
     left: 8%;
@@ -124,8 +170,58 @@ body {
     text-align: center;
 }
 
-.making-button:hover {
+/* modal */
+
+.make_room_modal {
+   /* background-color: antiquewhite; */
+   background-color: black;
+   color: white;
+   height: 300px;
+   width: 450px;
+   overflow: hidden;
+  
+}
+.make_room_start_button {
+    margin-left: 40px;
+}
+.modal_input-list {
+    /* background-color: antiquewhite; */
+}
+.make_room_top {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content:space-between;
+    align-items: center;
+   
+}
+.making-button:hover,.selection_roomlist:hover ,.making-back-button:hover{
 	box-shadow: 0 0 10px 0 blue inset, 0 0 10px 4px blue;
+     /* transform: scale(1.01); */
+}
+.making-back-button{
+    /* position: relative; */
+    /* top:30%; */
+    /* left: 8%; */
+    border-radius: 30px;
+    border: 1px solid white;
+    cursor: pointer;
+    background-color: transparent;
+    color: white;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    padding: 2px 2px;
+    height: 30px;
+    width: 50px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.selection_roomlist:focus, .making-button:focus ,.making-back-button:focus{
+    box-shadow: 0 0 10px 0 blue inset, 0 0 10px 4px blue;
 }
 
 .hero {

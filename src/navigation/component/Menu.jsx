@@ -17,6 +17,7 @@ function Menu() {
                     <img className="direction-image-menu" src={Direction} alt="direct" />
                 </div>
             </div>
+
             <div className="body-container-menu">
                 <div className="left-container-menu">
                     <div className="next-menu-sentence">

@@ -47,8 +47,8 @@ function MediapipeHands({ roomid, sender }) {
           "lastX": preFingerPositionX.current,
           "lastY": preFingerPositionY.current,
         }
-        if (dataChannel.current)
-          dataChannel.current.send(JSON.stringify(obj));
+        // if (dataChannel.current)
+        //   dataChannel.current.send(JSON.stringify(obj));
 
         break;
       case constants.ERASE:
@@ -166,6 +166,7 @@ function MediapipeHands({ roomid, sender }) {
 
   const muteBtn = useRef(null);
   const cameraBtn = useRef(null);
+
   const videoRef = useRef(null);
   const anotherVideoRef = useRef(null);
 
@@ -181,8 +182,9 @@ function MediapipeHands({ roomid, sender }) {
 
   const subscribe = () => {
 
+    console.log("방번호는 " + roomid   + "샌더" + sender);
     client.current.subscribe(
-      `/sub/gameroom/${roomid}`,
+      `/sub/play/${roomid}`,
       async ({ body }) => {
         const data = JSON.parse(body);
         // console.log(body);
@@ -194,7 +196,7 @@ function MediapipeHands({ roomid, sender }) {
               console.log("@@offer : ", (offer));
               myPeerConnection.setLocalDescription(offer);
               client.current.publish({
-                destination: `/pub/gameroom/${roomid}`,
+                destination: `/pub/play`,
                 body: JSON.stringify({
                   type: 'OFFER',
                   room_id: roomid,//param.roomId,
@@ -215,7 +217,7 @@ function MediapipeHands({ roomid, sender }) {
               const answer = await myPeerConnection.createAnswer();
               myPeerConnection.setLocalDescription(answer);
               client.current.publish({
-                destination: `/pub/gameroom/${roomid}`,
+                destination: `/pub/play`,
                 body: JSON.stringify({
                   type: 'ANSWER',
                   room_id: roomid,//param.roomId,
@@ -245,10 +247,10 @@ function MediapipeHands({ roomid, sender }) {
   };
   const connect = () => {
     client.current = new StompJs.Client({
-      webSocketFactory: () => new SockJS("http://localhost:8080/gameroom"),
+      webSocketFactory: () => new SockJS("http://localhost:8080/play"),
 
       debug: function (str) {
-        // console.log(str);
+        console.log(str);
       },
       // reconnectDelay: 5000,
       // heartbeatIncoming: 4000,
@@ -256,7 +258,7 @@ function MediapipeHands({ roomid, sender }) {
       onConnect: () => {
         subscribe();
         client.current.publish({
-          destination: `/pub/gameroom/${roomid}`,
+          destination: `/pub/play`,
           body: JSON.stringify({
             type: 'ENTER',
             room_id: roomid,//param.roomId,
@@ -320,7 +322,7 @@ function MediapipeHands({ roomid, sender }) {
 
   function handleIce(data) {
     client.current.publish({
-      destination: `/pub/gameroom/${roomid}`,
+      destination: `/pub/play`,
       body: JSON.stringify({
         type: 'ICE',
         room_id: roomid,//param.roomId,
@@ -351,7 +353,6 @@ function MediapipeHands({ roomid, sender }) {
   function makeOtherDrawing(event) {
     console.log("받은 문자의 내용 : " + event.data);
     const obj = JSON.parse(event.data);
-
 
     contextRef.current.beginPath();
     contextRef.current.moveTo(obj.startX, obj.startY);

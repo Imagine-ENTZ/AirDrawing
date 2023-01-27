@@ -72,7 +72,7 @@ const GameScreen = forwardRef((props, ref) => {
 
         switch (HandGesture.current) {
             case constants.DRAW:
-                console.log("DRAW");
+                // console.log("DRAW");
                 contextRef.current.fillStyle = "#"
                 contextRef.current.beginPath();
                 contextRef.current.moveTo(preFingerPositionX.current, preFingerPositionY.current);
@@ -81,7 +81,7 @@ const GameScreen = forwardRef((props, ref) => {
                 contextRef.current.closePath();
                 break;
             case constants.ERASE:
-                console.log("ERASE");
+                // console.log("ERASE");
                 contextRef.current.save();
                 contextRef.current.beginPath();
                 contextRef.current.arc(fingerPosition.x, fingerPosition.y, radius, 0, 2 * Math.PI, true);
@@ -120,8 +120,6 @@ const GameScreen = forwardRef((props, ref) => {
         frameImage.onload = function () {
             ctx.drawImage(frameImage, windowSize.width * constants.GAME_FRAME_POSITION_X_RATIO, 0,
                 windowSize.width * constants.GAME_FRAME_WIDTH_RATIO, windowSize.height * constants.GAME_FRAME_HEIGHT_RATIO); // 프레임 위치 나중에 손 봐야함
-            console.log("width:" + frameImage.width + ", height:" + frameImage.height);
-            console.log(windowSize.width + "+" + windowSize.height);
         };
     }, [canvasRef3]);
 
@@ -256,7 +254,6 @@ const GameScreen = forwardRef((props, ref) => {
     }
 
     function draw() {
-        console.log("thisisdraw " + shapes.current.length);
         // redraw each shape in the shapes[] array
         for (let i = 0; i < shapes.current.length; i++) {
             // decide if the shape is a rect or circle
@@ -279,14 +276,10 @@ const GameScreen = forwardRef((props, ref) => {
         const mx = parseInt(nativeEvent.clientX - canvasOffSetX.current);
         const my = parseInt(nativeEvent.clientY - canvasOffSetY.current);
 
-        console.log("x:" + mx + ", y:" + my);
-        console.log("myDown" + dragok);
         // test each shape to see if mouse is inside
         dragok = false;
-        console.log("thisisDown " + shapes.current.length);
         for (let i = 0; i < shapes.current.length; i++) {
             var s = shapes.current[i];
-            console.log("xx:" + s.x + ", yy:" + s.y);
             // decide if the shape is a rect or circle
             if (s.width) {
                 // test if the mouse is inside this rect
@@ -322,7 +315,6 @@ const GameScreen = forwardRef((props, ref) => {
         nativeEvent.preventDefault();
         nativeEvent.stopPropagation();
 
-        console.log("myUp" + dragok);
         // clear all the dragging flags
         dragok = false;
         for (let i = 0; i < shapes.current.length; i++) {
@@ -334,7 +326,6 @@ const GameScreen = forwardRef((props, ref) => {
     function myMove({ nativeEvent }) {
         // if we're dragging anything...
         if (dragok) {
-            console.log("drag ok! - myMove");
             // tell the browser we're handling this mouse event
             nativeEvent.preventDefault();
             nativeEvent.stopPropagation();
@@ -366,15 +357,11 @@ const GameScreen = forwardRef((props, ref) => {
             startX = mx;
             startY = my;
         }
-        else {
-            console.log("drag no ok! - myMove");
-        }
     }
 
     // 이미지 저장
     const spaceDown = (e) => {
         if (e.key === ' ') {
-            console.log("space click");
             //const image = canvasRef2.current.toDataURL("image/png"); // 이걸로 바로하면 흑백 처리 안됨
             //const image = converToGray();
             const image = preprocessImage(canvasRef2.current, windowSize.width, windowSize.height);
@@ -400,7 +387,7 @@ const GameScreen = forwardRef((props, ref) => {
 
         Tesseract.recognize(image, 'eng', {
             logger: (m) => {
-                console.log(m);
+                // console.log(m);
 
             },
         })
@@ -408,7 +395,7 @@ const GameScreen = forwardRef((props, ref) => {
                 console.error(err);
             })
             .then((result) => {
-                console.log("결과값 + " + result.data.text);
+                // console.log("결과값 + " + result.data.text);
                 setEmoji(result.data.text);
             });
 
@@ -426,7 +413,7 @@ const GameScreen = forwardRef((props, ref) => {
             '/v3/search/icons/{orderBy}?q='+emojiName, 
             {headers}
         ).then(res => {
-            console.log(res.data);
+            // console.log(res.data);
             var source = res.data.data[2].images[512];
             source = source.replace("https://cdn-icons-png.flaticon.com", "");
             image.crossOrigin = "anonymous";
@@ -451,8 +438,6 @@ const GameScreen = forwardRef((props, ref) => {
             props.getData(shapes.current.length);
             props.getWord(emojiName);
             draw();
-            console.log("thisissetimage " + shapes.current.length);
-            console.log("success!");
         }
     }
 
@@ -462,11 +447,9 @@ const GameScreen = forwardRef((props, ref) => {
         const emojiCanvas = canvasRef4.current;
         const ctx = canvas.getContext('2d')
         const ctxEmojiCanvas = emojiCanvas.getContext('2d')
-        console.log("hihihihihihi???");
         // 두 캔버스를 저장용 캔버스에 그린다 (먼저 그린쪽이 아래에 있는 레이어가 된다)
         ctx.drawImage(webcam, 0, 0);
         ctx.drawImage(emojiCanvas, 0, 0);
-        console.log(canvas);
         var img = new Image();
         // img.crossOrigin = "anonymous";
         img.src = canvas.toDataURL('image/png');
@@ -491,14 +474,6 @@ const GameScreen = forwardRef((props, ref) => {
         link.click();
         document.body.removeChild(link);
         canvasRef5.current.getContext('2d').clearRect(0, 0, windowSize.width, windowSize.height); // 저장 후 지우기
-    }
-
-    const f1Down = (e) => {
-        if (e.key === 'Enter') {
-            console.log("f1 click");
-
-            captureImage();
-        }
     }
 
     return (

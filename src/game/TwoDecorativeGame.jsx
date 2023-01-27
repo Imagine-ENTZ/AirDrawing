@@ -8,8 +8,17 @@ import { useNavigate } from "react-router-dom";
 
 import * as constants from "../utils/Constants";
 
+import { useLocation } from "react-router-dom";
 
-function TwoDecorativeGame(props) {
+function TwoDecorativeGame() {
+
+    const anotherVideoRef = useRef(null);
+
+    /// 파라미터로 방 코드 받음
+    const location = useLocation();
+    const code = location.state.code;
+    const sender = location.state.sender;
+
     const navigate = useNavigate();
 
     const [windowHeight, setWindowHeight] = useState(window.innerHeight * constants.TWO_DECORATIVE_GAME_HEIGHT_RATIO);
@@ -22,10 +31,14 @@ function TwoDecorativeGame(props) {
     }
 
     useEffect(() => {
+        console.log(code);
+        console.log(sender);
+
         window.addEventListener('resize', handleResize);
         return () => {
             window.removeEventListener('resize', handleResize);
         }
+
     }, [])
 
     // 모달창 (타이머)
@@ -91,7 +104,7 @@ function TwoDecorativeGame(props) {
                     <div className="body-container-of-left-decoration-game-two">
                         <div className="screen-admin-decoration-game-two">
                             <div style={{ width: (window.innerHeight * constants.TWO_DECORATIVE_GAME_HEIGHT_RATIO * (4.0 / 3.0)), height: windowHeight, margin: "auto" }}>
-                                <TwoGameScreen getData={setNumber} getWord={setWord} ref={gameScreenRef} />
+                                <TwoGameScreen getData={setNumber} getWord={setWord} ref={gameScreenRef} roomid={code} sender={Math.random().toString(36).substring(2, 11)} anotherVideoRef={anotherVideoRef} />
                             </div>
                         </div>
                     </div>
@@ -104,7 +117,13 @@ function TwoDecorativeGame(props) {
 
                 <div className="right-body-container-decoration-game-two">
                     <div className="body-container-of-right-decoration-game-two">
-
+                        <video
+                            className="hong"
+                            ref={anotherVideoRef}
+                            autoPlay={true}
+                            playsInline={true}
+                            style={{ width: "800px", height: "600px" }}
+                        />
                     </div>
                     <div className="bottom-of-right-container-decoration-game-two">
                         <div className="emoji-record-opponent">
