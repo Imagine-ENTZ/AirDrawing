@@ -33,7 +33,7 @@ function App() {
 
         <Route path="/word-tracing" element={<WordTracingPage />} />
         <Route path="/word-tracing/play" element={<GamePage />} />
-        <Route path="/2p-word-tracing/play" element={<GamePageForTwo />} />
+        <Route path="/2p-word-tracing/play/:code" element={<GamePageForTwo />} />
         
         <Route path="/main" element={<MainPage />} />
         <Route path="/selection" element={<SelectionPage />} />

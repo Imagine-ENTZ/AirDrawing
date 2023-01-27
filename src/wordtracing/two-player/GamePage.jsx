@@ -6,8 +6,18 @@ import * as constants from "../../utils/Constants"
 import Canvas from './component/Canvas';
 import CheckSpinner from "../component/CheckSpinner"
 
+
+import { useLocation } from "react-router-dom";
+
 function GamePage() {
-  const [windowHeight, setWindowHeight] = useState(window.innerHeight*constants.HEIGHT_RATIO);
+
+  const anotherVideoRef = useRef(null);
+  /// 파라미터로 방 코드 받음
+  const location = useLocation();
+  const code = location.state.code;
+  const sender = location.state.sender;
+
+  const [windowHeight, setWindowHeight] = useState(window.innerHeight * constants.HEIGHT_RATIO);
 
   const wordWrittenByUser = useRef(null);  //사용자가 쓴 글자
   const wordToTest = useRef(null);         //현재 사용자가 작성해야 하는 단어
@@ -18,38 +28,42 @@ function GamePage() {
   const [isTesting, setIsTesting] = useState(!constants.IS_TESTING);
 
   const wordList = ["red", "apple", "z", "cat", "Zoo", "b", "happy", "bread", "J", "ball", "car", "bird",
-  "farm", "duck", "grape"];
+    "farm", "duck", "grape"];
 
   const incorrection = useRef(false);
   const correction = useRef(false);
   const failure = useRef(false);
 
-  const loadingStyle = { 
+  const loadingStyle = {
     position: "absolute",
     left: "0",
     top: "0",
-    width: (window.innerHeight * constants.HEIGHT_RATIO * (4.0 / 3.0)), 
+    width: (window.innerHeight * constants.HEIGHT_RATIO * (4.0 / 3.0)),
     height: windowHeight,
-    zIndex: "5"}
+    zIndex: "5"
+  }
 
   useEffect(() => {
+    console.log(code);
+    console.log(sender);
+
     wordToTest.current = wordList[0];
   }, [])
 
   useEffect(() => {
-    if(wordWrittenByUser.current === null) {
+    if (wordWrittenByUser.current === null) {
       return;
     }
 
-    if(wordWrittenByUser.current.toUpperCase() === wordList[indexOfwordList.current].toUpperCase()){   //현재 화면에 표시된 단어와 사용자가 작성한 단어가 일치하는지를 확인함
-      console.log("정답 -> 사용자["+wordWrittenByUser.current+"], 정답["+wordList[indexOfwordList.current]+"]");
+    if (wordWrittenByUser.current.toUpperCase() === wordList[indexOfwordList.current].toUpperCase()) {   //현재 화면에 표시된 단어와 사용자가 작성한 단어가 일치하는지를 확인함
+      console.log("정답 -> 사용자[" + wordWrittenByUser.current + "], 정답[" + wordList[indexOfwordList.current] + "]");
       correction.current = true;
       userScore.current += 100;
       indexOfwordList.current += 1;  //정답인 경우에만 다음 단어로 넘어감
       wordToTest.current = wordList[indexOfwordList.current];
     }
-    else{
-      console.log("오답 -> 사용자["+wordWrittenByUser.current+"], 정답["+wordList[indexOfwordList.current]+"]");
+    else {
+      console.log("오답 -> 사용자[" + wordWrittenByUser.current + "], 정답[" + wordList[indexOfwordList.current] + "]");
       incorrection.current = true;
     }
 
@@ -60,7 +74,7 @@ function GamePage() {
   }, [wordWrittenByUser.current])
 
   const handleResize = () => {
-    let height = window.innerHeight*constants.HEIGHT_RATIO;
+    let height = window.innerHeight * constants.HEIGHT_RATIO;
 
     setWindowHeight(height);
   }
@@ -69,7 +83,7 @@ function GamePage() {
     window.addEventListener('resize', handleResize);
     return () => {
       window.removeEventListener('resize', handleResize);
-    }  
+    }
   }, [])
 
   const getLeftTime = () => {
@@ -81,8 +95,8 @@ function GamePage() {
 
   const [minutes, setMinutes] = useState(3);
   const [seconds, setSeconds] = useState(0);
-  const [timeLeft, setTimeLeft] = useState(minutes*60+seconds); //남은 시간
-  const totalTime = useRef(minutes*60+seconds);  //게임의 총 시간
+  const [timeLeft, setTimeLeft] = useState(minutes * 60 + seconds); //남은 시간
+  const totalTime = useRef(minutes * 60 + seconds);  //게임의 총 시간
 
   useEffect(() => {
     const countdown = setInterval(() => {
@@ -97,13 +111,13 @@ function GamePage() {
           setSeconds(59);
         }
       }
-      setTimeLeft(minutes*60+seconds);
+      setTimeLeft(minutes * 60 + seconds);
     }, 1000);
 
-    if(timeLeft === 0){
+    if (timeLeft === 0) {
       console.log("총 점수 : " + userScore);
     }
-    
+
     return () => clearInterval(countdown);
   }, [minutes, seconds]);
 
@@ -111,58 +125,58 @@ function GamePage() {
   const setEmotion = () => {
     console.log(isTesting);
 
-    if(isTesting){
-      return <CheckSpinner spinnerType={constants.LOADING}/>;
-    }
-    
-    if(incorrection.current){
-      showEmojiDuringOneSecond(incorrection);
-      return <CheckSpinner spinnerType={constants.INCORRECTION}/>;
-    } 
-    
-    if(correction.current){
-      showEmojiDuringOneSecond(correction);
-      return <CheckSpinner spinnerType={constants.CORRECTION}/>;
+    if (isTesting) {
+      return <CheckSpinner spinnerType={constants.LOADING} />;
     }
 
-    if(failure.current){
+    if (incorrection.current) {
+      showEmojiDuringOneSecond(incorrection);
+      return <CheckSpinner spinnerType={constants.INCORRECTION} />;
+    }
+
+    if (correction.current) {
+      showEmojiDuringOneSecond(correction);
+      return <CheckSpinner spinnerType={constants.CORRECTION} />;
+    }
+
+    if (failure.current) {
       showEmojiDuringOneSecond(failure);
-      return <CheckSpinner spinnerType={constants.FAILURE}/>;
+      return <CheckSpinner spinnerType={constants.FAILURE} />;
     }
     return null;
   }
 
   const showEmojiDuringOneSecond = (isShow) => {
-    setTimeout(function(){
+    setTimeout(function () {
       isShow.current = false;
     }, 1000);
   }
 
-	return(
-		<div className='word-tracing-play-container'>
+  return (
+    <div className='word-tracing-play-container'>
 
-			<div className='word-tracing-timer-container'>
+      <div className='word-tracing-timer-container'>
         <div className='word-tracing-timer'>
-          <div className='word-tracing-for-two-timer-gauge' style={{color: "white"}}>
+          <div className='word-tracing-for-two-timer-gauge' style={{ color: "white" }}>
             {/* {minutes}:{seconds < 10 ? `0${seconds}` : seconds} // {timeLeft} */}
-            <img className='word-tracing-timer-img' src={timer}/>
-            
-            <ProgressBar 
-            className="word-tracing-timer-gauge-bar"
-            completed={timeLeft}
-            customLabel={getLeftTime()}
-            maxCompleted={totalTime.current}
-            barContainerClassName="bar-container"
-            labelColor="black"
-            labelAlignment="center"
-            transitionDuration="1s"
-            bgColor="#FFBDBC"
+            <img className='word-tracing-timer-img' src={timer} />
+
+            <ProgressBar
+              className="word-tracing-timer-gauge-bar"
+              completed={timeLeft}
+              customLabel={getLeftTime()}
+              maxCompleted={totalTime.current}
+              barContainerClassName="bar-container"
+              labelColor="black"
+              labelAlignment="center"
+              transitionDuration="1s"
+              bgColor="#FFBDBC"
             />
           </div>
         </div>
       </div>
 
-			<div className='word-display-container'>
+      <div className='word-display-container'>
         <div style={{
           fontFamily: "Fredoka_One",
           color: "#fdad1a",
@@ -171,9 +185,9 @@ function GamePage() {
           justifyContent: "center",
           alignItems: "center"
         }}>
-          { wordToTest.current }
+          {wordToTest.current}
         </div>
-			</div>
+      </div>
 
       <div className='word-tracing-for-two-score-container'>
         <div className='word-tracing-for-two-score-screen'>
@@ -196,56 +210,59 @@ function GamePage() {
               alignItems: "center"
             }}>
               <div style={{
-                width: (window.innerHeight * constants.HEIGHT_RATIO * (4.0 / 3.0)), 
+                width: (window.innerHeight * constants.HEIGHT_RATIO * (4.0 / 3.0)),
                 height: windowHeight,
                 marginLeft: "auto",
-                position: "relative"}}>
-                  <Canvas
+                position: "relative"
+              }}>
+                <Canvas
                   wordWrittenByUser={wordWrittenByUser}
                   wordToTest={wordToTest}
                   isTesting={isTesting}
                   setIsTesting={setIsTesting}
-                  style={{ 
+                  roomid={code} 
+                  sender={Math.random().toString(36).substring(2, 11)} 
+                  anotherVideoRef={anotherVideoRef}
+                  style={{
                     position: "absolute",
                     left: "0",
                     top: "0",
                     zIndex: "1"
-                  }}/>
-                  <div style={loadingStyle}>
-                    {setEmotion()}
-                  </div>
+                  }} />
+                <div style={loadingStyle}>
+                  {setEmotion()}
+                </div>
               </div>
             </div>
           </div>
-          
+
           <div className='word-tracing-for-two-canvas'>
             <div style={{
               display: "flex",
               justifyContent: "center",
-              alignItems: "center"}}>
+              alignItems: "center"
+            }}>
               <div style={{
-                width: (window.innerHeight * constants.HEIGHT_RATIO * (4.0 / 3.0)), 
+                width: (window.innerHeight * constants.HEIGHT_RATIO * (4.0 / 3.0)),
                 height: windowHeight,
                 marginLeft: "auto",
-                position: "relative"}}>
-                  {/* <Canvas
-                  wordWrittenByUser={wordWrittenByUser}
-                  wordToTest={wordToTest}
-                  isTesting={isTesting}
-                  setIsTesting={setIsTesting}
-                  style={{ 
-                    position: "absolute",
-                    left: "0",
-                    top: "0",
-                    zIndex: "1"
-                  }}/> */}
+                backgroundColor: "blue",
+                position: "relative"
+              }}>
+                <video
+                  className="hong"
+                  ref={anotherVideoRef}
+                  autoPlay={true}
+                  playsInline={true}
+                // style={{ width: "800px", height: "600px" }}
+                />
               </div>
             </div>
           </div>
         </div>
-      </div> 
-		</div>
-	);
+      </div>
+    </div>
+  );
 }
 
 export default GamePage;
