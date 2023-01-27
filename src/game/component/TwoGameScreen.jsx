@@ -170,6 +170,8 @@ const TwoGameScreen = forwardRef((props, ref) => {
         frameImage.onload = function () {
             ctx.drawImage(frameImage, windowSize.width * constants.GAME_FRAME_POSITION_X_RATIO, 0,
                 windowSize.width * constants.GAME_FRAME_WIDTH_RATIO, windowSize.height * constants.GAME_FRAME_HEIGHT_RATIO); // 프레임 위치 나중에 손 봐야함
+            console.log("width:" + frameImage.width + ", height:" + frameImage.height);
+            console.log(windowSize.width + "+" + windowSize.height);
         };
     }, [canvasRef3]);
 
@@ -514,6 +516,8 @@ const TwoGameScreen = forwardRef((props, ref) => {
                 dataChannel.current.send(JSON.stringify(object));
 
             draw();
+            console.log("thisissetimage " + shapes.current.length);
+            console.log("success!");
         }
     }
 
@@ -523,6 +527,7 @@ const TwoGameScreen = forwardRef((props, ref) => {
         const emojiCanvas = canvasRef4.current;
         const ctx = canvas.getContext('2d')
         const ctxEmojiCanvas = emojiCanvas.getContext('2d')
+        console.log("hihihihihihi???");
         // 두 캔버스를 저장용 캔버스에 그린다 (먼저 그린쪽이 아래에 있는 레이어가 된다)
         ctx.drawImage(webcam, 0, 0);
         ctx.drawImage(emojiCanvas, 0, 0);
@@ -551,7 +556,7 @@ const TwoGameScreen = forwardRef((props, ref) => {
         link.click();
         document.body.removeChild(link);
         canvasRef5.current.getContext('2d').clearRect(0, 0, windowSize.width, windowSize.height); // 저장 후 지우기
-    } 
+    }
 
     /////////////////////////////////////////////////////////
 
@@ -571,7 +576,7 @@ const TwoGameScreen = forwardRef((props, ref) => {
     const history = createBrowserHistory();
 
     useEffect(() => {
-        // 뒤로가기 새로고침 눌렸을때
+        // 뒤로가기 새로고침 눌렸을때 
         return history.listen((location) => {
             if (history.action === constants.EXIT) {
                 client.current.activate();
@@ -725,8 +730,8 @@ const TwoGameScreen = forwardRef((props, ref) => {
     //function7 그림 받은 값
     function makeOtherDrawing(event) {
         // if (props.othercontextRef){
-            console.log("받은 문자의 내용 : " + event.data);
-            const obj = JSON.parse(event.data);
+        console.log("받은 문자의 내용 : " + event.data);
+        const obj = JSON.parse(event.data);
 
             if(obj.startX <= 0 || obj.startY <=0 || obj.lastX <=0 || obj.lastY <= 0){
                 console.log("오류발생오류발생")
