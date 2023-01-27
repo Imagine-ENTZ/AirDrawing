@@ -147,6 +147,13 @@ const TwoGameScreen = forwardRef((props, ref) => {
 
     }, [props.otherDrawingRef]);
 
+    useEffect(() => {
+        const canvas = props.otherEmojiRef.current;
+        const context = canvas.getContext("2d");
+        canvas.width = windowSize.width;
+        canvas.height = windowSize.height;
+    }, [props.otherEmojiRef]);
+
     // 단어 적는 프레임 캔버스
     useEffect(() => {
         const canvas = canvasRef3.current;
@@ -495,6 +502,16 @@ const TwoGameScreen = forwardRef((props, ref) => {
             });
             props.getData(shapes.current.length);
             props.getWord(emojiName);
+
+            // 영상에 보낼 것들
+            const object = {
+                "image": image.src,
+                "number": shapes.current.length,
+                "word": emojiName
+            }
+            if (dataChannel.current != null)
+                dataChannel.current.send(JSON.stringify(object));
+
             draw();
         }
     }
@@ -722,6 +739,14 @@ const TwoGameScreen = forwardRef((props, ref) => {
                     props.otherDrawingRef.current.getContext('2d').clearRect(obj.lastX- radius, obj.lastY - radius, radius * 2, radius * 2);
                     props.otherDrawingRef.current.getContext('2d').restore();
                     break;
+            }
+
+            props.otherEmojiRef.current.getContext('2d')
+            const image = new Image();
+            image.crossOrigin = "anonymous";
+            image.src = obj.image;
+            image.onload = function () {
+                draw();
             }
 
             // props.otherDrawingRef.current.getContext('2d').fillStyle = "#"
