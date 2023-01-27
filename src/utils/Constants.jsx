@@ -35,7 +35,7 @@ export const REGISTER_URL = `https://entz.azurewebsites.net/member`//`http://loc
 export const GAMEROOM_URL = `https://entz.azurewebsites.net/room`//`http://localhost:8080/room/`
 export const SOCKET_JS = `https://entz.azurewebsites.net/play`;  //`http://localhost:8080/play`;
 
-export const AUTHORIZATION_IMAGE = 'Bearer eyJ0eXAiOiJhdCtKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJZUUxsTm1MdGF2cXpxNlNQTzU3MndPT202YXh4UU9OY0Q5VXh3ckpJbFhWbDRON1QiLCJpc3MiOiJodHRwczpcL1wvYXBpLmZsYXRpY29uLmNvbVwvb2F1dGhcL3Rva2VuIiwiZXhwIjoxNjc0OTMzMDI2LCJpYXQiOjE2NzQ4NDY2MjYsImp0aSI6ImJkNDFiN2E5LTRjNDYtNDk3Yi04YTA0LTIxZTE3MzYyMjI4MyIsImNsaWVudF9pZCI6IllRTGxObUx0YXZxenE2U1BPNTcyd09PbTZheHhRT05jRDlVeHdySklsWFZsNE43VCJ9.BZABjEsgwXFitwHsdtVUWFvtT9b1fYKiKsFgbfbJ8PE';
+export const AUTHORIZATION_IMAGE = 'Bearer eyJ0eXAiOiJhdCtKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtbnpjTTZta2Z3NFM5UnB6RGc2UTVkWlVpS0FRYXp0SVd2MUFZYnNwc0JRZTNtTkkiLCJpc3MiOiJodHRwczpcL1wvYXBpLmZsYXRpY29uLmNvbVwvb2F1dGhcL3Rva2VuIiwiZXhwIjoxNjc0OTQ5MDE1LCJpYXQiOjE2NzQ4NjI2MTUsImp0aSI6ImFkNGI4NWNkLTc4Y2ItNGE5MC04NWYwLWFhOGVmODRmNDI3MCIsImNsaWVudF9pZCI6Im1uemNNNm1rZnc0UzlScHpEZzZRNWRaVWlLQVFhenRJV3YxQVlic3BzQlFlM21OSSJ9.e6mG3Sef4i7_oTJvgDbsqDPLZj-MpoUG63gWqBVpc-g';
 
 export const STUN_SERVER = 'stun:stun.hongyeonghwan.com:3478';
 export const TURN_SERVER = 'turn:turn.hongyeonghwan.com:3478';
