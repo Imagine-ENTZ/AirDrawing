@@ -707,19 +707,18 @@ const TwoGameScreen = forwardRef((props, ref) => {
             iceServers: [
 
                 {
-                    urls: ['stun:stun.hongyeonghwan.com:3478'],
+                    urls: [constants.STUN_SERVER],
                     username : "guest",
                     credential: "somepassword",
                 },
                 {
-                    urls: ['turn:turn.hongyeonghwan.com:3478'],
+                    urls: [constants.TURN_SERVER],
                     username : "guest",
                     credential: "somepassword",
                 }
                 
             ],
         });
-
         myPeerConnection.addEventListener('icecandidate', handleIce);
         myPeerConnection.addEventListener('addstream', handleAddStream); // 스트림 받기
         myPeerConnection.addEventListener('datachannel', handleChannel);
@@ -794,7 +793,6 @@ const TwoGameScreen = forwardRef((props, ref) => {
                 ref={canvasRef2}
                 mirrored={true}
                 tabIndex={0}
-                //onKeyDown={f1Down}
                 onKeyDown={spaceDown}
                 style={{
                     position: "absolute",

@@ -171,8 +171,8 @@ function Canvas(props) {
           "lastX": preFingerPositionX.current,
           "lastY": preFingerPositionY.current,
         }
-        // if (dataChannel.current != null)
-        // dataChannel.current.send(JSON.stringify(obj));
+        if (dataChannel.current != null)
+          dataChannel.current.send(JSON.stringify(obj));
         break;
       case constants.ERASE:
         fingerOfcontextRef.current.save();
@@ -470,26 +470,26 @@ function Canvas(props) {
     console.log("받은 문자의 내용 : " + event.data);
     const obj = JSON.parse(event.data);
 
-    // contextRef.current.beginPath();
-    // contextRef.current.moveTo(obj.startX, obj.startY);
-    // contextRef.current.lineTo(obj.lastX, obj.lastY);
-    // contextRef.current.stroke();
-    // contextRef.current.closePath();
+    contextRef.current.beginPath();
+    contextRef.current.moveTo(obj.startX, obj.startY);
+    contextRef.current.lineTo(obj.lastX, obj.lastY);
+    contextRef.current.stroke();
+    contextRef.current.closePath();
   }
   //function8
   async function makeConnection() {
     myPeerConnection = new RTCPeerConnection({
       iceServers: [
         {
-          urls: [
-            'stun:stun.l.google.com:19302',
-            'stun:stun1.l.google.com:19302',
-            'stun:stun2.l.google.com:19302',
-            'stun:stun3.l.google.com:19302',
-            'stun:stun4.l.google.com:19302',
-
-          ],
+          urls: [constants.STUN_SERVER],
+          username: "guest",
+          credential: "somepassword",
         },
+        {ß
+          urls: [constants.TURN_SERVER],
+          username: "guest",
+          credential: "somepassword",
+        }
       ],
     });
 
