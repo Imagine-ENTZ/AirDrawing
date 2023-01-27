@@ -524,15 +524,7 @@ const TwoGameScreen = forwardRef((props, ref) => {
         link.click();
         document.body.removeChild(link);
         canvasRef5.current.getContext('2d').clearRect(0, 0, windowSize.width, windowSize.height); // 저장 후 지우기
-    }
-
-    const f1Down = (e) => {
-        if (e.key === 'Enter') {
-            console.log("f1 click");
-
-            captureImage();
-        }
-    }
+    } 
 
     /////////////////////////////////////////////////////////
 
@@ -692,14 +684,16 @@ const TwoGameScreen = forwardRef((props, ref) => {
     }
     //function7 그림 받은 값
     function makeOtherDrawing(event) {
-        console.log("받은 문자의 내용 : " + event.data);
-        const obj = JSON.parse(event.data);
-
-        props.othercontextRef.current.beginPath();
-        props.othercontextRef.current.moveTo(obj.startX, obj.startY);
-        props.othercontextRef.current.lineTo(obj.lastX, obj.lastY);
-        props.othercontextRef.current.stroke();
-        props.othercontextRef.current.closePath();
+        if (props.othercontextRef){
+            console.log("받은 문자의 내용 : " + event.data);
+            const obj = JSON.parse(event.data);
+    
+            props.othercontextRef.current.beginPath();
+            props.othercontextRef.current.moveTo(obj.startX, obj.startY);
+            props.othercontextRef.current.lineTo(obj.lastX, obj.lastY);
+            props.othercontextRef.current.stroke();
+            props.othercontextRef.current.closePath();
+        }
     }
     //function8
     async function makeConnection() {

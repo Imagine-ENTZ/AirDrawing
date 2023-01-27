@@ -15,7 +15,7 @@ function TwoDecorativeGame() {
     const anotherVideoRef = useRef(null);
     const otherDrawingRef = useRef(null);
     const otherContextRef = useRef(null);
-    
+
 
     /// 파라미터로 방 코드 받음
     const location = useLocation();
@@ -125,7 +125,12 @@ function TwoDecorativeGame() {
                             ref={anotherVideoRef}
                             autoPlay={true}
                             playsInline={true}
-                            style={{ width: (window.innerHeight * constants.TWO_DECORATIVE_GAME_HEIGHT_RATIO * (4.0 / 3.0)), height: windowHeight, margin: "auto" }}
+                            style={{
+                                width: (window.innerHeight * constants.TWO_DECORATIVE_GAME_HEIGHT_RATIO * (4.0 / 3.0)),
+                                height: windowHeight,
+                                margin: "auto",
+                                transform: "scaleX(-1)"
+                            }}
                         />
                         <canvas
                             className="canvas"
