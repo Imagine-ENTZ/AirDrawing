@@ -199,7 +199,7 @@ function TwoGameLobby() {
                                         return (
                                             <div key={index} onClick={() => { selectRoomButton(index) }} className="selection_roomlist">
                                                 <div className="selection_roomlist_inner">
-                                                    <div> {item.full == constants.ROOM_POSSIBLE ?<AiTwotoneCheckCircle size="30" color="green"/> : <AiTwotoneCloseCircle size="30" color="red"/> } </div>
+                                                    <div> {item.full == constants.ROOM_POSSIBLE ?<AiTwotoneCheckCircle size="30" className="green_circle"/> : <AiTwotoneCloseCircle size="30" className="red_circle"/> } </div>
                                                     <div className="selection_roomlist_name"> {item.name}</div>
                                                     <div className="selection_roomlist_type">Game Type : {item.type == 1 ? "WordTracing" : "DecorateGame"}</div>
                                                 </div>

@@ -263,6 +263,12 @@ body {
     transform: translateY(-768px);
     animation: fall 45s infinite linear;
 }
+.green_circle {
+    color: rgb(39, 103, 18);
+}
+.red_circle {
+    color: rgb(116, 23, 23);
+}
 
 @keyframes fall {
 

@@ -14,6 +14,7 @@ import Tesseract from 'tesseract.js';
 
 import * as StompJs from "@stomp/stompjs";
 import * as SockJS from "sockjs-client";
+import { createBrowserHistory } from "history";
 
 
 const TwoGameScreen = forwardRef((props, ref) => {
@@ -548,6 +549,19 @@ const TwoGameScreen = forwardRef((props, ref) => {
 
     const dataChannel = useRef();
 
+    // 뒤로가기 감지 변수
+    const history = createBrowserHistory();
+
+    useEffect(() => {
+        // 뒤로가기 새로고침 눌렸을때
+        return history.listen((location) => {
+            if (history.action === constants.EXIT) {
+                client.current.activate();
+            }
+        })
+    }, [history])
+
+
     // function1
     const subscribe = () => {
 
@@ -708,15 +722,15 @@ const TwoGameScreen = forwardRef((props, ref) => {
 
                 {
                     urls: [constants.STUN_SERVER],
-                    username : "guest",
+                    username: "guest",
                     credential: "somepassword",
                 },
                 {
                     urls: [constants.TURN_SERVER],
-                    username : "guest",
+                    username: "guest",
                     credential: "somepassword",
                 }
-                
+
             ],
         });
         myPeerConnection.addEventListener('icecandidate', handleIce);

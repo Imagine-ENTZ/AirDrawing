@@ -9,13 +9,15 @@ import { useNavigate } from "react-router-dom";
 import * as constants from "../utils/Constants";
 
 import { useLocation } from "react-router-dom";
+import { createBrowserHistory } from "history";
+
 
 function TwoDecorativeGame() {
 
     const anotherVideoRef = useRef(null);
     const otherDrawingRef = useRef(null);
     const otherContextRef = useRef(null);
-    
+
 
     /// 파라미터로 방 코드 받음
     const location = useLocation();
@@ -32,6 +34,17 @@ function TwoDecorativeGame() {
 
         setWindowHeight(height);
     }
+    // 뒤로가기 감지 변수
+    const history = createBrowserHistory();
+
+
+    useEffect(() => {
+        return history.listen((location) => {
+            if (history.action === 'POP') {
+                console.log("이것도 눌림");
+            }
+        })
+    }, [history])
 
     useEffect(() => {
         console.log(code);

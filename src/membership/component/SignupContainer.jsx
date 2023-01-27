@@ -35,7 +35,6 @@ function SignupContainer() {
                     }
                 })
                 .catch((Error) => { console.log("에러", Error) })
-
         }
         else {
             console.log("입력하신 패스워드가 다릅니다");

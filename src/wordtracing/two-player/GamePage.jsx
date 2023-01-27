@@ -34,6 +34,9 @@ function GamePage() {
   const correction = useRef(false);
   const failure = useRef(false);
 
+
+
+
   const loadingStyle = {
     position: "absolute",
     left: "0",
@@ -43,9 +46,10 @@ function GamePage() {
     zIndex: "5"
   }
 
+  
+  
+
   useEffect(() => {
-    console.log(code);
-    console.log(sender);
 
     wordToTest.current = wordList[0];
   }, [])

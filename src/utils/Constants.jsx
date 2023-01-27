@@ -43,6 +43,7 @@ export const DECORATIVE_GAME = 2;
 export const WORDTRACING_GAME = 1;
 
 export const ROOM_POSSIBLE = 0;
-export const ROOM_IMPOSSIBLE = 1;
+
+export const EXIT = 'POP';
 
 
