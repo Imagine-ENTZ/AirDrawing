@@ -10,7 +10,7 @@ import * as constants from "../utils/Constants"
 import { type } from "@testing-library/user-event/dist/type";
 import Modal from 'react-modal';
 import Select from "react-select";
-
+import { AiTwotoneCheckCircle, AiTwotoneCloseCircle} from "react-icons/ai";
 
 const customStyles = {
     content: {
@@ -35,6 +35,7 @@ function TwoGameLobby() {
         code: 0,
         name: '',
         type: '',
+        full: '',
     }])
     //모달창 변수
     const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -76,8 +77,7 @@ function TwoGameLobby() {
                     // 이제 2명 게임 방으로 이동
                     // 영림게임 
 
-                    if (res.data["room"].type == constants.DECORATIVE_GAME)
-                    {
+                    if (res.data["room"].type == constants.DECORATIVE_GAME) {
                         navigate(`/2p-decorative/game/${res.data["room"].code}`, {
                             state: {
                                 code: res.data["room"].code,
@@ -100,15 +100,15 @@ function TwoGameLobby() {
     // 방리스트에서 방 클릭시 방상태 변경
     const changeFullState = (code) => {
         axios.get(constants.GAMEROOM_URL + `/change/${code}`)
-        .then((res) => {
-            if (res.data.result == "SUCCESS") {
-                console.log("방 상태 변경 성공");
-            }
-            else {
-                console.log("방 상태 변경 실패");
-            }
-        })
-        .catch((Error) => { console.log("에러", Error) })
+            .then((res) => {
+                if (res.data.result == "SUCCESS") {
+                    console.log("방 상태 변경 성공");
+                }
+                else {
+                    console.log("방 상태 변경 실패");
+                }
+            })
+            .catch((Error) => { console.log("에러", Error) })
     }
 
     // 생성된 방 리스트 클릭
@@ -118,25 +118,34 @@ function TwoGameLobby() {
         console.log(inputData[index].code);
         console.log(inputData[index].type);
 
-        //민지 게임으로 이동
-        if (inputData[index].type == constants.WORDTRACING_GAME) {
-            navigate( `/2p-word-tracing/play/${inputData[index].code}`, {
-                state: {
-                    code: inputData[index].code,
-                    sender: inputData[index].code + 2,
-                }
-            });
+        // 입장가능할때만 입장
+        if (inputData[index].full == constants.ROOM_POSSIBLE) {
+            //민지 게임으로 이동
+            if (inputData[index].type == constants.WORDTRACING_GAME) {
+                navigate(`/2p-word-tracing/play/${inputData[index].code}`, {
+                    state: {
+                        code: inputData[index].code,
+                        sender: inputData[index].code + 2,
+                    }
+                });
+            }
+            //영림이 게임으로 이동
+            else {
+                navigate(`/2p-decorative/game/${inputData[index].code}`, {
+                    state: {
+                        code: inputData[index].code,
+                        sender: inputData[index].code + 2,
+                    }
+                });
+            }
+            changeFullState(inputData[index].code);
         }
-        //영림이 게임으로 이동
         else {
-            navigate(`/2p-decorative/game/${inputData[index].code}`, {
-                state: {
-                    code: inputData[index].code,
-                    sender: inputData[index].code + 2,
-                }
-            });
+            // 입장 불가
+            console.log("입장이 불가능한 방입니다");
+            console.log("현재 방 상태 :" +inputData[index].full );
         }
-        changeFullState(inputData[index].code);
+
     }
     useEffect(() => {
 
@@ -149,9 +158,10 @@ function TwoGameLobby() {
                         code: data.code,
                         name: data.name,
                         type: data.type,
+                        full: data.full,
                     })
                     )
-                   
+
                     setInputData(inputData.concat(_inputData));
                 }
                 else {
@@ -189,6 +199,7 @@ function TwoGameLobby() {
                                         return (
                                             <div key={index} onClick={() => { selectRoomButton(index) }} className="selection_roomlist">
                                                 <div className="selection_roomlist_inner">
+                                                    <div> {item.full == constants.ROOM_POSSIBLE ?<AiTwotoneCheckCircle size="30" color="green"/> : <AiTwotoneCloseCircle size="30" color="red"/> } </div>
                                                     <div className="selection_roomlist_name"> {item.name}</div>
                                                     <div className="selection_roomlist_type">Game Type : {item.type == 1 ? "WordTracing" : "DecorateGame"}</div>
                                                 </div>
