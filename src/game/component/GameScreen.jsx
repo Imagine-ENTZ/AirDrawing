@@ -403,17 +403,18 @@ const GameScreen = forwardRef((props, ref) => {
     }
 
     // 이모지 넣어주는 함수 
-    const setEmoji = (emojiName) => {
+    const setEmoji = async(emojiName) => {
         const canvas = canvasRef4.current;
         canvas.width = windowSize.width;
         canvas.height = windowSize.height;
         const image = new Image();
 
-        const response =  axios.get(
+        console.log(emojiName);
+        await axios.get(
             'https://api.flaticon.com/v3/search/icons/{orderBy}?q='+emojiName, 
             {headers}
         ).then(res => {
-            // console.log(res.data);
+            console.log(res.data);
             var source = res.data.data[2].images[512];
             source = source.replace("https://cdn-icons-png.flaticon.com", "");
             image.crossOrigin = "anonymous";
