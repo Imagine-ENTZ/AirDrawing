@@ -74,14 +74,24 @@ function TwoGameLobby() {
                 }
                 else {
                     // 이제 2명 게임 방으로 이동
-                    navigate(`/2p-decorative/game/${res.data["room"].code}`, {
-                        state: {
-                            code: res.data["room"].code,
-                            sender: res.data["room"].code + 1,
-                        }
-                    });
-                    // console.log(res.data["room"]);
-
+                    // 영림게임 
+                    if (res.data["room"].type == constants.DECORATIVE_GAME)
+                    {
+                        navigate(`/2p-decorative/game/${res.data["room"].code}`, {
+                            state: {
+                                code: res.data["room"].code,
+                                sender: res.data["room"].code + 1,
+                            }
+                        });
+                    }
+                    else {
+                        navigate(`/2p-word-tracing/play/${res.data["room"].code}`, {
+                            state: {
+                                code: res.data["room"].code,
+                                sender: res.data["room"].code + 1,
+                            }
+                        });
+                    }
                 }
             })
             .catch((Error) => { console.log("에러", Error) })
@@ -94,10 +104,9 @@ function TwoGameLobby() {
         console.log(inputData[index].code);
         console.log(inputData[index].type);
 
-
         //민지 게임으로 이동
-        if (inputData[index].type == 1) {
-            navigate(`/2p-decorative/game/${inputData[index].code}`, {
+        if (inputData[index].type == constants.WORDTRACING_GAME) {
+            navigate( `/2p-word-tracing/play/${inputData[index].code}`, {
                 state: {
                     code: inputData[index].code,
                     sender: inputData[index].code + 2,
@@ -106,6 +115,12 @@ function TwoGameLobby() {
         }
         //영림이 게임으로 이동
         else {
+            navigate(`/2p-decorative/game/${inputData[index].code}`, {
+                state: {
+                    code: inputData[index].code,
+                    sender: inputData[index].code + 2,
+                }
+            });
 
         }
     }
