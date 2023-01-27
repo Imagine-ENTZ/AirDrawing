@@ -166,13 +166,13 @@ function Canvas(props) {
         fingerOfcontextRef.current.closePath();
         // webRTC
         const obj = {
-          "startX": fingerPosition.x,
-          "startY": fingerPosition.y,
-          "lastX": preFingerPositionX.current,
-          "lastY": preFingerPositionY.current,
+          "startX": preFingerPositionX.current, 
+          "startY": preFingerPositionY.current,
+          "lastX": fingerPosition.x,
+          "lastY": fingerPosition.y,
         }
-        // if (dataChannel.current != null)
-        // dataChannel.current.send(JSON.stringify(obj));
+        if (dataChannel.current != null)
+          dataChannel.current.send(JSON.stringify(obj));
         break;
       case constants.ERASE:
         fingerOfcontextRef.current.save();
@@ -309,10 +309,6 @@ function Canvas(props) {
   }
 
   /////////////////////////////////////////////////////////
-
-
-
-
   const videoRef = useRef(null);
   // const anotherVideoRef = useRef(null);
   const client = useRef({});
@@ -470,6 +466,8 @@ function Canvas(props) {
     console.log("받은 문자의 내용 : " + event.data);
     const obj = JSON.parse(event.data);
 
+    console.log("보냄 -> x: " + obj.startX + ", y: " + obj.startY);
+    props.setFingerPosition({ x: obj.startX, y: obj.startY});
     // contextRef.current.beginPath();
     // contextRef.current.moveTo(obj.startX, obj.startY);
     // contextRef.current.lineTo(obj.lastX, obj.lastY);
@@ -531,22 +529,6 @@ function Canvas(props) {
         position: "relative",
         height: "100%",
       }}>
-      {/* <div style={{
-        textShadow: "-2px 0 #000, 0 2px #000, 2px 0 #000, 0 -2px #000",
-        position: "absolute", 
-        width:"100%",
-        height: "65%",
-        bottom: "0",
-        display: "flex",
-        justifyContent: "center",
-        textAlign: "center",
-        fontSize: "500%",
-        fontFamily: "Fredoka_One",
-        zIndex: 2,
-        color: "white",
-      }}>
-        { props.wordToTest.current }
-      </div> */}
       <Webcam
         audio={false}
         mirrored={true}

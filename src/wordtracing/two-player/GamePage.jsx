@@ -4,8 +4,9 @@ import "./Game.css"
 import ProgressBar from "@ramonak/react-progress-bar";
 import * as constants from "../../utils/Constants"
 import Canvas from './component/Canvas';
+import OpponentCanvas from './component/OpponentCanvas';
 import CheckSpinner from "../component/CheckSpinner"
-
+import canvasPicture from "../img/canvas_with_transparent_bg.png"
 
 import { useLocation } from "react-router-dom";
 
@@ -42,6 +43,37 @@ function GamePage() {
     height: windowHeight,
     zIndex: "5"
   }
+
+  //window size
+  const [windowSize, setWindowSize] = useState({
+    width: window.innerHeight * constants.HEIGHT_RATIO * (4.0 / 3.0),
+    height: window.innerHeight * constants.HEIGHT_RATIO
+  });
+
+  //스팰링 도안 캔버스 변수
+  const spellingArtOfCanvasRef = useRef(null);
+  const spellingArtOfContextRef = useRef(null);
+
+  useEffect(() => {
+    //영어 단어 스펠링 도안 캔버스
+    const spellingArtCanvas = spellingArtOfCanvasRef.current;
+    spellingArtCanvas.width = windowSize.width;
+    spellingArtCanvas.height = windowSize.height;
+
+    const spellingArtOfContext = spellingArtCanvas.getContext("2d");
+
+    let spellingArtImg = new Image();
+    spellingArtImg.src = canvasPicture;
+
+    if (!spellingArtOfContextRef) return;
+
+    spellingArtImg.onload = () => {
+      spellingArtOfContext.drawImage(
+        spellingArtImg, 0, 0, spellingArtCanvas.width, spellingArtCanvas.height);
+    }
+
+    spellingArtOfContextRef.current = spellingArtOfContext;
+  }, [])
 
   useEffect(() => {
     console.log(code);
@@ -85,6 +117,161 @@ function GamePage() {
       window.removeEventListener('resize', handleResize);
     }
   }, [])
+
+  //손가락으로 캔버스에 그리는 변수
+  const fingerOfcanvasRef = useRef(null);
+  const fingerOfcontextRef = useRef(null);
+
+    //직전의 손가락 위치
+  const preFingerPositionX = useRef(null);
+  const preFingerPositionY = useRef(null);
+  const [fingerPosition, setFingerPosition] = useState({
+    x: null,
+    y: null
+  });
+
+  useEffect(() => {
+    //사용자 그리기 캔버스
+    const canvas = fingerOfcanvasRef.current;
+    canvas.width = windowSize.width;
+    canvas.height = windowSize.height;
+
+    const context = canvas.getContext("2d");
+    context.lineCap = "round";
+    context.strokeStyle = "orange";
+    context.lineWidth = 8;
+
+    fingerOfcontextRef.current = context;
+  }, [])
+
+  useEffect(() => {
+    let radius = 20;
+
+    // if (handGesture.current == constants.DRAW && (preFingerPositionX == null || preFingerPositionY == null)) {
+    //   return;
+    // }
+
+    // if (props.isTesting == constants.IS_TESTING) {
+    //   return;
+    // }
+
+    // switch (handGesture.current) {
+    //   case constants.DRAW:
+        // fingerOfcontextRef.current.beginPath();
+        // fingerOfcontextRef.current.moveTo(preFingerPositionX.current, preFingerPositionY.current);
+        // fingerOfcontextRef.current.lineTo(fingerPosition.x, fingerPosition.y);
+        // fingerOfcontextRef.current.stroke();
+        // fingerOfcontextRef.current.closePath();
+    //     break;
+    //   case constants.ERASE:
+    //     fingerOfcontextRef.current.save();
+    //     fingerOfcontextRef.current.beginPath();
+    //     fingerOfcontextRef.current.arc(fingerPosition.x, fingerPosition.y, radius, 0, 2 * Math.PI, true);
+    //     fingerOfcontextRef.current.clip();
+    //     fingerOfcontextRef.current.clearRect(fingerPosition.x - radius, fingerPosition.y - radius, radius * 2, radius * 2);
+    //     fingerOfcontextRef.current.restore();
+    //     break;
+    //   case constants.OK:
+    //     checkIfWordsMatch();
+    //     break;
+    // }
+
+    if (fingerOfcontextRef.current) {
+      fingerOfcontextRef.current.beginPath();
+      fingerOfcontextRef.current.moveTo(preFingerPositionX.current, preFingerPositionY.current);
+      fingerOfcontextRef.current.lineTo(fingerPosition.x, fingerPosition.y);
+      fingerOfcontextRef.current.stroke();
+      fingerOfcontextRef.current.closePath();
+
+      preFingerPositionX.current = fingerPosition.x;
+      preFingerPositionY.current = fingerPosition.y;
+    }
+
+    console.log("현재 -> x: " + fingerPosition.x + ", y: " + fingerPosition.y);
+  }, [fingerPosition])
+  
+
+  // //손가락으로 캔버스에 그리는 변수
+  // const fingerOfcanvasRef = useRef(null);
+  // const fingerOfcontextRef = useRef(null);
+
+  // //현재 그리기 모드
+  // const handGesture = useRef(constants.HOVER);
+  // const preHandGesture = useRef(constants.HOVER);
+
+  // //직전의 손가락 위치
+  // const preFingerPositionX = useRef(null);
+  // const preFingerPositionY = useRef(null);
+  // const [fingerPosition, setFingerPosition] = useState({
+  //   x: null,
+  //   y: null
+  // });
+
+  // useEffect(() => {
+  //   //사용자 그리기 캔버스
+  //   const canvas = fingerOfcanvasRef.current;
+  //   canvas.width = windowSize.width;
+  //   canvas.height = windowSize.height;
+
+  //   const context = canvas.getContext("2d");
+  //   context.lineCap = "round";
+  //   context.strokeStyle = "orange";
+  //   context.lineWidth = 8;
+
+  //   fingerOfcontextRef.current = context;
+  // }, [])
+
+  // // 손그리기 캔버스
+  // useEffect(() => {
+  //   let radius = 20;
+
+  //   if (handGesture.current == constants.DRAW && (preFingerPositionX == null || preFingerPositionY == null)) {
+  //     return;
+  //   }
+
+  //   if (isOpponentUserTesting == constants.IS_TESTING) {
+  //     return;
+  //   }
+
+  //   switch (handGesture.current) {
+  //     case constants.DRAW:
+  //       fingerOfcontextRef.current.beginPath();
+  //       fingerOfcontextRef.current.moveTo(preFingerPositionX.current, preFingerPositionY.current);
+  //       fingerOfcontextRef.current.lineTo(fingerPosition.x, fingerPosition.y);
+  //       fingerOfcontextRef.current.stroke();
+  //       fingerOfcontextRef.current.closePath();
+  //       break;
+  //     case constants.ERASE:
+  //       fingerOfcontextRef.current.save();
+  //       fingerOfcontextRef.current.beginPath();
+  //       fingerOfcontextRef.current.arc(fingerPosition.x, fingerPosition.y, radius, 0, 2 * Math.PI, true);
+  //       fingerOfcontextRef.current.clip();
+  //       fingerOfcontextRef.current.clearRect(fingerPosition.x - radius, fingerPosition.y - radius, radius * 2, radius * 2);
+  //       fingerOfcontextRef.current.restore();
+  //       break;
+  //     case constants.OK:
+  //       // checkIfWordsMatch();
+  //       break;
+  //   }
+
+  //   if (fingerOfcontextRef.current) {
+  //     preFingerPositionX.current = fingerPosition.x;
+  //     preFingerPositionY.current = fingerPosition.y;
+  //   }
+  // }, [fingerPosition])
+
+  // const getCurrentHandGesture = () => {
+  //   switch (handGesture.current) {
+  //     case constants.DRAW:
+  //       return "Draw";
+  //     case constants.ERASE:
+  //       return "Erase";
+  //     case constants.OK:
+  //       return "Ok";
+  //     default:
+  //       return "Hover";
+  //   }
+  // }
 
   const getLeftTime = () => {
     let second = seconds < 10 ? `0${seconds}` : seconds;
@@ -223,6 +410,10 @@ function GamePage() {
                   roomid={code} 
                   sender={Math.random().toString(36).substring(2, 11)} 
                   anotherVideoRef={anotherVideoRef}
+
+                  fingerPosition={fingerPosition}
+                  setFingerPosition={setFingerPosition}
+
                   style={{
                     position: "absolute",
                     left: "0",
@@ -246,7 +437,6 @@ function GamePage() {
                 width: (window.innerHeight * constants.HEIGHT_RATIO * (4.0 / 3.0)),
                 height: windowHeight,
                 marginLeft: "auto",
-                backgroundColor: "blue",
                 position: "relative"
               }}>
                 <video
@@ -254,8 +444,58 @@ function GamePage() {
                   ref={anotherVideoRef}
                   autoPlay={true}
                   playsInline={true}
-                // style={{ width: "800px", height: "600px" }}
+                  style={{
+                    transform: "scaleX(-1)"
+                  }}
                 />
+                {/* <div 
+                  style={{
+                    position: "absolute",
+                    top: "0",
+                    left: "0",
+                    textAlign: "center",
+                    zIndex: 1,
+                    width: "100%",
+                    height: "100%"
+                  }}> */}
+                  {/* <OpponentCanvas
+                    wordWrittenByUser={wordWrittenByUser}
+                    wordToTest={wordToTest}
+                    isTesting={isTesting}
+                    setIsTesting={setIsTesting}
+                    style={{
+                      position: "absolute",
+                      left: "0",
+                      top: "0",
+                      zIndex: "1"
+                    }}/> */}
+                {/* </div> */}
+                <canvas
+                  ref={fingerOfcanvasRef}
+                  mirrored={true}
+                  style={{
+                    position: "absolute",
+                    top: "0",
+                    left: "0",
+                    textAlign: "center",
+                    zIndex: 3,
+                    width: "100%",
+                    height: "100%"
+                  }}>
+                </canvas>
+                <canvas
+                  ref={spellingArtOfCanvasRef}
+                  mirrored={true}
+                  style={{
+                    position: "absolute",
+                    top: "0",
+                    left: "0",
+                    textAlign: "center",
+                    zIndex: 1,
+                    width: "100%",
+                    height: "100%"
+                  }}>
+                </canvas>
               </div>
             </div>
           </div>
