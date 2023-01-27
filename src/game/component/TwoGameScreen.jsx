@@ -27,7 +27,8 @@ const TwoGameScreen = forwardRef((props, ref) => {
         // 부모 컴포넌트에서 사용할 함수를 선언
         captureImage
     }))
-   
+
+
 
     const headers = {
         'Accept': 'application/json',
@@ -65,6 +66,10 @@ const TwoGameScreen = forwardRef((props, ref) => {
     const canvasRef5 = useRef(null);
     const contextRef5 = useRef(null);
 
+    // 상대방 그림 나오는 캔버스
+    const othercanvasRef = useRef(null);
+    const othercontextRef = useRef(null);
+
     // 마우스 드래그
     let dragok = false;
     let startX;
@@ -86,14 +91,13 @@ const TwoGameScreen = forwardRef((props, ref) => {
                 contextRef.current.closePath();
                 // webRTC
                 const obj = {
-                    "startX": fingerPosition.x,
-                    "startY": fingerPosition.y,
-                    "lastX": preFingerPositionX.current,
-                    "lastY": preFingerPositionY.current,
+                    "startX": preFingerPositionX.current,
+                    "startY": preFingerPositionY.current,
+                    "lastX": fingerPosition.x,
+                    "lastY": fingerPosition.y,
                 }
-                // if (dataChannel.current != null)
-                    // dataChannel.current.send(JSON.stringify(obj));
-
+                if (dataChannel.current != null)
+                    dataChannel.current.send(JSON.stringify(obj));
                 break;
             case constants.ERASE:
                 // console.log("ERASE");
@@ -119,6 +123,15 @@ const TwoGameScreen = forwardRef((props, ref) => {
             preFingerPositionY.current = null;
         }
     }, [fingerPosition]);
+
+    // 상대방 그리는 캔버스
+    useEffect(() => {
+        const canvas = props.otherDrawingRef.current;
+        const context = canvas.getContext("2d");
+        canvas.width = windowSize.width;
+        canvas.height = windowSize.height;
+
+    }, [props.otherDrawingRef]);
 
     // 단어 적는 프레임 캔버스
     useEffect(() => {
@@ -194,7 +207,7 @@ const TwoGameScreen = forwardRef((props, ref) => {
         context.lineWidth = 10;
         contextRef.current = context;
 
-        
+
         hands.onResults(onResults);
 
 
@@ -510,7 +523,7 @@ const TwoGameScreen = forwardRef((props, ref) => {
     // function1
     const subscribe = () => {
 
-      
+
         console.log(props.roomid, props.sender)
 
         client.current.subscribe(
@@ -619,7 +632,7 @@ const TwoGameScreen = forwardRef((props, ref) => {
             if (videoRef.current) {
                 videoRef.current.srcObject = stream;
             }
-           
+
         } catch (e) {
             console.error(e);
         }
@@ -649,16 +662,16 @@ const TwoGameScreen = forwardRef((props, ref) => {
     function handleChannel(event) {
         dataChannel.current = event.channel;
     }
-    //function7
+    //function7 그림 받은 값
     function makeOtherDrawing(event) {
         console.log("받은 문자의 내용 : " + event.data);
         const obj = JSON.parse(event.data);
 
-        contextRef.current.beginPath();
-        contextRef.current.moveTo(obj.startX, obj.startY);
-        contextRef.current.lineTo(obj.lastX, obj.lastY);
-        contextRef.current.stroke();
-        contextRef.current.closePath();
+        props.othercontextRef.current.beginPath();
+        props.othercontextRef.current.moveTo(obj.startX, obj.startY);
+        props.othercontextRef.current.lineTo(obj.lastX, obj.lastY);
+        props.othercontextRef.current.stroke();
+        props.othercontextRef.current.closePath();
     }
     //function8
     async function makeConnection() {
