@@ -96,8 +96,8 @@ const TwoGameScreen = forwardRef((props, ref) => {
                     "lastX": fingerPosition.x,
                     "lastY": fingerPosition.y,
                 }
-                if (dataChannel.current != null)
-                    dataChannel.current.send(JSON.stringify(obj));
+                // if (dataChannel.current != null)
+                //     dataChannel.current.send(JSON.stringify(obj));
                 break;
             case constants.ERASE:
                 console.log("ERASE");
@@ -705,16 +705,6 @@ const TwoGameScreen = forwardRef((props, ref) => {
     async function makeConnection() {
         myPeerConnection = new RTCPeerConnection({
             iceServers: [
-                
-                    // {
-                //     urls: [
-                //         'stun:stun.l.google.com:19302',
-                //         'stun:stun1.l.google.com:19302',
-                //         'stun:stun2.l.google.com:19302',
-                //         'stun:stun3.l.google.com:19302',
-                //         'stun:stun4.l.google.com:19302',
-                //     ],
-                // },
 
                 {
                     urls: ['stun:stun.hongyeonghwan.com:3478'],
