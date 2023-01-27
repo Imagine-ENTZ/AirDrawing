@@ -122,7 +122,7 @@ const GameScreen = forwardRef((props, ref) => {
                 windowSize.width * constants.GAME_FRAME_WIDTH_RATIO, windowSize.height * constants.GAME_FRAME_HEIGHT_RATIO); // 프레임 위치 나중에 손 봐야함
         };
     }, [canvasRef3]);
-
+    
     // 이모지 생성 캔버스
     useEffect(() => {
         const canvas = canvasRef4.current;

@@ -120,15 +120,21 @@ function TwoDecorativeGame() {
 
                 <div className="right-body-container-decoration-game-two">
                     <div className="body-container-of-right-decoration-game-two">
+                        <div style={{
+                            position:"relative",
+                            height:"100%"
+                        }}>
                         <video
                             className="hong"
                             ref={anotherVideoRef}
                             autoPlay={true}
                             playsInline={true}
                             style={{
+                                position:"absolute",
                                 width: (window.innerHeight * constants.TWO_DECORATIVE_GAME_HEIGHT_RATIO * (4.0 / 3.0)),
                                 height: windowHeight,
                                 margin: "auto",
+                                zIndex:1,
                                 transform: "scaleX(-1)"
                             }}
                         />
@@ -136,9 +142,10 @@ function TwoDecorativeGame() {
                             className="canvas"
                             ref={otherDrawingRef}
                             mirrored={true}
-                            tabIndex={0}
+                            // tabIndex={0}s
                             //onKeyDown={f1Down}
                             style={{
+                                // background:"red",
                                 position: "absolute",
                                 marginLeft: "auto",
                                 marginRight: "auto",
@@ -150,6 +157,7 @@ function TwoDecorativeGame() {
                                 height: "100%",
                             }}>
                         </canvas>
+                        </div>
                     </div>
                     <div className="bottom-of-right-container-decoration-game-two">
                         <div className="emoji-record-opponent">
