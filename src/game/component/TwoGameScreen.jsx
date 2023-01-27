@@ -97,8 +97,8 @@ const TwoGameScreen = forwardRef((props, ref) => {
                     "lastX": fingerPosition.x,
                     "lastY": fingerPosition.y,
                 }
-                // if (dataChannel.current != null)
-                //     dataChannel.current.send(JSON.stringify(obj));
+                if (dataChannel.current != null)
+                    dataChannel.current.send(JSON.stringify(obj));
                 break;
             case constants.ERASE:
                 console.log("ERASE");
@@ -727,6 +727,11 @@ const TwoGameScreen = forwardRef((props, ref) => {
         // if (props.othercontextRef){
             console.log("받은 문자의 내용 : " + event.data);
             const obj = JSON.parse(event.data);
+
+            if(obj.startX <= 0 || obj.startY <=0 || obj.lastX <=0 || obj.lastY <= 0){
+                console.log("오류발생오류발생")
+                return;
+            }
 
             let radius = 20;
 
