@@ -92,7 +92,7 @@ const TwoGameScreen = forwardRef((props, ref) => {
                 contextRef.current.closePath();
                 // webRTC
                 const obj = {
-                    "startX": preFingerPositionX.current,
+                    "startX": preFingerPositionX.current ,
                     "startY": preFingerPositionY.current,
                     "lastX": fingerPosition.x,
                     "lastY": fingerPosition.y,
@@ -108,6 +108,14 @@ const TwoGameScreen = forwardRef((props, ref) => {
                 contextRef.current.clip();
                 contextRef.current.clearRect(fingerPosition.x - radius, fingerPosition.y - radius, radius * 2, radius * 2);
                 contextRef.current.restore();
+                const object = {
+                    "startX": preFingerPositionX.current,
+                    "startY": preFingerPositionY.current,
+                    "lastX": fingerPosition.x,
+                    "lastY": fingerPosition.y,
+                }
+                if (dataChannel.current != null)
+                    dataChannel.current.send(JSON.stringify(object));
                 break;
         }
 
@@ -132,7 +140,20 @@ const TwoGameScreen = forwardRef((props, ref) => {
         canvas.width = windowSize.width;
         canvas.height = windowSize.height;
 
+        context.lineCap = "round";
+        context.strokeStyle = "black";
+        context.lineWidth = 10;
+        props.otherContextRef.current = context;
+        console.log("otherDrawingRef");
+
     }, [props.otherDrawingRef]);
+
+    useEffect(() => {
+        const canvas = props.otherEmojiRef.current;
+        const context = canvas.getContext("2d");
+        canvas.width = windowSize.width;
+        canvas.height = windowSize.height;
+    }, [props.otherEmojiRef]);
 
     // 단어 적는 프레임 캔버스
     useEffect(() => {
@@ -149,8 +170,6 @@ const TwoGameScreen = forwardRef((props, ref) => {
         frameImage.onload = function () {
             ctx.drawImage(frameImage, windowSize.width * constants.GAME_FRAME_POSITION_X_RATIO, 0,
                 windowSize.width * constants.GAME_FRAME_WIDTH_RATIO, windowSize.height * constants.GAME_FRAME_HEIGHT_RATIO); // 프레임 위치 나중에 손 봐야함
-            console.log("width:" + frameImage.width + ", height:" + frameImage.height);
-            console.log(windowSize.width + "+" + windowSize.height);
         };
     }, [canvasRef3]);
 
@@ -484,9 +503,17 @@ const TwoGameScreen = forwardRef((props, ref) => {
             });
             props.getData(shapes.current.length);
             props.getWord(emojiName);
+
+            // 영상에 보낼 것들
+            const object = {
+                "image": image.src,
+                "number": shapes.current.length,
+                "word": emojiName
+            }
+            if (dataChannel.current != null)
+                dataChannel.current.send(JSON.stringify(object));
+
             draw();
-            console.log("thisissetimage " + shapes.current.length);
-            console.log("success!");
         }
     }
 
@@ -496,7 +523,6 @@ const TwoGameScreen = forwardRef((props, ref) => {
         const emojiCanvas = canvasRef4.current;
         const ctx = canvas.getContext('2d')
         const ctxEmojiCanvas = emojiCanvas.getContext('2d')
-        console.log("hihihihihihi???");
         // 두 캔버스를 저장용 캔버스에 그린다 (먼저 그린쪽이 아래에 있는 레이어가 된다)
         ctx.drawImage(webcam, 0, 0);
         ctx.drawImage(emojiCanvas, 0, 0);
@@ -525,15 +551,7 @@ const TwoGameScreen = forwardRef((props, ref) => {
         link.click();
         document.body.removeChild(link);
         canvasRef5.current.getContext('2d').clearRect(0, 0, windowSize.width, windowSize.height); // 저장 후 지우기
-    }
-
-    const f1Down = (e) => {
-        if (e.key === 'Enter') {
-            console.log("f1 click");
-
-            captureImage();
-        }
-    }
+    } 
 
     /////////////////////////////////////////////////////////
 
@@ -706,14 +724,52 @@ const TwoGameScreen = forwardRef((props, ref) => {
     }
     //function7 그림 받은 값
     function makeOtherDrawing(event) {
-        console.log("받은 문자의 내용 : " + event.data);
-        const obj = JSON.parse(event.data);
+        // if (props.othercontextRef){
+            console.log("받은 문자의 내용 : " + event.data);
+            const obj = JSON.parse(event.data);
 
-        props.othercontextRef.current.beginPath();
-        props.othercontextRef.current.moveTo(obj.startX, obj.startY);
-        props.othercontextRef.current.lineTo(obj.lastX, obj.lastY);
-        props.othercontextRef.current.stroke();
-        props.othercontextRef.current.closePath();
+            let radius = 20;
+
+            switch (HandGesture.current) {
+
+                case constants.DRAW:
+                    // console.log("DRAW");
+                    console.log("hello?");
+                    props.otherDrawingRef.current.getContext('2d').fillStyle = "#"
+                    props.otherDrawingRef.current.getContext('2d').beginPath();
+                    props.otherDrawingRef.current.getContext('2d').moveTo(obj.startX, obj.startY);
+                    props.otherDrawingRef.current.getContext('2d').lineTo(obj.lastX, obj.lastY);
+                    props.otherDrawingRef.current.getContext('2d').stroke();
+                    props.otherDrawingRef.current.getContext('2d').closePath();
+                    break;
+            
+                case constants.ERASE:
+                    console.log("hiihihihihi??");
+                    //console.log("ERASE");
+                    props.otherDrawingRef.current.getContext('2d').save();
+                    props.otherDrawingRef.current.getContext('2d').beginPath();
+                    props.otherDrawingRef.current.getContext('2d').arc(obj.lastX, obj.lastY, radius, 0, 2 * Math.PI, true);
+                    props.otherDrawingRef.current.getContext('2d').clip();
+                    props.otherDrawingRef.current.getContext('2d').clearRect(obj.lastX- radius, obj.lastY - radius, radius * 2, radius * 2);
+                    props.otherDrawingRef.current.getContext('2d').restore();
+                    break;
+            }
+
+            props.otherEmojiRef.current.getContext('2d')
+            const image = new Image();
+            image.crossOrigin = "anonymous";
+            image.src = obj.image;
+            image.onload = function () {
+                draw();
+            }
+
+            // props.otherDrawingRef.current.getContext('2d').fillStyle = "#"
+            // props.otherDrawingRef.current.getContext('2d').beginPath();
+            // props.otherDrawingRef.current.getContext('2d').moveTo(obj.startX, obj.startY);
+            // props.otherDrawingRef.current.getContext('2d').lineTo(obj.lastX, obj.lastY);
+            // props.otherDrawingRef.current.getContext('2d').stroke();
+            // props.otherDrawingRef.current.getContext('2d').closePath();
+        // }
     }
     //function8
     async function makeConnection() {
