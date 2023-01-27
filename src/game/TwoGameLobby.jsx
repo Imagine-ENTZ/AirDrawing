@@ -75,6 +75,7 @@ function TwoGameLobby() {
                 else {
                     // 이제 2명 게임 방으로 이동
                     // 영림게임 
+
                     if (res.data["room"].type == constants.DECORATIVE_GAME)
                     {
                         navigate(`/2p-decorative/game/${res.data["room"].code}`, {
@@ -95,6 +96,19 @@ function TwoGameLobby() {
                 }
             })
             .catch((Error) => { console.log("에러", Error) })
+    }
+    // 방리스트에서 방 클릭시 방상태 변경
+    const changeFullState = (code) => {
+        axios.get(constants.GAMEROOM_URL + `/change/${code}`)
+        .then((res) => {
+            if (res.data.result == "SUCCESS") {
+                console.log("방 상태 변경 성공");
+            }
+            else {
+                console.log("방 상태 변경 실패");
+            }
+        })
+        .catch((Error) => { console.log("에러", Error) })
     }
 
     // 생성된 방 리스트 클릭
@@ -121,8 +135,8 @@ function TwoGameLobby() {
                     sender: inputData[index].code + 2,
                 }
             });
-
         }
+        changeFullState(inputData[index].code);
     }
     useEffect(() => {
 
@@ -137,10 +151,7 @@ function TwoGameLobby() {
                         type: data.type,
                     })
                     )
-                    // res.data["room"].map((data) => {
-                    //    console.log(data.code);
-                    // })
-                    // console.log(res.data["room"][0]["code"]);
+                   
                     setInputData(inputData.concat(_inputData));
                 }
                 else {
