@@ -470,11 +470,11 @@ function Canvas(props) {
     console.log("받은 문자의 내용 : " + event.data);
     const obj = JSON.parse(event.data);
 
-    contextRef.current.beginPath();
-    contextRef.current.moveTo(obj.startX, obj.startY);
-    contextRef.current.lineTo(obj.lastX, obj.lastY);
-    contextRef.current.stroke();
-    contextRef.current.closePath();
+    // contextRef.current.beginPath();
+    // contextRef.current.moveTo(obj.startX, obj.startY);
+    // contextRef.current.lineTo(obj.lastX, obj.lastY);
+    // contextRef.current.stroke();
+    // contextRef.current.closePath();
   }
   //function8
   async function makeConnection() {
@@ -485,7 +485,7 @@ function Canvas(props) {
           username: "guest",
           credential: "somepassword",
         },
-        {ß
+        {
           urls: [constants.TURN_SERVER],
           username: "guest",
           credential: "somepassword",

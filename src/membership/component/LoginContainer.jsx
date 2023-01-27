@@ -11,24 +11,24 @@ function LoginContainer() {
     const navigate = useNavigate();
 
     const navigateToLobby = () => {
-        // axios.post(constants.LOGIN_URL,
-        //     {
-        //         user: id,
-        //         password: password,
-        //     })
-        //     .then((Response) => {
+        axios.post(constants.LOGIN_URL,
+            {
+                user: id,
+                password: password,
+            })
+            .then((Response) => {
 
-        //         if (Response.data.result == "FAIL") {
-        //             console.log("존재하지 않는 ID이거나 비밀번호가 틀렸습니다.");
-        //             setId("");
-        //             setPassword("");
-        //         }
-        //         else {
-        //             navigate("/lobby");
-        //         }
-        //     })
-        //     .catch((Error) => { console.log("에러", Error) })
-        navigate("/lobby");
+                if (Response.data.result == "FAIL") {
+                    console.log("존재하지 않는 ID이거나 비밀번호가 틀렸습니다.");
+                    setId("");
+                    setPassword("");
+                }
+                else {
+                    navigate("/lobby");
+                }
+            })
+            .catch((Error) => { console.log("에러", Error) })
+       
     };
 
     const [id, setId] = useState();
