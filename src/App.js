@@ -12,11 +12,11 @@ import GamePageForTwo from './wordtracing/two-player/GamePage.jsx';
 
 import DecorativeGamePage from "./game/DecorativeGameLobby.jsx";
 import DecorationGamePage from "./game/DecorativeGame.jsx";
-import HowToDecorativeGame from "./game/HowToDecorative.jsx";
-import HowToDecorativeGamePlus from "./game/HowToDecorativePlus.jsx";
-import HowToDecorativeGame2 from "./game/HowToDecorative2.jsx";
-import HowToDecorativeGame3 from "./game/HowToDecorative3.jsx";
-import HowToDecorativeGame4 from "./game/HowToDecorative4.jsx";
+import HowToDecorativeGame from "./game/howtogame/HowToDecorative.jsx";
+import HowToDecorativeGamePlus from "./game/howtogame/HowToDecorativePlus.jsx";
+import HowToDecorativeGame2 from "./game/howtogame/HowToDecorative2.jsx";
+import HowToDecorativeGame3 from "./game/howtogame/HowToDecorative3.jsx";
+import HowToDecorativeGame4 from "./game/howtogame/HowToDecorative4.jsx";
 import TwoDecorativeGame from "./game/TwoDecorativeGame.jsx";
 import TwoGameLobby from "./game/TwoGameLobby.jsx";
 import { Routes, Route, BrowserRouter } from "react-router-dom";

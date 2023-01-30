@@ -1,6 +1,6 @@
 import React from "react";
 import "./DecorativeGameLobby.css";
-import StarRain from "./component/StarRain.jsx";
+import StarRain from "./component/effect/StarRain.jsx";
 import Direction from "./img/direction-arrow.png";
 import { useNavigate } from "react-router-dom";
 

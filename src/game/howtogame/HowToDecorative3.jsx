@@ -1,9 +1,9 @@
 import React from "react";
 import "./HowToDecorative.css";
-import StarRain from "./component/StarRain.jsx";
-import howto3 from "./img/howto3.png";
-import RightArrow from "./img/right-arrow.png";
-import LeftArrow from "./img/left-arrow.png";
+import StarRain from "../component/effect/StarRain.jsx";
+import howto3 from "../img/howto3.png";
+import RightArrow from "../img/right-arrow.png";
+import LeftArrow from "../img/left-arrow.png";
 import { useNavigate } from "react-router-dom";
 
 function HowToDecorative3() {

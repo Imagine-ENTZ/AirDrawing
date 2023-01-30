@@ -3,11 +3,11 @@ import Webcam from "react-webcam";
 import { Hands, HAND_CONNECTIONS } from "@mediapipe/hands/hands";
 import { drawConnectors, drawLandmarks } from "@mediapipe/drawing_utils/drawing_utils";
 import { Camera } from "@mediapipe/camera_utils/camera_utils";
-import "./MediapipeHands.css"
-import { detectHandGesture } from "./HandGesture";
-import { preprocessImage } from "./PreprocessImage";
+import "../MediapipeHands.jsx"
+import { detectHandGesture } from "../HandGesture";
+import { preprocessImage } from "../PreprocessImage";
 import frame from "./frame.png";
-import * as constants from "../../utils/Constants";
+import * as constants from "../../../utils/Constants"
 import axios from 'axios';
 
 import Tesseract from 'tesseract.js';
@@ -495,6 +495,7 @@ const TwoGameScreen = forwardRef((props, ref) => {
         //image.crossOrigin="*";
         image.onerror = function () {
             draw();
+            props.getWord("Try Again");
         }
 
         image.onload = function () {
@@ -551,7 +552,6 @@ const TwoGameScreen = forwardRef((props, ref) => {
         let link = document.createElement('a');
         link.download = "my_image.png";
         link.href = img.src;
-        link.click();
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
