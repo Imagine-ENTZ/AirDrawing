@@ -275,6 +275,7 @@ function GamePage() {
             {isGameWaitModalOpen && (<Modal
               open={isGameWaitModalOpen}
               onClose={() => setisGameWaitModalOpen(false)}
+              onClick = {onClickedBack}
             />)}
           </AppWrap>
         </div>

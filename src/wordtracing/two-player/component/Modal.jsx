@@ -4,9 +4,10 @@ import userImage from "../../img/emotion/sunglasses.png"
 import questionMark from "../../img/question_mark.png"
 import "./Modal.css"
 
-function Modal({ onClose }) {
+function Modal({ onClose,onClick }) {
   const handleClose = () => {
     onClose?.();
+    onClick();
   };
 
   return (
