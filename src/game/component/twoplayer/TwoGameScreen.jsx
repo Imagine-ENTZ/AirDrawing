@@ -789,10 +789,7 @@ const TwoGameScreen = forwardRef((props, ref) => {
             image.onload = function () {
                 draw();
             }
-<<<<<<< HEAD
         }
-=======
->>>>>>> hong
     }
     //function8
     async function makeConnection() {
