@@ -4,6 +4,7 @@ import TwoGameScreen from "./component/twoplayer/TwoGameScreen.jsx";
 import OnOff from "./img/on-off-button.png";
 import StarRain from "./component/effect/StarRain.jsx";
 import { useNavigate } from "react-router-dom";
+import Loading from "./component/loading/Loading";
 
 import * as constants from "../utils/Constants";
 
@@ -29,17 +30,14 @@ function TwoDecorativeGame() {
 
     const handleResize = () => {
         let height = window.innerHeight * constants.TWO_DECORATIVE_GAME_HEIGHT_RATIO;
-        console.log(height)
-
         setWindowHeight(height);
     }
 
-    // 모달창 (타이머)
-    const [isOpen, setIsOpen] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
 
-    const onClickButton = () => {
-        setIsOpen(true);
-    };
+    const getVideo = (isLoading) => {
+        console.log(isLoading);
+    }
 
     // 자식 함수 데려오기
     const gameScreenRef = useRef();
@@ -125,6 +123,7 @@ function TwoDecorativeGame() {
                                     getOtherData={setOtherNumber}
                                     getData={setNumber}
                                     getWord={setWord}
+                                    getVideo={setIsLoading}
                                     ref={gameScreenRef}
                                     roomid={code}
                                     sender={Math.random().toString(36).substring(2, 11)}
@@ -145,6 +144,7 @@ function TwoDecorativeGame() {
 
                 <div className="right-body-container-decoration-game-two">
                     <div className="body-container-of-right-decoration-game-two">
+                        <Loading loading={isLoading}/>
                         <div style={{
                             position: "relative",
                             height: "100%"
