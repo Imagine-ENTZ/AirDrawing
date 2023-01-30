@@ -26,10 +26,10 @@ const TwoGameScreen = forwardRef((props, ref) => {
         captureImage
     }))
 
-    const headers = {
-        'Accept': 'application/json',
-        'Authorization': constants.AUTHORIZATION_IMAGE
-    };
+    // const headers = {
+    //     'Accept': 'application/json',
+    //     'Authorization': constants.AUTHORIZATION_IMAGE
+    // };
 
     // 웹캡 변수
     const webcamRef = useRef(null);
@@ -69,7 +69,23 @@ const TwoGameScreen = forwardRef((props, ref) => {
     const shapes = useRef([]); // 이모지 저장소
 
 
+    const [token, setToken] = useState(null);
 
+    // 토큰발급하기
+    useEffect(() => {
+
+        updateToken();
+
+    }, [])
+    const updateToken = async () => {
+
+        await axios.get(constants.TOKEN_URL)
+            .then((res) => {
+                setToken(res.data["token"])
+                console.log(res.data["token"])
+            })
+            .catch((Error) => { console.log("에러", Error) })
+    }
 
     // 손그리기 캔버스
     useEffect(() => {
@@ -118,11 +134,11 @@ const TwoGameScreen = forwardRef((props, ref) => {
                 if (dataChannel.current) {
                     if (dataChannel.current.readyState == "open") {
                         if (!isNaN(preFingerPositionX.current) && !isNaN(preFingerPositionY.current) &&
-                        !isNaN(fingerPosition.x) && !isNaN(fingerPosition.y))
-                        dataChannel.current.send(JSON.stringify(object));
+                            !isNaN(fingerPosition.x) && !isNaN(fingerPosition.y))
+                            dataChannel.current.send(JSON.stringify(object));
                     }
                 }
-               
+
                 break;
         }
 
@@ -482,8 +498,14 @@ const TwoGameScreen = forwardRef((props, ref) => {
         const image = new Image();
 
         const response = axios.get(
-            'https://api.flaticon.com/v3/search/icons/{orderBy}?q=' + emojiName,
-            { headers }
+            'https://api.flaticon.com/v3/search/icons/{orderBy}?q=CAT',// + emojiName,
+            {
+                headers: {
+
+                    'Accept': 'application/json',
+                    'Authorization': "Bearer " + token
+                },
+            }
         ).then(res => {
             console.log(res.data);
             var source = res.data.data[2].images[512];
@@ -514,8 +536,13 @@ const TwoGameScreen = forwardRef((props, ref) => {
                 "number": shapes.current.length,
                 "word": emojiName
             }
-            if (image.src != null && dataChannel.current != null)
-                dataChannel.current.send(JSON.stringify(object));
+            if (dataChannel.current) {
+                if (dataChannel.current.readyState == "open") {
+                    if (image.src != null && dataChannel.current != null)
+                        dataChannel.current.send(JSON.stringify(object));
+                }
+            }
+
 
             draw();
         }
@@ -557,7 +584,7 @@ const TwoGameScreen = forwardRef((props, ref) => {
     const client = useRef({});
     const navigate = useNavigate();
 
-    const disconnectWebRTC = async() => {
+    const disconnectWebRTC = async () => {
         if (props.isBackButton == true) {
             await client.current.unsubscribe();
             await client.current.deactivate();
@@ -801,7 +828,7 @@ const TwoGameScreen = forwardRef((props, ref) => {
     }
 
     //상대방이 나가 채널이 닫겼을때
-    async function closeDataChannel () {
+    async function closeDataChannel() {
         console.log("데이터채널의 닫김")
         await client.current.unsubscribe();
         await client.current.deactivate();
