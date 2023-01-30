@@ -14,7 +14,6 @@ import Tesseract from 'tesseract.js';
 
 import * as StompJs from "@stomp/stompjs";
 import * as SockJS from "sockjs-client";
-import { createBrowserHistory } from "history";
 
 
 const TwoGameScreen = forwardRef((props, ref) => {
@@ -74,6 +73,9 @@ const TwoGameScreen = forwardRef((props, ref) => {
     let startX;
     let startY;
     const shapes = useRef([]); // 이모지 저장소
+
+
+
 
     // 손그리기 캔버스
     useEffect(() => {
@@ -566,7 +568,7 @@ const TwoGameScreen = forwardRef((props, ref) => {
 
     const videoRef = useRef(null);
     // const anotherVideoRef = useRef(null);
-    const client = useRef({});
+    // const client = useRef({});
 
     let stream;
     let myPeerConnection;
@@ -574,17 +576,20 @@ const TwoGameScreen = forwardRef((props, ref) => {
 
     const dataChannel = useRef();
 
-    // 뒤로가기 감지 변수
-    const history = createBrowserHistory();
 
-    useEffect(() => {
-        // 뒤로가기 새로고침 눌렸을때 
-        return history.listen((location) => {
-            if (history.action === constants.EXIT) {
-                client.current.activate();
-            }
-        })
-    }, [history])
+
+    
+    // useEffect(() => {
+
+    //     console.log("디스컨넥" + props.isBackButton);
+        
+    //     if (props.isBackButton == true) {
+    //         client.current.unsubscribe();
+    //         client.current.disactive();
+    //     }
+
+        
+    // }, [props.isBackButton])
 
 
     // function1
@@ -593,7 +598,7 @@ const TwoGameScreen = forwardRef((props, ref) => {
 
         console.log(props.roomid, props.sender)
 
-        client.current.subscribe(
+        props.client.current.subscribe(
             `/sub/play/${props.roomid}`,
             async ({ body }) => {
                 const data = JSON.parse(body);
@@ -606,7 +611,7 @@ const TwoGameScreen = forwardRef((props, ref) => {
                             const offer = await myPeerConnection.createOffer();
                             console.log("@@offer : ", (offer));
                             myPeerConnection.setLocalDescription(offer);
-                            client.current.publish({
+                            props.client.current.publish({
                                 destination: `/pub/play`,
                                 body: JSON.stringify({
                                     type: 'OFFER',
@@ -627,7 +632,7 @@ const TwoGameScreen = forwardRef((props, ref) => {
                             myPeerConnection.setRemoteDescription(JSON.parse(data.offer));
                             const answer = await myPeerConnection.createAnswer();
                             myPeerConnection.setLocalDescription(answer);
-                            client.current.publish({
+                            props.client.current.publish({
                                 destination: `/pub/play`,
                                 body: JSON.stringify({
                                     type: 'ANSWER',
@@ -659,18 +664,18 @@ const TwoGameScreen = forwardRef((props, ref) => {
 
     //function2
     const connect = () => {
-        client.current = new StompJs.Client({
+        props.client.current = new StompJs.Client({
             webSocketFactory: () => new SockJS(constants.SOCKET_JS),
 
             debug: function (str) {
                 console.log(str);
             },
-            reconnectDelay: 5000,
-            heartbeatIncoming: 4000,
-            heartbeatOutgoing: 4000,
+            // reconnectDelay: 5000,
+            // heartbeatIncoming: 4000,
+            // heartbeatOutgoing: 4000,
             onConnect: () => {
                 subscribe();
-                client.current.publish({
+                props.client.current.publish({
                     destination: `/pub/play`,
                     body: JSON.stringify({
                         type: 'ENTER',
@@ -684,7 +689,7 @@ const TwoGameScreen = forwardRef((props, ref) => {
                 console.log(`Additional details: ${frame.body}`);
             },
         });
-        client.current.activate();
+        props.client.current.activate();
 
     };
     //function3
@@ -707,7 +712,7 @@ const TwoGameScreen = forwardRef((props, ref) => {
     };
     //function4
     function handleIce(data) {
-        client.current.publish({
+        props.client.current.publish({
             destination: `/pub/play`,
             body: JSON.stringify({
                 type: 'ICE',
@@ -784,7 +789,10 @@ const TwoGameScreen = forwardRef((props, ref) => {
             image.onload = function () {
                 draw();
             }
+<<<<<<< HEAD
         }
+=======
+>>>>>>> hong
     }
     //function8
     async function makeConnection() {
