@@ -371,6 +371,13 @@ const TwoGameScreen = forwardRef((props, ref) => {
         // save the current mouse position
         startX = mx;
         startY = my;
+
+        const object = {
+            "number": shapes.current.length,
+            "shapes": shapes.current
+        }
+        if (dataChannel.current != null)
+            dataChannel.current.send(JSON.stringify(object));
     }
 
     // handle mouseup events
@@ -384,6 +391,13 @@ const TwoGameScreen = forwardRef((props, ref) => {
         for (let i = 0; i < shapes.current.length; i++) {
             shapes.current[i].isDragging = false;
         }
+
+        const object = {
+            "number": shapes.current.length,
+            "shapes": shapes.current
+        }
+        if (dataChannel.current != null)
+            dataChannel.current.send(JSON.stringify(object));
     }
 
     // handle mouse moves
@@ -421,6 +435,13 @@ const TwoGameScreen = forwardRef((props, ref) => {
             startX = mx;
             startY = my;
         }
+
+        const object = {
+            "number": shapes.current.length,
+            "shapes": shapes.current
+        }
+        if (dataChannel.current != null)
+            dataChannel.current.send(JSON.stringify(object));
     }
 
     // 이미지 저장
