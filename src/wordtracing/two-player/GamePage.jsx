@@ -61,6 +61,9 @@ function GamePage() {
   const spellingArtOfCanvasRef = useRef(null);
   const spellingArtOfContextRef = useRef(null);
 
+  // 뒤로가기 버튼 클릭
+  const [isBackButton, setIsBackButton] = useState(false);
+
   useEffect(() => {
     //영어 단어 스펠링 도안 캔버스
     const spellingArtCanvas = spellingArtOfCanvasRef.current;
@@ -255,7 +258,7 @@ function GamePage() {
             />
           </div>
           <div className="word-tracing-exit-button">
-            <div className="word-tracing-exit-button-wrapper">
+            <div className="word-tracing-exit-button-wrapper"  onClick={()=> { setIsBackButton(!isBackButton)}}>
               <img className="word-tracing-exit-button-img" src={OnOff} alt="END"></img>
             </div>
           </div>
@@ -319,6 +322,7 @@ function GamePage() {
                   opponentFingerOfcanvasRef={opponentFingerOfcanvasRef}
                   opponentFingerOfcontextRef={opponentFingerOfcontextRef}   //상대방의 좌표데이터를 바탕으로 그릴 context
 
+                  isBackButton = {isBackButton}  // 뒤로가기 버튼 클릭 여부
                   style={{
                     position: "absolute",
                     left: "0",

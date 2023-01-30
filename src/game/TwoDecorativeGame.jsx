@@ -52,12 +52,8 @@ function TwoDecorativeGame() {
     }
     // 쓰여진 단어 알려주기
     const [word, setWord] = useState("Your Word Here!");
+    // 뒤로가기 버튼 클릭
     const [isBackButton, setIsBackButton] = useState(false);
-    const backClicked = () => {
-
-        setIsBackButton(!isBackButton);
-    }
-
     // 상대 이모지 개수 불러오기
     const [otherNumber, setOtherNumber] = useState(0);
 
@@ -84,7 +80,7 @@ function TwoDecorativeGame() {
                     <div className="best-top-left-decoration-game-two">
                     </div>
                     <div className="best-top-right-decoration-game-two">
-                        <div className="on-off-button-two-decorative" onClick={backClicked}>
+                        <div className="on-off-button-two-decorative" onClick={()=> { setIsBackButton(!isBackButton)}}>
                             <img className="on-off-image-two-decorative" src={OnOff} alt="END"></img>
                         </div>
                     </div>

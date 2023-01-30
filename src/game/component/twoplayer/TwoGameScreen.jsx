@@ -9,9 +9,7 @@ import { preprocessImage } from "../PreprocessImage";
 import frame from "./frame.png";
 import * as constants from "../../../utils/Constants"
 import axios from 'axios';
-
 import Tesseract from 'tesseract.js';
-
 import * as StompJs from "@stomp/stompjs";
 import * as SockJS from "sockjs-client";
 import { useNavigate } from "react-router-dom";
@@ -117,9 +115,14 @@ const TwoGameScreen = forwardRef((props, ref) => {
                     "lastX": fingerPosition.x,
                     "lastY": fingerPosition.y,
                 }
-                if (!isNaN(preFingerPositionX.current) && !isNaN(preFingerPositionY.current) &&
-                    !isNaN(fingerPosition.x) && !isNaN(fingerPosition.y) && dataChannel.current != null)
-                    dataChannel.current.send(JSON.stringify(object));
+                if (dataChannel.current) {
+                    if (dataChannel.current.readyState == "open") {
+                        if (!isNaN(preFingerPositionX.current) && !isNaN(preFingerPositionY.current) &&
+                        !isNaN(fingerPosition.x) && !isNaN(fingerPosition.y))
+                        dataChannel.current.send(JSON.stringify(object));
+                    }
+                }
+               
                 break;
         }
 
@@ -570,7 +573,6 @@ const TwoGameScreen = forwardRef((props, ref) => {
     }, []);
     useEffect(() => {
         disconnectWebRTC();
-        console.log("안녕하세요 반갑습니다");
     }, [props.isBackButton]);
 
 
@@ -585,14 +587,12 @@ const TwoGameScreen = forwardRef((props, ref) => {
             `/sub/play/${props.roomid}`,
             async ({ body }) => {
                 const data = JSON.parse(body);
-                // console.log(body);
-                console.log("내이름은" + props.sender);
                 switch (data.type) {
                     case 'ENTER':
                         if (data.sender !== props.sender) {
-                            console.log("sneder  " + data.sender);
+                            // console.log("sneder  " + data.sender);
                             const offer = await myPeerConnection.current.createOffer();
-                            console.log("@@offer : ", (offer));
+                            // console.log("@@offer : ", (offer));
                             myPeerConnection.current.setLocalDescription(offer);
                             client.current.publish({
                                 destination: `/pub/play`,
@@ -603,7 +603,7 @@ const TwoGameScreen = forwardRef((props, ref) => {
                                     offer: JSON.stringify(offer),
                                 }),
                             });
-                            console.log("진입" + offer + "그리더 : " + props.sender)
+                            // console.log("진입" + offer + "그리더 : " + props.sender)
                             console.log('오퍼전송');
 
                         }
@@ -719,8 +719,7 @@ const TwoGameScreen = forwardRef((props, ref) => {
     }
     //function7 그림 받은 값
     function makeOtherDrawing(event) {
-        // if (props.othercontextRef){
-        console.log("받은 문자의 내용 : " + event.data);
+        // console.log("받은 문자의 내용 : " + event.data);
         const obj = JSON.parse(event.data);
 
         if (obj.startX <= 0 || obj.startY <= 0 || obj.lastX <= 0 || obj.lastY <= 0) {
