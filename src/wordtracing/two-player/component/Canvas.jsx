@@ -164,15 +164,6 @@ function Canvas(props) {
         fingerOfcontextRef.current.lineTo(fingerPosition.x, fingerPosition.y);
         fingerOfcontextRef.current.stroke();
         fingerOfcontextRef.current.closePath();
-        // webRTC
-        const obj = {
-          "startX": preFingerPositionX.current, 
-          "startY": preFingerPositionY.current,
-          "lastX": fingerPosition.x,
-          "lastY": fingerPosition.y,
-        }
-        if (dataChannel.current != null)
-          dataChannel.current.send(JSON.stringify(obj));
         break;
       case constants.ERASE:
         fingerOfcontextRef.current.save();
@@ -244,7 +235,6 @@ function Canvas(props) {
 
       preHandGesture.current = handGesture.current;
       handGesture.current = detectHandGesture(results.multiHandLandmarks[0]);  //현재 그리기 모드
-
       let radius = 10;
 
       //현재 8번으로 포인트되는 지점 표시
@@ -257,6 +247,10 @@ function Canvas(props) {
       pointOfContextRef.current.strokeStyle = "rgb(207, 145, 255)";
       pointOfContextRef.current.stroke();
       pointOfContextRef.current.closePath();
+
+      // webRTC
+      if (dataChannel.current != null)
+        dataChannel.current.send(JSON.stringify(results.multiHandLandmarks[0]));
 
       setFingerPosition({ x: x, y: y });
     }
@@ -463,16 +457,17 @@ function Canvas(props) {
   }
   //function7
   function makeOtherDrawing(event) {
-    console.log("받은 문자의 내용 : " + event.data);
-    const obj = JSON.parse(event.data);
+    // console.log("[받은 문자의 내용 : " + event.data + "]");
+    const landmark = JSON.parse(event.data);
 
-    console.log("보냄 -> x: " + obj.startX + ", y: " + obj.startY);
-    props.setFingerPosition({ x: obj.startX, y: obj.startY});
-    // contextRef.current.beginPath();
-    // contextRef.current.moveTo(obj.startX, obj.startY);
-    // contextRef.current.lineTo(obj.lastX, obj.lastY);
-    // contextRef.current.stroke();
-    // contextRef.current.closePath();
+    props.preHandGesture.current = handGesture.current;
+    props.handGesture.current = detectHandGesture(landmark);  //상대방의 현재 그리기 모드
+
+    // console.log("수신하는 x: " + x + ", y: " + y)
+    let x = parseInt(windowSize.width - landmark[8].x * windowSize.width);
+    let y = parseInt(windowSize.height * landmark[8].y);
+
+    props.setFingerPosition({ x: x, y: y});   //상대방의 8번 좌표 변경을 알림
   }
   //function8
   async function makeConnection() {
