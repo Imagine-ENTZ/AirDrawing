@@ -158,25 +158,27 @@ function Canvas(props) {
   const drawLineOnCanvas = (isTesting, handGesture, fingerOfcontextRef, preFingerPositionX, preFingerPositionY, fingerPosition) => {
     let radius = 20;
 
-    switch (handGesture) {
-      case constants.DRAW:
-        fingerOfcontextRef.beginPath();
-        fingerOfcontextRef.moveTo(preFingerPositionX, preFingerPositionY);
-        fingerOfcontextRef.lineTo(fingerPosition.x, fingerPosition.y);
-        fingerOfcontextRef.stroke();
-        fingerOfcontextRef.closePath();
-        break;
-      case constants.ERASE:
-        fingerOfcontextRef.save();
-        fingerOfcontextRef.beginPath();
-        fingerOfcontextRef.arc(fingerPosition.x, fingerPosition.y, radius, 0, 2 * Math.PI, true);
-        fingerOfcontextRef.clip();
-        fingerOfcontextRef.clearRect(fingerPosition.x - radius, fingerPosition.y - radius, radius * 2, radius * 2);
-        fingerOfcontextRef.restore();
-        break;
-      case constants.OK:
-        checkIfWordsMatch(isTesting);
-        break;
+    if ( dataChannel.current && dataChannel.current.readyState == "open") {
+      switch (handGesture) {
+        case constants.DRAW:
+          fingerOfcontextRef.beginPath();
+          fingerOfcontextRef.moveTo(preFingerPositionX, preFingerPositionY);
+          fingerOfcontextRef.lineTo(fingerPosition.x, fingerPosition.y);
+          fingerOfcontextRef.stroke();
+          fingerOfcontextRef.closePath();
+          break;
+        case constants.ERASE:
+          fingerOfcontextRef.save();
+          fingerOfcontextRef.beginPath();
+          fingerOfcontextRef.arc(fingerPosition.x, fingerPosition.y, radius, 0, 2 * Math.PI, true);
+          fingerOfcontextRef.clip();
+          fingerOfcontextRef.clearRect(fingerPosition.x - radius, fingerPosition.y - radius, radius * 2, radius * 2);
+          fingerOfcontextRef.restore();
+          break;
+        case constants.OK:
+          checkIfWordsMatch(isTesting);
+          break;
+      }
     }
   }
 
@@ -291,7 +293,7 @@ function Canvas(props) {
           dataChannel.current.send(JSON.stringify(results.multiHandLandmarks[0]));
         }
       }
-     
+
       setFingerPosition({ x: x, y: y });
     }
     //save한 곳으로 이동
