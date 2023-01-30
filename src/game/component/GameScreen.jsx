@@ -439,7 +439,7 @@ const GameScreen = forwardRef((props, ref) => {
         ).then(res => {
             console.log(res.data);
             var source = res.data.data[2].images[512];
-            source = source.replace("https://cdn-icons-png.flaticon.com", "");
+            // source = source.replace("https://cdn-icons-png.flaticon.com", "");
             image.crossOrigin = "anonymous";
             image.src = source;
         }).catch((error) => {

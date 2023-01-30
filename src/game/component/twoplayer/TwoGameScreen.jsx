@@ -519,7 +519,7 @@ const TwoGameScreen = forwardRef((props, ref) => {
         ).then(res => {
             var source = res.data.data[2].images[512];
             console.log(source);
-            source = source.replace("https://cdn-icons-png.flaticon.com", "");
+            // source = source.replace("https://cdn-icons-png.flaticon.com", "");
             image.crossOrigin = "anonymous";
             image.src = source;
         })
