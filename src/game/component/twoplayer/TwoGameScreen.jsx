@@ -114,7 +114,8 @@ const TwoGameScreen = forwardRef((props, ref) => {
                     "startX": preFingerPositionX.current,
                     "startY": preFingerPositionY.current,
                     "lastX": fingerPosition.x,
-                    "lastY": fingerPosition.y
+                    "lastY": fingerPosition.y,
+                    "handGesture" : HandGesture.current
                 }
 
                 if (dataChannel.current) {
@@ -139,6 +140,7 @@ const TwoGameScreen = forwardRef((props, ref) => {
                     "startY": preFingerPositionY.current,
                     "lastX": fingerPosition.x,
                     "lastY": fingerPosition.y,
+                    "handGesture" : HandGesture.current
                 }
                 if (dataChannel.current) {
                     if (dataChannel.current.readyState == "open") {
@@ -782,7 +784,8 @@ const TwoGameScreen = forwardRef((props, ref) => {
         let radius = 20;
 
         const context = props.otherDrawingRef.current.getContext('2d');
-        switch (HandGesture.current) {
+
+        switch (obj.handGesture) {
             case constants.DRAW:
                 props.otherDrawingRef.current.getContext('2d').fillStyle = "#"
                 props.otherDrawingRef.current.getContext('2d').beginPath();

@@ -35,7 +35,7 @@ function GamePage() {
   const [isOpponentTesting, setIsOpponentTesting] = useState(!constants.IS_TESTING);    //상대 유저의 정답 테스트 여부
 
   const wordList = ["red", "apple", "z", "cat", "Zoo", "b", "happy", "bread", "J", "ball", "car", "bird",
-    "farm", "duck", "grape"];
+    "farm", "duck", "grape", "book", "coin", "bus"];
 
   const incorrection = useRef(false);     //사용자의 정답여부
   const correction = useRef(false);
