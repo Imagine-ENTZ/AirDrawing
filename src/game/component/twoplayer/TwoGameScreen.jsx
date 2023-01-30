@@ -478,6 +478,12 @@ const TwoGameScreen = forwardRef((props, ref) => {
         }).catch((error) => {
             draw();
             props.getWord("Try Again");
+            const object = {
+                "number": shapes.current.length,
+                "shapes": shapes.current
+            }
+            if (dataChannel.current != null)
+                dataChannel.current.send(JSON.stringify(object));
         })
 
         //image.src = "https://emojiapi.dev/api/v1/" + emojiName + "/" + parseInt(windowSize.width * constants.GAME_EMOJI_RATIO) + ".png";
@@ -497,13 +503,9 @@ const TwoGameScreen = forwardRef((props, ref) => {
                 "image": image.src,
                 "number": shapes.current.length,
                 "word": emojiName,
-                "x": windowSize.width * constants.GAME_FRAME_POSITION_X_RATIO,
-                "y": 0,
-                "width": windowSize.width * constants.GAME_EMOJI_RATIO,
-                "height": windowSize.width * constants.GAME_EMOJI_RATIO,
-                "shapes": shapes.current
+                "shapes": shapes.current,
             }
-            if (image.src != null && dataChannel.current != null)
+            if (dataChannel.current != null)
                 dataChannel.current.send(JSON.stringify(object));
 
             draw();
@@ -740,20 +742,6 @@ const TwoGameScreen = forwardRef((props, ref) => {
         if (obj.number > 0) {
             props.otherDrawingRef.current.getContext('2d').clearRect(0, 0, windowSize.width, windowSize.height); // 저장 후 지우기
 
-            // console.log(obj.shapes.length);
-            // for (let i = 0; i < obj.shapes.length; i++) {
-            //     var image = new Image();
-
-            //     image.src = obj.shapes[i].fill;
-            //     console.log(image.src + "소스");
-
-            //     image.onload = function () {
-            //         props.otherEmojiRef.current.getContext('2d').drawImage(image, obj.shapes[i].x, obj.shapes[i].y, obj.shapes[i].width, obj.shapes[i].height);
-            //         console.log("drawdraw");
-            //     }
-
-            // }
-
             for (let i = 0; i < obj.shapes.length; i++) {
                 drawImage(obj.shapes[i].fill, props.otherEmojiRef, i, obj.shapes)
             }
@@ -762,8 +750,10 @@ const TwoGameScreen = forwardRef((props, ref) => {
 
             props.getOtherData(obj.number);
         }
+        
     }
 
+    // 이모지 캔버스 그림 (보내기)
     async function drawImage(source, canvas, i, shapes) {
         var image = new Image();
         image.src = source;
