@@ -96,22 +96,7 @@ function TwoGameLobby() {
             })
             .catch((Error) => { console.log("에러", Error) })
     }
-    const deleteRoom = (code) => {
-        axios.post(constants.GAMEROOM_URL + "/delete",
-            {
-                code: code,
-            })
-            .then((res) => {
-
-                if (res.data.result == "FAIL") {
-                    console.log("방 삭제 실패");
-                }
-                else {
-                    console.log("방 삭제 성공")
-                }
-            })
-            .catch((Error) => { console.log("에러", Error) })
-    }
+    
     
     // 방리스트에서 방 클릭시 방상태 변경
     const changeFullState = (code) => {
@@ -156,7 +141,6 @@ function TwoGameLobby() {
                 });
             }
             changeFullState(inputData[index].code);
-            deleteRoom(inputData[index].code);
         }
         else {
             // 입장 불가

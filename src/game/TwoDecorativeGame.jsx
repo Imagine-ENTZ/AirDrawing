@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 import * as constants from "../utils/Constants";
 
 import { useLocation } from "react-router-dom";
-import { createBrowserHistory } from "history";
+import axios from 'axios';
 
 
 function TwoDecorativeGame() {
@@ -61,7 +61,10 @@ function TwoDecorativeGame() {
         console.log(otherNumber);
     }
 
-    
+    const onClickedBack = ()=> {
+        deleteRoom(code);
+        setIsBackButton(!isBackButton)
+    }
     
     useEffect(() => {
 
@@ -72,6 +75,24 @@ function TwoDecorativeGame() {
 
     }, [])
 
+    // 방 나가기 -> 방 삭제
+    const deleteRoom = (code) => {
+        axios.post(constants.GAMEROOM_URL + "/delete",
+            {
+                code: code,
+            })
+            .then((res) => {
+
+                if (res.data.result == "FAIL") {
+                    console.log("방 삭제 실패");
+                }
+                else {
+                    console.log("방 삭제 성공")
+                }
+            })
+            .catch((Error) => { console.log("에러", Error) })
+    }
+
     return (
         <div className="main-container-decoration-game-two">
             <StarRain />
@@ -80,7 +101,7 @@ function TwoDecorativeGame() {
                     <div className="best-top-left-decoration-game-two">
                     </div>
                     <div className="best-top-right-decoration-game-two">
-                        <div className="on-off-button-two-decorative" onClick={()=> { setIsBackButton(!isBackButton)}}>
+                        <div className="on-off-button-two-decorative" onClick={onClickedBack}>
                             <img className="on-off-image-two-decorative" src={OnOff} alt="END"></img>
                         </div>
                     </div>
