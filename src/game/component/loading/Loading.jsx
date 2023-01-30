@@ -13,18 +13,14 @@ const override = {
 const Loading = ({ loading }) => {
 
     return (
-        <div className="over-lay" loading={loading}>
             <div className="modal-wrap">
-                <div className="contents">
                     <SyncLoader
                         color="#FFF"
                         loading={loading}
                         cssOverride={override}
                         size={20}
                     />
-                </div>
             </div>
-        </div>
     );
 };
 
