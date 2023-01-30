@@ -428,6 +428,7 @@ const GameScreen = forwardRef((props, ref) => {
         //image.crossOrigin="*";
         image.onerror = function () {
             draw();
+            props.getWord("Try Again");
         }
 
         image.onload = function () {
@@ -470,7 +471,6 @@ const GameScreen = forwardRef((props, ref) => {
         let link = document.createElement('a');
         link.download = "my_image.png";
         link.href = img.src;
-        link.click();
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);

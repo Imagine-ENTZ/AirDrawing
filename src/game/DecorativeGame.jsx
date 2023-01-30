@@ -2,8 +2,8 @@ import React, { useEffect, useState, useRef } from "react";
 import "./DecorativeGame.css";
 import GameScreen from "./component/GameScreen";
 import OnOff from "./img/on-off-button.png";
-import TimerScreen from "./component/TimerScreen.jsx";
-import StarRain from "./component/StarRain.jsx";
+import TimerScreen from "./component/timer/TimerScreen.jsx";
+import StarRain from "./component/effect/StarRain.jsx";
 import { useNavigate } from "react-router-dom";
 
 import * as constants from "../utils/Constants";

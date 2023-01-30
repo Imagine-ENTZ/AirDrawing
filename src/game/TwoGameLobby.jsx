@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./TwoGameLobby.css";
-import Snow from "./component/Snow.jsx";
+import Snow from "./component/effect/Snow.jsx";
 import { useNavigate } from "react-router-dom";
 import Direction from "./img/direction-arrow.png";
 import SimpleBarReact from "simplebar-react";

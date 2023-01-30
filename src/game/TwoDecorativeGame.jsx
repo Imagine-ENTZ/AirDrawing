@@ -1,9 +1,8 @@
 import React, { useEffect, useState, useRef } from "react";
 import "./TwoDecorativeGame.css";
-import TwoGameScreen from "./component/TwoGameScreen";
+import TwoGameScreen from "./component/twoplayer/TwoGameScreen.jsx";
 import OnOff from "./img/on-off-button.png";
-import TimerScreen from "./component/TimerScreen.jsx";
-import StarRain from "./component/StarRain.jsx";
+import StarRain from "./component/effect/StarRain.jsx";
 import { useNavigate } from "react-router-dom";
 
 import * as constants from "../utils/Constants";

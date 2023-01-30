@@ -1,5 +1,5 @@
 import React from "react";
-import "../TwoGameLobby.css";
+import "./Snow.css";
 function Snow() {
    
     return (
