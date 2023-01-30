@@ -36,10 +36,10 @@ const getCosAngle = (u, v) => {
 export const detectHandGesture = (landmarks) => {
   let threshhold = 0.7;
 
-  for (let index = 0; index < 21; index++) {
-    landmarks[index].x = parseInt(landmarks[index].x * 800);
-    landmarks[index].y = parseInt(landmarks[index].y * 600);
-  }
+  // for (let index = 0; index < 21; index++) {
+  //   landmarks[index].x = parseInt(landmarks[index].x * 800);
+  //   landmarks[index].y = parseInt(landmarks[index].y * 600);
+  // }
 
   // palm vector
   let palm_to_index_vector = calculateVectorize(landmarks[0], landmarks[5])
