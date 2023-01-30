@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react"
+import { useLocation } from "react-router-dom";
 import timer from "../img/clock.png"
 import "./Game.css"
 import ProgressBar from "@ramonak/react-progress-bar";
@@ -7,10 +8,11 @@ import Canvas from './component/Canvas';
 import CheckSpinner from "../component/CheckSpinner"
 import canvasPicture from "../img/canvas_with_transparent_bg.png"
 import OnOff from "../../game/img/on-off-button.png"
-
-import { useLocation } from "react-router-dom";
+import Modal from "./component/Modal"
+import styled from "styled-components";
 
 function GamePage() {
+  const [isGameWaitModalOpen, setisGameWaitModalOpen] = useState(constants.IS_MODAL_OPEN);
 
   const anotherVideoRef = useRef(null);
   /// 파라미터로 방 코드 받음
@@ -153,7 +155,7 @@ function GamePage() {
   //손가락으로 캔버스에 그리는 변수(상대방의 손가락 좌표)
   const opponentFingerOfcanvasRef = useRef(null);
   const opponentFingerOfcontextRef = useRef(null);
-
+  
   //상대방의 현재 그리기 모드
   const opponentHandGesture = useRef(constants.HOVER);
 
@@ -236,161 +238,202 @@ function GamePage() {
     }, 1000);
   }
 
+  // const Button = styled.button`
+  //   font-size: 14px;
+  //   padding: 10px 20px;
+  //   border: none;
+  //   background-color: #fa9f98;
+  //   border-radius: 10px;
+  //   color: white;
+  //   font-style: italic;
+  //   font-weight: 200;
+  //   cursor: pointer;
+  //   &:hover {
+  //     background-color: #fac2be;
+  //   }
+  // `;
+
+  const AppWrap = styled.div`
+    text-align: center;
+  `;
+
   return (
     <div className='word-tracing-play-container'>
+      <div className='word-tracing-full-screen-container'>
+        <div style={{width: "100%", height: "100%"}}>
+          <AppWrap>
+            {/* <Button onClick={()=> setisGameWaitModalOpen(true)}>Click Me !</Button> */}
+            {isGameWaitModalOpen && (<Modal
+              open={isGameWaitModalOpen}
+              onClose={() => setisGameWaitModalOpen(false)}
+            />)}
+          </AppWrap>
+        </div>
+      </div>
 
-      <div className='word-tracing-timer-container'>
-        <div className='word-tracing-timer'>
-          <div className='word-tracing-for-two-timer-gauge' style={{ color: "white" }}>
-            {/* {minutes}:{seconds < 10 ? `0${seconds}` : seconds} // {timeLeft} */}
-            <img className='word-tracing-timer-img' src={timer} />
 
-            <ProgressBar
-              className="word-tracing-timer-gauge-bar"
-              completed={timeLeft}
-              customLabel={getLeftTime()}
-              maxCompleted={totalTime.current}
-              barContainerClassName="bar-container"
-              labelColor="black"
-              labelAlignment="center"
-              transitionDuration="1s"
-              bgColor="#FFBDBC"
-            />
+
+      {/* <button onClick={()=> setisGameWaitModalOpen(true)}>Modal Open</button>
+      <Modal 
+        isOpen={isGameWaitModalOpen} 
+        onRequestClose={() => setisGameWaitModalOpen(false)}
+      >
+        This is Modal content
+      </Modal> */}
+      <div className='word-tracing-full-screen-container'>
+        <div className='word-tracing-timer-container'>
+          <div className='word-tracing-timer'>
+            <div className='word-tracing-for-two-timer-gauge' style={{ color: "white" }}>
+              {/* {minutes}:{seconds < 10 ? `0${seconds}` : seconds} // {timeLeft} */}
+              <img className='word-tracing-timer-img' src={timer} />
+
+              <ProgressBar
+                className="word-tracing-timer-gauge-bar"
+                completed={timeLeft}
+                customLabel={getLeftTime()}
+                maxCompleted={totalTime.current}
+                barContainerClassName="bar-container"
+                labelColor="black"
+                labelAlignment="center"
+                transitionDuration="1s"
+                bgColor="#FFBDBC"
+              />
+            </div>
+            <div className="word-tracing-exit-button">
+              <div className="word-tracing-exit-button-wrapper"  onClick={()=> { setIsBackButton(!isBackButton)}}>
+                <img className="word-tracing-exit-button-img" src={OnOff} alt="END"></img>
+              </div>
           </div>
-          <div className="word-tracing-exit-button">
-            <div className="word-tracing-exit-button-wrapper"  onClick={()=> { setIsBackButton(!isBackButton)}}>
-              <img className="word-tracing-exit-button-img" src={OnOff} alt="END"></img>
+        </div>
+
+        </div>
+
+        <div className='word-display-container'>
+          <div style={{
+            fontFamily: "Fredoka_One",
+            color: "#fdad1a",
+            fontSize: "4em",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center"
+          }}>
+            {wordToTest.current}
+          </div>
+        </div>
+
+        <div className='word-tracing-for-two-score-container'>
+          <div className='word-tracing-for-two-score-screen'>
+            <div className='word-tracing-for-two-score'>
+              score: {userScore.current}
+            </div>
+
+            <div className='word-tracing-for-two-score'>
+              score: {opponentUserScore.current}
             </div>
           </div>
         </div>
-        
-      </div>
 
-      <div className='word-display-container'>
-        <div style={{
-          fontFamily: "Fredoka_One",
-          color: "#fdad1a",
-          fontSize: "4em",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center"
-        }}>
-          {wordToTest.current}
-        </div>
-      </div>
-
-      <div className='word-tracing-for-two-score-container'>
-        <div className='word-tracing-for-two-score-screen'>
-          <div className='word-tracing-for-two-score'>
-            score: {userScore.current}
-          </div>
-
-          <div className='word-tracing-for-two-score'>
-            score: {opponentUserScore.current}
-          </div>
-        </div>
-      </div>
-
-      <div className='word-tracing-for-two-play-container'>
-        <div className='word-tracing-for-two-play'>
-          <div className='word-tracing-for-two-canvas'>
-            <div style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center"
-            }}>
+        <div className='word-tracing-for-two-play-container'>
+          <div className='word-tracing-for-two-play'>
+            <div className='word-tracing-for-two-canvas'>
               <div style={{
-                width: (window.innerHeight * constants.HEIGHT_RATIO * (4.0 / 3.0)),
-                height: windowHeight,
-                marginLeft: "auto",
-                position: "relative"
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center"
               }}>
-                <Canvas
-                  wordWrittenByUser={wordWrittenByUser}   //현재 유저의 그리기 변수
-                  wordWrittenByOpponentUser={wordWrittenByOpponentUser} //상대 유저의 그리기 변수
-                  wordToTest={wordToTest}
+                <div style={{
+                  width: (window.innerHeight * constants.HEIGHT_RATIO * (4.0 / 3.0)),
+                  height: windowHeight,
+                  marginLeft: "auto",
+                  position: "relative"
+                }}>
+                  <Canvas
+                    wordWrittenByUser={wordWrittenByUser}   //현재 유저의 그리기 변수
+                    wordWrittenByOpponentUser={wordWrittenByOpponentUser} //상대 유저의 그리기 변수
+                    wordToTest={wordToTest}
 
-                  isTesting={isTesting}                  //현재 유저의 정답 테스트 여부
-                  setIsTesting={setIsTesting}
-                  isOpponentTesting={isOpponentTesting}  //상대 유저의 정답 테스트 여부
-                  setIsOpponentTesting={setIsOpponentTesting}
+                    isTesting={isTesting}                  //현재 유저의 정답 테스트 여부
+                    setIsTesting={setIsTesting}
+                    isOpponentTesting={isOpponentTesting}  //상대 유저의 정답 테스트 여부
+                    setIsOpponentTesting={setIsOpponentTesting}
 
-                  roomid={code}    //stomp, webRTC 연결 변수
-                  sender={Math.random().toString(36).substring(2, 11)}
-                  anotherVideoRef={anotherVideoRef}
+                    roomid={code}    //stomp, webRTC 연결 변수
+                    sender={Math.random().toString(36).substring(2, 11)} 
+                    anotherVideoRef={anotherVideoRef}
 
-                  opponentFingerOfcanvasRef={opponentFingerOfcanvasRef}
-                  opponentFingerOfcontextRef={opponentFingerOfcontextRef}   //상대방의 좌표데이터를 바탕으로 그릴 context
+                    opponentFingerOfcanvasRef={opponentFingerOfcanvasRef}
+                    opponentFingerOfcontextRef={opponentFingerOfcontextRef}   //상대방의 좌표데이터를 바탕으로 그릴 context
 
-                  isBackButton = {isBackButton}  // 뒤로가기 버튼 클릭 여부
-                  style={{
-                    position: "absolute",
-                    left: "0",
-                    top: "0",
-                    zIndex: "1"
-                  }} />
-                <div style={loadingStyle}>
-                  {setEmotion(isTesting, incorrection, correction, failure)}
+                    isBackButton = {isBackButton}  // 뒤로가기 버튼 클릭 여부
+                    style={{
+                      position: "absolute",
+                      left: "0",
+                      top: "0",
+                      zIndex: "1"
+                    }} />
+                  <div style={loadingStyle}>
+                    {setEmotion(isTesting, incorrection, correction, failure)}
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
 
-          <div className='word-tracing-for-two-canvas'>
-            <div style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center"
-            }}>
+            <div className='word-tracing-for-two-canvas'>
               <div style={{
-                width: (window.innerHeight * constants.HEIGHT_RATIO * (4.0 / 3.0)),
-                height: windowHeight,
-                marginLeft: "auto",
-                position: "relative"
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center"
               }}>
-                <video
-                  className="hong"
-                  ref={anotherVideoRef}
-                  autoPlay={true}
-                  playsInline={true}
-                  style={{
-                    transform: "scaleX(-1)"
-                  }}
-                />
-                <canvas
-                  ref={opponentFingerOfcanvasRef}
-                  mirrored={true}
-                  style={{
-                    position: "absolute",
-                    top: "0",
-                    left: "0",
-                    textAlign: "center",
-                    zIndex: 3,
-                    width: "100%",
-                    height: "100%"
-                  }}>
-                </canvas>
-                <canvas
-                  ref={spellingArtOfCanvasRef}
-                  mirrored={true}
-                  style={{
-                    position: "absolute",
-                    top: "0",
-                    left: "0",
-                    textAlign: "center",
-                    zIndex: 1,
-                    width: "100%",
-                    height: "100%"
-                  }}>
-                </canvas>
                 <div style={{
-                    position: "absolute",
-                    left: "0",
-                    top: "0",
-                    zIndex: "5"
-                  }} >
-                  <div style={loadingStyle}>
-                    {setEmotion(isOpponentTesting, opponentIncorrection, opponentCorrection, opponentFailure)}
+                  width: (window.innerHeight * constants.HEIGHT_RATIO * (4.0 / 3.0)),
+                  height: windowHeight,
+                  marginLeft: "auto",
+                  position: "relative"
+                }}>
+                  <video
+                    className="hong"
+                    ref={anotherVideoRef}
+                    autoPlay={true}
+                    playsInline={true}
+                    style={{
+                      transform: "scaleX(-1)"
+                    }}
+                  />
+                  <canvas
+                    ref={opponentFingerOfcanvasRef}
+                    mirrored={true}
+                    style={{
+                      position: "absolute",
+                      top: "0",
+                      left: "0",
+                      textAlign: "center",
+                      zIndex: 3,
+                      width: "100%",
+                      height: "100%"
+                    }}>
+                  </canvas>
+                  <canvas
+                    ref={spellingArtOfCanvasRef}
+                    mirrored={true}
+                    style={{
+                      position: "absolute",
+                      top: "0",
+                      left: "0",
+                      textAlign: "center",
+                      zIndex: 1,
+                      width: "100%",
+                      height: "100%"
+                    }}>
+                  </canvas>
+                  <div style={{
+                      position: "absolute",
+                      left: "0",
+                      top: "0",
+                      zIndex: "5"
+                    }} >
+                    <div style={loadingStyle}>
+                      {setEmotion(isOpponentTesting, opponentIncorrection, opponentCorrection, opponentFailure)}
+                    </div>
                   </div>
                 </div>
               </div>

@@ -46,4 +46,4 @@ export const ROOM_POSSIBLE = 0;
 
 export const EXIT = 'POP';
 
-
+export const IS_MODAL_OPEN = true;
