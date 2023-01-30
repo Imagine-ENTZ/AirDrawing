@@ -14,7 +14,7 @@ import Tesseract from 'tesseract.js';
 
 import * as StompJs from "@stomp/stompjs";
 import * as SockJS from "sockjs-client";
-
+import { useNavigate } from "react-router-dom";
 
 const TwoGameScreen = forwardRef((props, ref) => {
 
@@ -62,11 +62,7 @@ const TwoGameScreen = forwardRef((props, ref) => {
 
     // 캔버스 합성 변수
     const canvasRef5 = useRef(null);
-    const contextRef5 = useRef(null);
 
-    // 상대방 그림 나오는 캔버스
-    const othercanvasRef = useRef(null);
-    const othercontextRef = useRef(null);
 
     // 마우스 드래그
     let dragok = false;
@@ -83,7 +79,6 @@ const TwoGameScreen = forwardRef((props, ref) => {
 
         switch (HandGesture.current) {
             case constants.DRAW:
-                // console.log("DRAW");
                 contextRef.current.fillStyle = "#"
                 contextRef.current.beginPath();
                 contextRef.current.moveTo(preFingerPositionX.current, preFingerPositionY.current);
@@ -110,7 +105,6 @@ const TwoGameScreen = forwardRef((props, ref) => {
                 }
                 break;
             case constants.ERASE:
-                // console.log("ERASE");
                 contextRef.current.save();
                 contextRef.current.beginPath();
                 contextRef.current.arc(fingerPosition.x, fingerPosition.y, radius, 0, 2 * Math.PI, true);
@@ -497,18 +491,13 @@ const TwoGameScreen = forwardRef((props, ref) => {
         })
             .catch((Error) => console.log(Error))
 
-        //image.src = "https://emojiapi.dev/api/v1/" + emojiName + "/" + parseInt(windowSize.width * constants.GAME_EMOJI_RATIO) + ".png";
 
-        //image.crossOrigin = "Anonymous";
-        //image.setAttribute('crossOrigin', '');
-        //image.crossOrigin="*";
         image.onerror = function () {
             draw();
             props.getWord("Try Again");
         }
 
         image.onload = function () {
-            //ctx.drawImage(image, 125, 0);
             shapes.current.push({
                 x: windowSize.width * constants.GAME_FRAME_POSITION_X_RATIO, y: 0, width: windowSize.width * constants.GAME_EMOJI_RATIO, height: windowSize.width * constants.GAME_EMOJI_RATIO,
                 fill: image.src, isDragging: false
@@ -544,17 +533,6 @@ const TwoGameScreen = forwardRef((props, ref) => {
         // img.crossOrigin = "anonymous";
         img.src = canvas.toDataURL('image/png');
 
-
-        // var blobBin = atob(img.src.split(',')[1]);	// base64 데이터 디코딩
-        // var array = [];
-        // for (var i = 0; i < blobBin.length; i++) {
-        //     array.push(blobBin.charCodeAt(i));
-        // }
-
-        // var file = new Blob([new Uint8Array(array)], { type: 'image/png' });	// Blob 생성
-        // const image = URL.createObjectURL(file);
-
-
         //a태그를 만들고 다운로드한뒤 갖다 버린다
         let link = document.createElement('a');
         link.download = "my_image.png";
@@ -571,8 +549,31 @@ const TwoGameScreen = forwardRef((props, ref) => {
 
     const videoRef = useRef(null);
     let stream;
-    let myPeerConnection;
+    const myPeerConnection = useRef();
     const dataChannel = useRef();
+    const client = useRef({});
+    const navigate = useNavigate();
+
+    const disconnectWebRTC = async() => {
+        if (props.isBackButton == true) {
+            await client.current.unsubscribe();
+            await client.current.deactivate();
+            await dataChannel.current.close(); // 채널닫음
+            await myPeerConnection.current.close();
+            navigate("/lobby");
+        }
+
+    }
+    useEffect(() => {
+        fetchData();
+
+    }, []);
+    useEffect(() => {
+        disconnectWebRTC();
+        console.log("안녕하세요 반갑습니다");
+    }, [props.isBackButton]);
+
+
 
     // function1
     const subscribe = () => {
@@ -580,7 +581,7 @@ const TwoGameScreen = forwardRef((props, ref) => {
 
         console.log(props.roomid, props.sender)
 
-        props.client.current.subscribe(
+        client.current.subscribe(
             `/sub/play/${props.roomid}`,
             async ({ body }) => {
                 const data = JSON.parse(body);
@@ -590,10 +591,10 @@ const TwoGameScreen = forwardRef((props, ref) => {
                     case 'ENTER':
                         if (data.sender !== props.sender) {
                             console.log("sneder  " + data.sender);
-                            const offer = await myPeerConnection.createOffer();
+                            const offer = await myPeerConnection.current.createOffer();
                             console.log("@@offer : ", (offer));
-                            myPeerConnection.setLocalDescription(offer);
-                            props.client.current.publish({
+                            myPeerConnection.current.setLocalDescription(offer);
+                            client.current.publish({
                                 destination: `/pub/play`,
                                 body: JSON.stringify({
                                     type: 'OFFER',
@@ -611,10 +612,10 @@ const TwoGameScreen = forwardRef((props, ref) => {
                     case 'OFFER':
                         if (data.sender !== props.sender) {
                             console.log('오퍼수신');
-                            myPeerConnection.setRemoteDescription(JSON.parse(data.offer));
-                            const answer = await myPeerConnection.createAnswer();
-                            myPeerConnection.setLocalDescription(answer);
-                            props.client.current.publish({
+                            myPeerConnection.current.setRemoteDescription(JSON.parse(data.offer));
+                            const answer = await myPeerConnection.current.createAnswer();
+                            myPeerConnection.current.setLocalDescription(answer);
+                            client.current.publish({
                                 destination: `/pub/play`,
                                 body: JSON.stringify({
                                     type: 'ANSWER',
@@ -629,13 +630,13 @@ const TwoGameScreen = forwardRef((props, ref) => {
                     case 'ANSWER':
                         if (data.sender !== props.sender) {
                             console.log('엔서수신');
-                            myPeerConnection.setRemoteDescription(JSON.parse(data.answer));
+                            myPeerConnection.current.setRemoteDescription(JSON.parse(data.answer));
                         }
                         break;
                     case 'ICE':
                         if (data.sender !== props.sender) {
                             console.log("아이스 수신 값 : " + data.ice);
-                            myPeerConnection.addIceCandidate(JSON.parse(data.ice));
+                            myPeerConnection.current.addIceCandidate(JSON.parse(data.ice));
                         }
                         break;
                     default:
@@ -646,7 +647,7 @@ const TwoGameScreen = forwardRef((props, ref) => {
 
     //function2
     const connect = () => {
-        props.client.current = new StompJs.Client({
+        client.current = new StompJs.Client({
             webSocketFactory: () => new SockJS(constants.SOCKET_JS),
 
             debug: function (str) {
@@ -657,7 +658,7 @@ const TwoGameScreen = forwardRef((props, ref) => {
             // heartbeatOutgoing: 4000,
             onConnect: () => {
                 subscribe();
-                props.client.current.publish({
+                client.current.publish({
                     destination: `/pub/play`,
                     body: JSON.stringify({
                         type: 'ENTER',
@@ -671,7 +672,7 @@ const TwoGameScreen = forwardRef((props, ref) => {
                 console.log(`Additional details: ${frame.body}`);
             },
         });
-        props.client.current.activate();
+        client.current.activate();
 
     };
     //function3
@@ -694,7 +695,7 @@ const TwoGameScreen = forwardRef((props, ref) => {
     };
     //function4
     function handleIce(data) {
-        props.client.current.publish({
+        client.current.publish({
             destination: `/pub/play`,
             body: JSON.stringify({
                 type: 'ICE',
@@ -729,24 +730,24 @@ const TwoGameScreen = forwardRef((props, ref) => {
 
         let radius = 20;
 
+        const context = props.otherDrawingRef.current.getContext('2d');
         switch (HandGesture.current) {
-
             case constants.DRAW:
-                props.otherDrawingRef.current.getContext('2d').fillStyle = "#"
-                props.otherDrawingRef.current.getContext('2d').beginPath();
-                props.otherDrawingRef.current.getContext('2d').moveTo(obj.startX * constants.TWO_DECORATIVE_GAME_HEIGHT_RATIO * (4.0 / 3.0), obj.startY);
-                props.otherDrawingRef.current.getContext('2d').lineTo(obj.lastX * constants.TWO_DECORATIVE_GAME_HEIGHT_RATIO * (4.0 / 3.0), obj.lastY);
-                props.otherDrawingRef.current.getContext('2d').stroke();
-                props.otherDrawingRef.current.getContext('2d').closePath();
+                context.fillStyle = "#"
+                context.beginPath();
+                context.moveTo(obj.startX * constants.TWO_DECORATIVE_GAME_HEIGHT_RATIO * (4.0 / 3.0), obj.startY);
+                context.lineTo(obj.lastX * constants.TWO_DECORATIVE_GAME_HEIGHT_RATIO * (4.0 / 3.0), obj.lastY);
+                context.stroke();
+                context.closePath();
                 break;
 
             case constants.ERASE:
-                props.otherDrawingRef.current.getContext('2d').save();
-                props.otherDrawingRef.current.getContext('2d').beginPath();
-                props.otherDrawingRef.current.getContext('2d').arc(obj.lastX * constants.TWO_DECORATIVE_GAME_HEIGHT_RATIO * (4.0 / 3.0), obj.lastY, radius, 0, 2 * Math.PI, true);
-                props.otherDrawingRef.current.getContext('2d').clip();
-                props.otherDrawingRef.current.getContext('2d').clearRect(obj.lastX * constants.TWO_DECORATIVE_GAME_HEIGHT_RATIO * (4.0 / 3.0) - radius, obj.lastY - radius, radius * 2, radius * 2);
-                props.otherDrawingRef.current.getContext('2d').restore();
+                context.save();
+                context.beginPath();
+                context.arc(obj.lastX * constants.TWO_DECORATIVE_GAME_HEIGHT_RATIO * (4.0 / 3.0), obj.lastY, radius, 0, 2 * Math.PI, true);
+                context.clip();
+                context.clearRect(obj.lastX * constants.TWO_DECORATIVE_GAME_HEIGHT_RATIO * (4.0 / 3.0) - radius, obj.lastY - radius, radius * 2, radius * 2);
+                context.restore();
                 break;
         }
 
@@ -775,7 +776,7 @@ const TwoGameScreen = forwardRef((props, ref) => {
     }
     //function8
     async function makeConnection() {
-        myPeerConnection = new RTCPeerConnection({
+        myPeerConnection.current = new RTCPeerConnection({
             iceServers: [
 
                 {
@@ -791,19 +792,31 @@ const TwoGameScreen = forwardRef((props, ref) => {
 
             ],
         });
-        myPeerConnection.addEventListener('icecandidate', handleIce);
-        myPeerConnection.addEventListener('addstream', handleAddStream); // 스트림 받기
-        myPeerConnection.addEventListener('datachannel', handleChannel);
+        myPeerConnection.current.addEventListener('icecandidate', handleIce);
+        myPeerConnection.current.addEventListener('addstream', handleAddStream); // 스트림 받기
+        myPeerConnection.current.addEventListener('datachannel', handleChannel); //받은 채널을 dataChannel에 연결
+
         stream.getTracks().forEach((track) => {
-            myPeerConnection.addTrack(track, stream);
+            myPeerConnection.current.addTrack(track, stream);
         });
     }
+
+    //상대방이 나가 채널이 닫겼을때
+    async function closeDataChannel () {
+        console.log("데이터채널의 닫김")
+        await client.current.unsubscribe();
+        await client.current.deactivate();
+        await dataChannel.current.close(); // 채널닫음
+        await myPeerConnection.current.close();
+        navigate("/lobby");
+    }
+
     //function9
     async function makeMessageConnection() {
-        dataChannel.current = await myPeerConnection.createDataChannel("chat", { reliable: true });
+        dataChannel.current = await myPeerConnection.current.createDataChannel("chat", { reliable: true });
 
         dataChannel.current.addEventListener("error", (error) => console.log("데이터채널의 오류 : " + error));
-        dataChannel.current.addEventListener("close", () => console.log("데이터채널의 닫김"));
+        dataChannel.current.addEventListener("close", closeDataChannel);
         dataChannel.current.addEventListener("open", () => console.log("데이터채널 열림"));
         dataChannel.current.addEventListener("message", makeOtherDrawing);
 
@@ -811,15 +824,10 @@ const TwoGameScreen = forwardRef((props, ref) => {
     //function10
     async function fetchData() {
         await getMedia();
-        makeConnection();
-        connect();
-        makeMessageConnection();
+        await makeConnection();
+        await connect();
+        await makeMessageConnection();
     }
-    //function11
-    useEffect(() => {
-        fetchData();
-
-    }, []);
 
 
     return (

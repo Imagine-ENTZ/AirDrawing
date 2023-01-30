@@ -45,30 +45,17 @@ function TwoDecorativeGame() {
 
     // 자식 함수 데려오기
     const gameScreenRef = useRef();
-
-    // useEffect(() => {
-    //     gameScreenRef.current.captureImage();
-    // }, []);
-
     // 이모지 개수 재주기
     const [number, setNumber] = useState(0);
-
     const getData = (number) => {
-        //setNumber(number);
         console.log(number);
     }
-
     // 쓰여진 단어 알려주기
     const [word, setWord] = useState("Your Word Here!");
-
-    const client = useRef({});
-
-
+    const [isBackButton, setIsBackButton] = useState(false);
     const backClicked = () => {
-       
-        client.current.unsubscribe();
-        client.current.deactivate();
-        navigate("/lobby");
+
+        setIsBackButton(!isBackButton);
     }
 
     // 상대 이모지 개수 불러오기
@@ -78,7 +65,8 @@ function TwoDecorativeGame() {
         console.log(otherNumber);
     }
 
-        
+    
+    
     useEffect(() => {
 
         window.addEventListener('resize', handleResize);
@@ -133,7 +121,7 @@ function TwoDecorativeGame() {
                                 otherDrawingRef={otherDrawingRef} 
                                 otherContextRef={otherContextRef} 
                                 otherEmojiRef={otherEmojiRef}
-                               client = {client} />
+                                isBackButton = {isBackButton} />
                             </div>
                         </div>
                     </div>
@@ -187,10 +175,8 @@ function TwoDecorativeGame() {
                                 className="canvas"
                                 ref={otherEmojiRef}
                                 mirrored={true}
-                                // tabIndex={0}s
-                                //onKeyDown={f1Down}
                                 style={{
-                                    // background:"red",
+
                                     position: "absolute",
                                     marginLeft: "auto",
                                     marginRight: "auto",
