@@ -286,7 +286,7 @@ function Canvas(props) {
 
       // webRTC
       if (dataChannel.current != null)
-        dataChannel.current.send(JSON.stringify(results.multiHandLandmarks[0]));
+        dataChannel.current.send(JSON.stringify({x: x, y: y, handGesture: handGesture.current}));
 
       setFingerPosition({ x: x, y: y });
     }
@@ -297,20 +297,21 @@ function Canvas(props) {
   //사용자가 적은 단어와 제시된 단어의 일치 여부 확인
   const checkIfWordsMatch = (isUserTesting) => {
     //아직 이전의 결과를 테스트 중인 경우 중복 테스트가 되는 것을 방지함
-    if (isUserTesting.current == constants.IS_TESTING) {
+    if (isUserTesting.current) {
       return;
     }
 
     isUserTesting.current = constants.IS_TESTING;   //test중임을 알림
-
     if(isTesting.current){               //현재 플레이어의 단어가 판별중인 경우
       props.setIsTesting(constants.IS_TESTING);   //현재 테스트중임을 gamepage에 알림 -> 확인중 아이콘을 띄움
+      console.log("나 테스트 시작합니다")
       
       const image = fingerOfcanvasRef.current.toDataURL("image/png");
       saveImage(image, isUserTesting, props.wordWrittenByUser);
     }
     else if(isOpponentTesting.current){  //상대 플레이어의 단어가 판별중인 경우
       props.setIsOpponentTesting(constants.IS_TESTING);   //현재 테스트중임을 gamepage에 알림 -> 확인중 아이콘을 띄움
+      console.log("상대방 테스트 시작합니다")
 
       const image = props.opponentFingerOfcanvasRef.current.toDataURL("image/png");
       saveImage(image, isUserTesting, props.wordWrittenByOpponentUser);
@@ -338,16 +339,18 @@ function Canvas(props) {
         console.error(err);
       })
       .then((result) => {
-        isUserTesting.current = !constants.IS_TESTING;
         sendWordToParentComponent(result.data.text, wordWrittenByUser);  //부모 컴포넌트에 사용자가 쓴 단어 텍스트값 보내기
         
-        
         if(isTesting.current){
+          console.log("나 테스트중")
           fingerOfcontextRef.current.clearRect(0, 0, windowSize.width, windowSize.height); //검사 완료 후 글씨쓴 캔버스 초기화
         }
-        else{
+        else if(isOpponentTesting.current){
+          console.log("상대방 테스트중")
           props.opponentFingerOfcontextRef.current.clearRect(0, 0, windowSize.width, windowSize.height); //검사 완료 후 글씨쓴 캔버스 초기화
         }
+
+        isUserTesting.current = !constants.IS_TESTING;  //정답 판정이 끝났음을 표시함
           // console.log("결과값: " + result.data.text)
       });
 
@@ -508,14 +511,12 @@ function Canvas(props) {
   }
   //function7
   function makeOtherDrawing(event) {
-    // console.log("[받은 문자의 내용 : " + event.data + "]");
-    const landmark = JSON.parse(event.data);
+    const data = JSON.parse(event.data);
 
-    opponentHandGesture.current = detectHandGesture(landmark);  //상대방의 현재 그리기 모드
+    opponentHandGesture.current = data.handGesture;  //상대방의 현재 그리기 모드
 
-    // console.log("수신하는 x: " + x + ", y: " + y)
-    let x = parseInt(windowSize.width - landmark[8].x * windowSize.width);
-    let y = parseInt(windowSize.height * landmark[8].y);
+    let x = data.x;
+    let y = data.y;
 
     setOpponentFingerPosition({ x: x, y: y});     //상대방의 8번 좌표 변경을 알림
   }

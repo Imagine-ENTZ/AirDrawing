@@ -116,14 +116,14 @@ function GamePage() {
 
     if (wordWrittenByOpponentUser.current.toUpperCase() === wordList[indexOfwordList.current].toUpperCase()) {   //현재 화면에 표시된 단어와 사용자가 작성한 단어가 일치하는지를 확인함
       console.log("정답 -> 상대방[" + wordWrittenByOpponentUser.current + "], 정답[" + wordList[indexOfwordList.current] + "]");
-      // correction.current = true;
+      opponentCorrection.current = true;
       // userScore.current += 100;
       // indexOfwordList.current += 1;  //정답인 경우에만 다음 단어로 넘어감
       // wordToTest.current = wordList[indexOfwordList.current];
     }
     else {
       console.log("오답 -> 상대방[" + wordWrittenByOpponentUser.current + "], 정답[" + wordList[indexOfwordList.current] + "]");
-      // incorrection.current = true;
+      opponentIncorrection.current = true;
     }
 
     wordWrittenByOpponentUser.current = null;   //상대방이 작성한 단어 초기화
@@ -203,9 +203,9 @@ function GamePage() {
   }, [minutes, seconds]);
 
 
-  const setEmotion = () => {
+  const setEmotion = (isUserTesting, incorrection, correction, failure) => {
 
-    if (isTesting) {
+    if (isUserTesting) {
       return <CheckSpinner spinnerType={constants.LOADING} />;
     }
 
@@ -319,7 +319,7 @@ function GamePage() {
                     zIndex: "1"
                   }} />
                 <div style={loadingStyle}>
-                  {setEmotion()}
+                  {setEmotion(isTesting, incorrection, correction, failure)}
                 </div>
               </div>
             </div>
@@ -372,6 +372,16 @@ function GamePage() {
                     height: "100%"
                   }}>
                 </canvas>
+                <div style={{
+                    position: "absolute",
+                    left: "0",
+                    top: "0",
+                    zIndex: "5"
+                  }} >
+                  <div style={loadingStyle}>
+                    {setEmotion(isOpponentTesting, opponentIncorrection, opponentCorrection, opponentFailure)}
+                  </div>
+                </div>
               </div>
             </div>
           </div>
