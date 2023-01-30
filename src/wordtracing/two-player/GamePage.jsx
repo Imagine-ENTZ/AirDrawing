@@ -6,6 +6,7 @@ import * as constants from "../../utils/Constants"
 import Canvas from './component/Canvas';
 import CheckSpinner from "../component/CheckSpinner"
 import canvasPicture from "../img/canvas_with_transparent_bg.png"
+import OnOff from "../../game/img/on-off-button.png"
 
 import { useLocation } from "react-router-dom";
 
@@ -149,7 +150,7 @@ function GamePage() {
   //손가락으로 캔버스에 그리는 변수(상대방의 손가락 좌표)
   const opponentFingerOfcanvasRef = useRef(null);
   const opponentFingerOfcontextRef = useRef(null);
-  
+
   //상대방의 현재 그리기 모드
   const opponentHandGesture = useRef(constants.HOVER);
 
@@ -253,7 +254,13 @@ function GamePage() {
               bgColor="#FFBDBC"
             />
           </div>
+          <div className="word-tracing-exit-button">
+            <div className="word-tracing-exit-button-wrapper">
+              <img className="word-tracing-exit-button-img" src={OnOff} alt="END"></img>
+            </div>
+          </div>
         </div>
+        
       </div>
 
       <div className='word-display-container'>
@@ -306,7 +313,7 @@ function GamePage() {
                   setIsOpponentTesting={setIsOpponentTesting}
 
                   roomid={code}    //stomp, webRTC 연결 변수
-                  sender={Math.random().toString(36).substring(2, 11)} 
+                  sender={Math.random().toString(36).substring(2, 11)}
                   anotherVideoRef={anotherVideoRef}
 
                   opponentFingerOfcanvasRef={opponentFingerOfcanvasRef}
