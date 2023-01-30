@@ -395,8 +395,11 @@ const TwoGameScreen = forwardRef((props, ref) => {
             "number": shapes.current.length,
             "shapes": shapes.current
         }
-        if (dataChannel.current != null)
-            dataChannel.current.send(JSON.stringify(object));
+        if (dataChannel.current) {
+            if (dataChannel.current.readyState == "open") {
+                dataChannel.current.send(JSON.stringify(object));
+            }
+        }
     }
 
     // handle mouseup events
@@ -415,8 +418,11 @@ const TwoGameScreen = forwardRef((props, ref) => {
             "number": shapes.current.length,
             "shapes": shapes.current
         }
-        if (dataChannel.current != null)
+        if (dataChannel.current) {
+            if (dataChannel.current.readyState == "open") {
             dataChannel.current.send(JSON.stringify(object));
+            }
+        }
     }
 
     // handle mouse moves
@@ -459,8 +465,11 @@ const TwoGameScreen = forwardRef((props, ref) => {
             "number": shapes.current.length,
             "shapes": shapes.current
         }
-        if (dataChannel.current != null)
+        if (dataChannel.current) {
+            if (dataChannel.current.readyState == "open") {
             dataChannel.current.send(JSON.stringify(object));
+            }
+        }
     }
 
     // 이미지 저장
@@ -523,16 +532,19 @@ const TwoGameScreen = forwardRef((props, ref) => {
             image.crossOrigin = "anonymous";
             image.src = source;
         })
-        .catch((error) => {
-            draw();
-            props.getWord("Try Again");
-            const object = {
-                "number": shapes.current.length,
-                "shapes": shapes.current
-            }
-            if (dataChannel.current != null)
-                dataChannel.current.send(JSON.stringify(object));
-        })
+            .catch((error) => {
+                draw();
+                props.getWord("Try Again");
+                const object = {
+                    "number": shapes.current.length,
+                    "shapes": shapes.current
+                }
+                if (dataChannel.current) {
+                    if (dataChannel.current.readyState == "open") {
+                    dataChannel.current.send(JSON.stringify(object));
+                    }
+                }
+            })
 
         //image.src = "https://emojiapi.dev/api/v1/" + emojiName + "/" + parseInt(windowSize.width * constants.GAME_EMOJI_RATIO) + ".png";
 

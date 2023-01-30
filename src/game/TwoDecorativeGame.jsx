@@ -150,7 +150,6 @@ function TwoDecorativeGame() {
 
                 <div className="right-body-container-decoration-game-two">
                     <div className="body-container-of-right-decoration-game-two">
-                        <Loading loading={isLoading}/>
                         <div style={{
                             position: "relative",
                             height: "100%"
