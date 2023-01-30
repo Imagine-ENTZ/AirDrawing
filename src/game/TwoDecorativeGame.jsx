@@ -15,9 +15,7 @@ function TwoDecorativeGame() {
 
     const anotherVideoRef = useRef(null);
     const otherDrawingRef = useRef(null);
-    const otherContextRef = useRef(null);
     const otherEmojiRef = useRef(null);
-    const otherEmojiContextRef = useRef(null);
 
 
     /// 파라미터로 방 코드 받음
@@ -65,7 +63,7 @@ function TwoDecorativeGame() {
 
 
     const backClicked = () => {
-       
+
         client.current.unsubscribe();
         client.current.deactivate();
         navigate("/lobby");
@@ -78,7 +76,8 @@ function TwoDecorativeGame() {
         console.log(otherNumber);
     }
 
-        
+    const otherShapes = useRef([]);
+
     useEffect(() => {
 
         window.addEventListener('resize', handleResize);
@@ -122,18 +121,18 @@ function TwoDecorativeGame() {
                     <div className="body-container-of-left-decoration-game-two">
                         <div className="screen-admin-decoration-game-two">
                             <div style={{ width: (window.innerHeight * constants.TWO_DECORATIVE_GAME_HEIGHT_RATIO * (4.0 / 3.0)), height: windowHeight, margin: "auto" }}>
-                                <TwoGameScreen 
-                                getOtherData={setOtherNumber}
-                                getData={setNumber} 
-                                getWord={setWord} 
-                                ref={gameScreenRef} 
-                                roomid={code} 
-                                sender={Math.random().toString(36).substring(2, 11)} 
-                                anotherVideoRef={anotherVideoRef} 
-                                otherDrawingRef={otherDrawingRef} 
-                                otherContextRef={otherContextRef} 
-                                otherEmojiRef={otherEmojiRef}
-                               client = {client} />
+                                <TwoGameScreen
+                                    getOtherData={setOtherNumber}
+                                    getData={setNumber}
+                                    getWord={setWord}
+                                    ref={gameScreenRef}
+                                    roomid={code}
+                                    sender={Math.random().toString(36).substring(2, 11)}
+                                    anotherVideoRef={anotherVideoRef}
+                                    otherDrawingRef={otherDrawingRef}
+                                    otherEmojiRef={otherEmojiRef}
+                                    otherShapes={otherShapes}
+                                    client={client} />
                             </div>
                         </div>
                     </div>
@@ -159,8 +158,15 @@ function TwoDecorativeGame() {
                                     position: "absolute",
                                     width: (window.innerHeight * constants.TWO_DECORATIVE_GAME_HEIGHT_RATIO * (4.0 / 3.0)),
                                     height: windowHeight,
-                                    margin: "auto",
+                                    marginLeft: "auto",
+                                    marginRight: "auto",
+                                    top: "0",
+                                    left: "0",
+                                    right: "0",
+                                    textAlign: "center",
                                     zIndex: 1,
+                                    width: "100%",
+                                    height: "100%",
                                     transform: "scaleX(-1)"
                                 }}
                             />
@@ -171,7 +177,7 @@ function TwoDecorativeGame() {
                                 // tabIndex={0}s
                                 //onKeyDown={f1Down}
                                 style={{
-                                    // background:"red",
+                                    // background: "red",
                                     position: "absolute",
                                     marginLeft: "auto",
                                     marginRight: "auto",
@@ -179,8 +185,8 @@ function TwoDecorativeGame() {
                                     right: "0",
                                     textAlign: "center",
                                     zIndex: 9,
-                                    width: "100%",
-                                    height: "100%",
+                                    width: (window.innerHeight * constants.TWO_DECORATIVE_GAME_HEIGHT_RATIO * (4.0 / 3.0)),
+                                    height: windowHeight,
                                 }}>
                             </canvas>
                             <canvas
@@ -198,8 +204,8 @@ function TwoDecorativeGame() {
                                     right: "0",
                                     textAlign: "center",
                                     zIndex: 11,
-                                    width: "100%",
-                                    height: "100%",
+                                    width: (window.innerHeight * constants.TWO_DECORATIVE_GAME_HEIGHT_RATIO * (4.0 / 3.0)),
+                                    height: windowHeight,
                                 }}>
                             </canvas>
                         </div>

@@ -419,6 +419,9 @@ const GameScreen = forwardRef((props, ref) => {
             source = source.replace("https://cdn-icons-png.flaticon.com", "");
             image.crossOrigin = "anonymous";
             image.src = source;
+        }).catch((error) => {
+            draw();
+            props.getWord("Try Again");
         })
         
         //image.src = "https://emojiapi.dev/api/v1/" + emojiName + "/" + parseInt(windowSize.width * constants.GAME_EMOJI_RATIO) + ".png";
@@ -426,10 +429,10 @@ const GameScreen = forwardRef((props, ref) => {
         //image.crossOrigin = "Anonymous";
         //image.setAttribute('crossOrigin', '');
         //image.crossOrigin="*";
-        image.onerror = function () {
-            draw();
-            props.getWord("Try Again");
-        }
+        // image.onerror = function () {
+        //     draw();
+        //     props.getWord("Try Again");
+        // }
 
         image.onload = function () {
             //ctx.drawImage(image, 125, 0);
