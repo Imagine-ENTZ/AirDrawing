@@ -24,10 +24,7 @@ const GameScreen = forwardRef((props, ref) => {
         captureImage
     }))
 
-    const headers = {
-        'Accept':'application/json',
-        'Authorization': constants.AUTHORIZATION_IMAGE
-      };
+
 
     // 웹캡 변수
     const webcamRef = useRef(null);
@@ -65,6 +62,28 @@ const GameScreen = forwardRef((props, ref) => {
     let startX;
     let startY;
     const shapes = useRef([]); // 이모지 저장소
+
+    // const headers = {
+    //     'Accept': 'application/json',
+    //     'Authorization': constants.AUTHORIZATION_IMAGE
+    // };
+
+    const [token, setToken] = useState();
+
+    // 토큰발급하기
+    useEffect(() => {
+
+        updateToken();
+
+    }, [])
+    const updateToken = async () => {
+
+        await axios.get(constants.TOKEN_URL)
+            .then((res) => {
+                setToken(res.data["token"])
+            })
+            .catch((Error) => { console.log("에러", Error) })
+    }
 
     // 손그리기 캔버스
     useEffect(() => {
@@ -122,7 +141,7 @@ const GameScreen = forwardRef((props, ref) => {
                 windowSize.width * constants.GAME_FRAME_WIDTH_RATIO, windowSize.height * constants.GAME_FRAME_HEIGHT_RATIO); // 프레임 위치 나중에 손 봐야함
         };
     }, [canvasRef3]);
-    
+
     // 이모지 생성 캔버스
     useEffect(() => {
         const canvas = canvasRef4.current;
@@ -403,16 +422,19 @@ const GameScreen = forwardRef((props, ref) => {
     }
 
     // 이모지 넣어주는 함수 
-    const setEmoji = async(emojiName) => {
+    const setEmoji = async (emojiName) => {
         const canvas = canvasRef4.current;
         canvas.width = windowSize.width;
         canvas.height = windowSize.height;
         const image = new Image();
-
-        console.log(emojiName);
         await axios.get(
-            'https://api.flaticon.com/v3/search/icons/{orderBy}?q='+emojiName, 
-            {headers}
+            'https://api.flaticon.com/v3/search/icons/{orderBy}?q=' + emojiName,
+            {headers : {
+
+                'Accept': 'application/json',
+                'Authorization': "Bearer " + token
+            },
+        }
         ).then(res => {
             console.log(res.data);
             var source = res.data.data[2].images[512];
@@ -420,7 +442,7 @@ const GameScreen = forwardRef((props, ref) => {
             image.crossOrigin = "anonymous";
             image.src = source;
         })
-        
+
         //image.src = "https://emojiapi.dev/api/v1/" + emojiName + "/" + parseInt(windowSize.width * constants.GAME_EMOJI_RATIO) + ".png";
 
         //image.crossOrigin = "Anonymous";
