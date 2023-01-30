@@ -29,8 +29,6 @@ const TwoGameScreen = forwardRef((props, ref) => {
         captureImage
     }))
 
-
-
     const headers = {
         'Accept': 'application/json',
         'Authorization': constants.AUTHORIZATION_IMAGE
@@ -91,17 +89,23 @@ const TwoGameScreen = forwardRef((props, ref) => {
                 contextRef.current.stroke();
                 contextRef.current.closePath();
                 // webRTC
+
                 const obj = {
-                    "startX": preFingerPositionX.current ,
+                    "startX": preFingerPositionX.current,
                     "startY": preFingerPositionY.current,
                     "lastX": fingerPosition.x,
-                    "lastY": fingerPosition.y,
+                    "lastY": fingerPosition.y
                 }
-                if (dataChannel.current != null)
+
+                // 단어쓰는 프레임 밖으로 빠져나가면 값 전달 안함
+                if (!isNaN(preFingerPositionX.current) && !isNaN(preFingerPositionY.current) &&
+                    !isNaN(fingerPosition.x) && !isNaN(fingerPosition.y) &&
+                    dataChannel.current != null) {
                     dataChannel.current.send(JSON.stringify(obj));
+                }
                 break;
             case constants.ERASE:
-                console.log("ERASE");
+                // console.log("ERASE");
                 contextRef.current.save();
                 contextRef.current.beginPath();
                 contextRef.current.arc(fingerPosition.x, fingerPosition.y, radius, 0, 2 * Math.PI, true);
@@ -114,7 +118,8 @@ const TwoGameScreen = forwardRef((props, ref) => {
                     "lastX": fingerPosition.x,
                     "lastY": fingerPosition.y,
                 }
-                if (dataChannel.current != null)
+                if (!isNaN(preFingerPositionX.current) && !isNaN(preFingerPositionY.current) &&
+                    !isNaN(fingerPosition.x) && !isNaN(fingerPosition.y) && dataChannel.current != null)
                     dataChannel.current.send(JSON.stringify(object));
                 break;
         }
@@ -486,7 +491,6 @@ const TwoGameScreen = forwardRef((props, ref) => {
             image.src = source;
         })
             .catch((Error) => console.log(Error))
-        console.log(image.src);
 
         //image.src = "https://emojiapi.dev/api/v1/" + emojiName + "/" + parseInt(windowSize.width * constants.GAME_EMOJI_RATIO) + ".png";
 
@@ -513,12 +517,10 @@ const TwoGameScreen = forwardRef((props, ref) => {
                 "number": shapes.current.length,
                 "word": emojiName
             }
-            if (dataChannel.current != null)
+            if (image.src != null && dataChannel.current != null)
                 dataChannel.current.send(JSON.stringify(object));
 
             draw();
-            console.log("thisissetimage " + shapes.current.length);
-            console.log("success!");
         }
     }
 
@@ -528,7 +530,7 @@ const TwoGameScreen = forwardRef((props, ref) => {
         const emojiCanvas = canvasRef4.current;
         const ctx = canvas.getContext('2d')
         const ctxEmojiCanvas = emojiCanvas.getContext('2d')
-        console.log("hihihihihihi???");
+
         // 두 캔버스를 저장용 캔버스에 그린다 (먼저 그린쪽이 아래에 있는 레이어가 된다)
         ctx.drawImage(webcam, 0, 0);
         ctx.drawImage(emojiCanvas, 0, 0);
@@ -733,53 +735,56 @@ const TwoGameScreen = forwardRef((props, ref) => {
         console.log("받은 문자의 내용 : " + event.data);
         const obj = JSON.parse(event.data);
 
-            if(obj.startX <= 0 || obj.startY <=0 || obj.lastX <=0 || obj.lastY <= 0){
-                console.log("오류발생오류발생")
-                return;
-            }
+        if (obj.startX <= 0 || obj.startY <= 0 || obj.lastX <= 0 || obj.lastY <= 0) {
+            console.log("오류발생오류발생")
+            return;
+        }
 
-            let radius = 20;
+        let radius = 20;
 
-            switch (HandGesture.current) {
+        switch (HandGesture.current) {
 
-                case constants.DRAW:
-                    // console.log("DRAW");
-                    console.log("hello?");
-                    props.otherDrawingRef.current.getContext('2d').fillStyle = "#"
-                    props.otherDrawingRef.current.getContext('2d').beginPath();
-                    props.otherDrawingRef.current.getContext('2d').moveTo(obj.startX, obj.startY);
-                    props.otherDrawingRef.current.getContext('2d').lineTo(obj.lastX, obj.lastY);
-                    props.otherDrawingRef.current.getContext('2d').stroke();
-                    props.otherDrawingRef.current.getContext('2d').closePath();
-                    break;
-            
-                case constants.ERASE:
-                    console.log("hiihihihihi??");
-                    //console.log("ERASE");
-                    props.otherDrawingRef.current.getContext('2d').save();
-                    props.otherDrawingRef.current.getContext('2d').beginPath();
-                    props.otherDrawingRef.current.getContext('2d').arc(obj.lastX, obj.lastY, radius, 0, 2 * Math.PI, true);
-                    props.otherDrawingRef.current.getContext('2d').clip();
-                    props.otherDrawingRef.current.getContext('2d').clearRect(obj.lastX- radius, obj.lastY - radius, radius * 2, radius * 2);
-                    props.otherDrawingRef.current.getContext('2d').restore();
-                    break;
-            }
+            case constants.DRAW:
+                props.otherDrawingRef.current.getContext('2d').fillStyle = "#"
+                props.otherDrawingRef.current.getContext('2d').beginPath();
+                props.otherDrawingRef.current.getContext('2d').moveTo(obj.startX * constants.TWO_DECORATIVE_GAME_HEIGHT_RATIO * (4.0 / 3.0), obj.startY);
+                props.otherDrawingRef.current.getContext('2d').lineTo(obj.lastX * constants.TWO_DECORATIVE_GAME_HEIGHT_RATIO * (4.0 / 3.0), obj.lastY);
+                props.otherDrawingRef.current.getContext('2d').stroke();
+                props.otherDrawingRef.current.getContext('2d').closePath();
+                break;
 
-            props.otherEmojiRef.current.getContext('2d')
+            case constants.ERASE:
+                props.otherDrawingRef.current.getContext('2d').save();
+                props.otherDrawingRef.current.getContext('2d').beginPath();
+                props.otherDrawingRef.current.getContext('2d').arc(obj.lastX * constants.TWO_DECORATIVE_GAME_HEIGHT_RATIO * (4.0 / 3.0), obj.lastY, radius, 0, 2 * Math.PI, true);
+                props.otherDrawingRef.current.getContext('2d').clip();
+                props.otherDrawingRef.current.getContext('2d').clearRect(obj.lastX * constants.TWO_DECORATIVE_GAME_HEIGHT_RATIO * (4.0 / 3.0) - radius, obj.lastY - radius, radius * 2, radius * 2);
+                props.otherDrawingRef.current.getContext('2d').restore();
+                break;
+        }
+
+        props.otherEmojiRef.current.getContext('2d');
+  
+        if (obj.word != null) {
+            props.otherDrawingRef.current.getContext('2d').clearRect(0, 0, windowSize.width, windowSize.height); // 저장 후 지우기
+        }
+        if (obj.image != null) {
             const image = new Image();
+            
             image.crossOrigin = "anonymous";
             image.src = obj.image;
+
+            props.getData(obj.number);
+
+            image.onerror = function () {
+                draw();
+                props.getData(1234567);
+            }
+
             image.onload = function () {
                 draw();
             }
-
-            // props.otherDrawingRef.current.getContext('2d').fillStyle = "#"
-            // props.otherDrawingRef.current.getContext('2d').beginPath();
-            // props.otherDrawingRef.current.getContext('2d').moveTo(obj.startX, obj.startY);
-            // props.otherDrawingRef.current.getContext('2d').lineTo(obj.lastX, obj.lastY);
-            // props.otherDrawingRef.current.getContext('2d').stroke();
-            // props.otherDrawingRef.current.getContext('2d').closePath();
-        // }
+        }
     }
     //function8
     async function makeConnection() {
