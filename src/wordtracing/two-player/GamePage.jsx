@@ -7,7 +7,7 @@ import Canvas from './component/Canvas';
 import CheckSpinner from "../component/CheckSpinner"
 import canvasPicture from "../img/canvas_with_transparent_bg.png"
 import OnOff from "../../game/img/on-off-button.png"
-
+import axios from 'axios';
 import { useLocation } from "react-router-dom";
 
 function GamePage() {
@@ -236,6 +236,30 @@ function GamePage() {
     }, 1000);
   }
 
+  // 뒤로나가기 클릭
+  const onClickedBack = () => {
+    deleteRoom(code);
+    setIsBackButton(!isBackButton)
+  }
+
+  // 방 나가기 -> 방 삭제
+  const deleteRoom = (code) => {
+    axios.post(constants.GAMEROOM_URL + "/delete",
+      {
+        code: code,
+      })
+      .then((res) => {
+
+        if (res.data.result == "FAIL") {
+          console.log("방 삭제 실패");
+        }
+        else {
+          console.log("방 삭제 성공")
+        }
+      })
+      .catch((Error) => { console.log("에러", Error) })
+  }
+
   return (
     <div className='word-tracing-play-container'>
 
@@ -258,12 +282,12 @@ function GamePage() {
             />
           </div>
           <div className="word-tracing-exit-button">
-            <div className="word-tracing-exit-button-wrapper"  onClick={()=> { setIsBackButton(!isBackButton)}}>
+            <div className="word-tracing-exit-button-wrapper" onClick={onClickedBack}>
               <img className="word-tracing-exit-button-img" src={OnOff} alt="END"></img>
             </div>
           </div>
         </div>
-        
+
       </div>
 
       <div className='word-display-container'>
@@ -322,7 +346,7 @@ function GamePage() {
                   opponentFingerOfcanvasRef={opponentFingerOfcanvasRef}
                   opponentFingerOfcontextRef={opponentFingerOfcontextRef}   //상대방의 좌표데이터를 바탕으로 그릴 context
 
-                  isBackButton = {isBackButton}  // 뒤로가기 버튼 클릭 여부
+                  isBackButton={isBackButton}  // 뒤로가기 버튼 클릭 여부
                   style={{
                     position: "absolute",
                     left: "0",

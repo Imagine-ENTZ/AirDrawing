@@ -97,7 +97,7 @@ function TwoGameLobby() {
             .catch((Error) => { console.log("에러", Error) })
     }
     
-    
+
     // 방리스트에서 방 클릭시 방상태 변경
     const changeFullState = (code) => {
         axios.get(constants.GAMEROOM_URL + `/change/${code}`)
