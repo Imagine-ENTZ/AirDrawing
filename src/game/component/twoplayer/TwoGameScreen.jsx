@@ -498,7 +498,7 @@ const TwoGameScreen = forwardRef((props, ref) => {
         const image = new Image();
 
         const response = axios.get(
-            'https://api.flaticon.com/v3/search/icons/{orderBy}?q=CAT',// + emojiName,
+            'https://api.flaticon.com/v3/search/icons/{orderBy}?q=' + emojiName,
             {
                 headers: {
 
