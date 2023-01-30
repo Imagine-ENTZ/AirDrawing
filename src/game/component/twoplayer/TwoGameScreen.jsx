@@ -123,6 +123,7 @@ const TwoGameScreen = forwardRef((props, ref) => {
                         if (!isNaN(preFingerPositionX.current) && !isNaN(preFingerPositionY.current) &&
                             !isNaN(fingerPosition.x) && !isNaN(fingerPosition.y)) {
                             dataChannel.current.send(JSON.stringify(obj));
+                           
                         }
                     }
                 }
@@ -784,21 +785,21 @@ const TwoGameScreen = forwardRef((props, ref) => {
         const context = props.otherDrawingRef.current.getContext('2d');
         switch (HandGesture.current) {
             case constants.DRAW:
-                props.otherDrawingRef.current.getContext('2d').fillStyle = "#"
-                props.otherDrawingRef.current.getContext('2d').beginPath();
-                props.otherDrawingRef.current.getContext('2d').moveTo(obj.startX, obj.startY);
-                props.otherDrawingRef.current.getContext('2d').lineTo(obj.lastX, obj.lastY);
-                props.otherDrawingRef.current.getContext('2d').stroke();
-                props.otherDrawingRef.current.getContext('2d').closePath();
+               context.fillStyle = "#"
+               context.beginPath();
+               context.moveTo(obj.startX, obj.startY);
+               context.lineTo(obj.lastX, obj.lastY);
+               context.stroke();
+               context.closePath();
                 break;
 
             case constants.ERASE:
-                props.otherDrawingRef.current.getContext('2d').save();
-                props.otherDrawingRef.current.getContext('2d').beginPath();
-                props.otherDrawingRef.current.getContext('2d').arc(obj.lastX, obj.lastY, radius, 0, 2 * Math.PI, true);
-                props.otherDrawingRef.current.getContext('2d').clip();
-                props.otherDrawingRef.current.getContext('2d').clearRect(obj.lastX - radius, obj.lastY - radius, radius * 2, radius * 2);
-                props.otherDrawingRef.current.getContext('2d').restore();
+                context.save();
+                context.beginPath();
+                context.arc(obj.lastX, obj.lastY, radius, 0, 2 * Math.PI, true);
+                context.clip();
+                context.clearRect(obj.lastX - radius, obj.lastY - radius, radius * 2, radius * 2);
+                context.restore();
                 break;
         }
 
