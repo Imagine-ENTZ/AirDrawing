@@ -29,8 +29,6 @@ const TwoGameScreen = forwardRef((props, ref) => {
         captureImage
     }))
 
-
-
     const headers = {
         'Accept': 'application/json',
         'Authorization': constants.AUTHORIZATION_IMAGE
@@ -493,7 +491,6 @@ const TwoGameScreen = forwardRef((props, ref) => {
             image.src = source;
         })
             .catch((Error) => console.log(Error))
-        console.log(image.src);
 
         //image.src = "https://emojiapi.dev/api/v1/" + emojiName + "/" + parseInt(windowSize.width * constants.GAME_EMOJI_RATIO) + ".png";
 
@@ -766,23 +763,28 @@ const TwoGameScreen = forwardRef((props, ref) => {
                 break;
         }
 
-        props.otherEmojiRef.current.getContext('2d')
+        props.otherEmojiRef.current.getContext('2d');
+  
+        if (obj.word != null) {
+            props.otherDrawingRef.current.getContext('2d').clearRect(0, 0, windowSize.width, windowSize.height); // 저장 후 지우기
+        }
         if (obj.image != null) {
             const image = new Image();
+            
             image.crossOrigin = "anonymous";
             image.src = obj.image;
+
+            props.getData(obj.number);
+
+            image.onerror = function () {
+                draw();
+                props.getData(1234567);
+            }
+
             image.onload = function () {
                 draw();
             }
         }
-
-        // props.otherDrawingRef.current.getContext('2d').fillStyle = "#"
-        // props.otherDrawingRef.current.getContext('2d').beginPath();
-        // props.otherDrawingRef.current.getContext('2d').moveTo(obj.startX, obj.startY);
-        // props.otherDrawingRef.current.getContext('2d').lineTo(obj.lastX, obj.lastY);
-        // props.otherDrawingRef.current.getContext('2d').stroke();
-        // props.otherDrawingRef.current.getContext('2d').closePath();
-        // }
     }
     //function8
     async function makeConnection() {

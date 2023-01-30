@@ -87,6 +87,13 @@ function TwoDecorativeGame() {
         console.log(word);
     }
 
+    // 상대 이모지 개수 불러오기
+    const [otherNumber, setOtherNumber] = useState(0);
+
+    const getOtherData = (otherNumber) => {
+        console.log(otherNumber);
+    }
+
     return (
         <div className="main-container-decoration-game-two">
             <StarRain />
@@ -121,7 +128,7 @@ function TwoDecorativeGame() {
                     <div className="body-container-of-left-decoration-game-two">
                         <div className="screen-admin-decoration-game-two">
                             <div style={{ width: (window.innerHeight * constants.TWO_DECORATIVE_GAME_HEIGHT_RATIO * (4.0 / 3.0)), height: windowHeight, margin: "auto" }}>
-                                <TwoGameScreen getData={setNumber} getWord={setWord} ref={gameScreenRef} roomid={code} sender={Math.random().toString(36).substring(2, 11)} anotherVideoRef={anotherVideoRef} otherDrawingRef={otherDrawingRef} otherContextRef={otherContextRef} otherEmojiRef={otherEmojiRef} />
+                                <TwoGameScreen getData={setNumber} getWord={setWord} getOtherData={setOtherNumber} ref={gameScreenRef} roomid={code} sender={Math.random().toString(36).substring(2, 11)} anotherVideoRef={anotherVideoRef} otherDrawingRef={otherDrawingRef} otherContextRef={otherContextRef} otherEmojiRef={otherEmojiRef} />
                             </div>
                         </div>
                     </div>
@@ -194,7 +201,7 @@ function TwoDecorativeGame() {
                     </div>
                     <div className="bottom-of-right-container-decoration-game-two">
                         <div className="emoji-record-opponent">
-                            <span>Opponent Emoji : </span><span>0</span>
+                            <span>Opponent Emoji : </span><span>{otherNumber}</span>
                         </div>
                     </div>
                 </div>
