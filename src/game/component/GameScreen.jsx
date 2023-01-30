@@ -63,10 +63,10 @@ const GameScreen = forwardRef((props, ref) => {
     let startY;
     const shapes = useRef([]); // 이모지 저장소
 
-    const headers = {
-        'Accept': 'application/json',
-        'Authorization': constants.AUTHORIZATION_IMAGE
-    };
+    // const headers = {
+    //     'Accept': 'application/json',
+    //     'Authorization': constants.AUTHORIZATION_IMAGE
+    // };
 
     const [token, setToken] = useState();
 
@@ -429,13 +429,13 @@ const GameScreen = forwardRef((props, ref) => {
         const image = new Image();
         await axios.get(
             'https://api.flaticon.com/v3/search/icons/{orderBy}?q=' + emojiName,
-            {headers}
-            // {headers : {
+            // {headers}
+            {headers : {
 
-            //     'Accept': 'application/json',
-            //     'Authorization': "Bearer " + token
-            // },
-        // }
+                'Accept': 'application/json',
+                'Authorization': "Bearer " + token
+            },
+        }
         ).then(res => {
             console.log(res.data);
             var source = res.data.data[2].images[512];
@@ -452,10 +452,10 @@ const GameScreen = forwardRef((props, ref) => {
         //image.crossOrigin = "Anonymous";
         //image.setAttribute('crossOrigin', '');
         //image.crossOrigin="*";
-        // image.onerror = function () {
-        //     draw();
-        //     props.getWord("Try Again");
-        // }
+        image.onerror = function () {
+            draw();
+            props.getWord("Try Again");
+        }
 
         image.onload = function () {
             //ctx.drawImage(image, 125, 0);
