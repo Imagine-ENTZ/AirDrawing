@@ -750,8 +750,8 @@ const TwoGameScreen = forwardRef((props, ref) => {
             case constants.DRAW:
                 props.otherDrawingRef.current.getContext('2d').fillStyle = "#"
                 props.otherDrawingRef.current.getContext('2d').beginPath();
-                props.otherDrawingRef.current.getContext('2d').moveTo(obj.startX, obj.startY);
-                props.otherDrawingRef.current.getContext('2d').lineTo(obj.lastX, obj.lastY);
+                props.otherDrawingRef.current.getContext('2d').moveTo(obj.startX * constants.TWO_DECORATIVE_GAME_HEIGHT_RATIO * (4.0 / 3.0), obj.startY);
+                props.otherDrawingRef.current.getContext('2d').lineTo(obj.lastX * constants.TWO_DECORATIVE_GAME_HEIGHT_RATIO * (4.0 / 3.0), obj.lastY);
                 props.otherDrawingRef.current.getContext('2d').stroke();
                 props.otherDrawingRef.current.getContext('2d').closePath();
                 break;
@@ -759,9 +759,9 @@ const TwoGameScreen = forwardRef((props, ref) => {
             case constants.ERASE:
                 props.otherDrawingRef.current.getContext('2d').save();
                 props.otherDrawingRef.current.getContext('2d').beginPath();
-                props.otherDrawingRef.current.getContext('2d').arc(obj.lastX, obj.lastY, radius, 0, 2 * Math.PI, true);
+                props.otherDrawingRef.current.getContext('2d').arc(obj.lastX * constants.TWO_DECORATIVE_GAME_HEIGHT_RATIO * (4.0 / 3.0), obj.lastY, radius, 0, 2 * Math.PI, true);
                 props.otherDrawingRef.current.getContext('2d').clip();
-                props.otherDrawingRef.current.getContext('2d').clearRect(obj.lastX - radius, obj.lastY - radius, radius * 2, radius * 2);
+                props.otherDrawingRef.current.getContext('2d').clearRect(obj.lastX * constants.TWO_DECORATIVE_GAME_HEIGHT_RATIO * (4.0 / 3.0) - radius, obj.lastY - radius, radius * 2, radius * 2);
                 props.otherDrawingRef.current.getContext('2d').restore();
                 break;
         }
