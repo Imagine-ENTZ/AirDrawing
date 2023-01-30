@@ -10,6 +10,7 @@ import canvasPicture from "../../img/canvas_with_transparent_bg.png"
 import Tesseract from 'tesseract.js';
 import * as StompJs from "@stomp/stompjs";
 import * as SockJS from "sockjs-client";
+import { useNavigate } from "react-router-dom";
 
 function Canvas(props) {
   const isTesting = useRef(!constants.IS_TESTING);           //현재 단어의 정답 여부를 테스트 중인지 관리
@@ -157,25 +158,27 @@ function Canvas(props) {
   const drawLineOnCanvas = (isTesting, handGesture, fingerOfcontextRef, preFingerPositionX, preFingerPositionY, fingerPosition) => {
     let radius = 20;
 
-    switch (handGesture) {
-      case constants.DRAW:
-        fingerOfcontextRef.beginPath();
-        fingerOfcontextRef.moveTo(preFingerPositionX, preFingerPositionY);
-        fingerOfcontextRef.lineTo(fingerPosition.x, fingerPosition.y);
-        fingerOfcontextRef.stroke();
-        fingerOfcontextRef.closePath();
-        break;
-      case constants.ERASE:
-        fingerOfcontextRef.save();
-        fingerOfcontextRef.beginPath();
-        fingerOfcontextRef.arc(fingerPosition.x, fingerPosition.y, radius, 0, 2 * Math.PI, true);
-        fingerOfcontextRef.clip();
-        fingerOfcontextRef.clearRect(fingerPosition.x - radius, fingerPosition.y - radius, radius * 2, radius * 2);
-        fingerOfcontextRef.restore();
-        break;
-      case constants.OK:
-        checkIfWordsMatch(isTesting);
-        break;
+    if ( dataChannel.current && dataChannel.current.readyState == "open") {
+      switch (handGesture) {
+        case constants.DRAW:
+          fingerOfcontextRef.beginPath();
+          fingerOfcontextRef.moveTo(preFingerPositionX, preFingerPositionY);
+          fingerOfcontextRef.lineTo(fingerPosition.x, fingerPosition.y);
+          fingerOfcontextRef.stroke();
+          fingerOfcontextRef.closePath();
+          break;
+        case constants.ERASE:
+          fingerOfcontextRef.save();
+          fingerOfcontextRef.beginPath();
+          fingerOfcontextRef.arc(fingerPosition.x, fingerPosition.y, radius, 0, 2 * Math.PI, true);
+          fingerOfcontextRef.clip();
+          fingerOfcontextRef.clearRect(fingerPosition.x - radius, fingerPosition.y - radius, radius * 2, radius * 2);
+          fingerOfcontextRef.restore();
+          break;
+        case constants.OK:
+          checkIfWordsMatch(isTesting);
+          break;
+      }
     }
   }
 
@@ -192,7 +195,7 @@ function Canvas(props) {
     }
 
     drawLineOnCanvas(
-      isTesting, handGesture.current, fingerOfcontextRef.current, 
+      isTesting, handGesture.current, fingerOfcontextRef.current,
       preFingerPositionX.current, preFingerPositionY.current, fingerPosition);
 
     if (fingerOfcontextRef.current) {
@@ -213,7 +216,7 @@ function Canvas(props) {
     }
 
     drawLineOnCanvas(   //현재 정답 테스트 여부, 그리기모드, contextRef, 이전 x좌표, 이전 y좌표, 현재 (x, y)좌표
-      isOpponentTesting, opponentHandGesture.current, props.opponentFingerOfcontextRef.current, 
+      isOpponentTesting, opponentHandGesture.current, props.opponentFingerOfcontextRef.current,
       opponentPreFingerPositionX.current, opponentPreFingerPositionY.current, opponentFingerPosition);
 
     if (props.opponentFingerOfcontextRef.current) {
@@ -285,8 +288,11 @@ function Canvas(props) {
       pointOfContextRef.current.closePath();
 
       // webRTC
-      if (dataChannel.current != null)
-        dataChannel.current.send(JSON.stringify({x: x, y: y, handGesture: handGesture.current}));
+      if (dataChannel.current) {
+        if (dataChannel.current.readyState == "open") {
+          dataChannel.current.send(JSON.stringify({x: x, y: y, handGesture: handGesture.current}));
+        }
+      }
 
       setFingerPosition({ x: x, y: y });
     }
@@ -302,14 +308,15 @@ function Canvas(props) {
     }
 
     isUserTesting.current = constants.IS_TESTING;   //test중임을 알림
+
     if(isTesting.current){               //현재 플레이어의 단어가 판별중인 경우
       props.setIsTesting(constants.IS_TESTING);   //현재 테스트중임을 gamepage에 알림 -> 확인중 아이콘을 띄움
       console.log("나 테스트 시작합니다")
-      
+
       const image = fingerOfcanvasRef.current.toDataURL("image/png");
       saveImage(image, isUserTesting, props.wordWrittenByUser);
     }
-    else if(isOpponentTesting.current){  //상대 플레이어의 단어가 판별중인 경우
+    else if (isOpponentTesting.current) {  //상대 플레이어의 단어가 판별중인 경우
       props.setIsOpponentTesting(constants.IS_TESTING);   //현재 테스트중임을 gamepage에 알림 -> 확인중 아이콘을 띄움
       console.log("상대방 테스트 시작합니다")
 
@@ -340,7 +347,7 @@ function Canvas(props) {
       })
       .then((result) => {
         sendWordToParentComponent(result.data.text, wordWrittenByUser);  //부모 컴포넌트에 사용자가 쓴 단어 텍스트값 보내기
-        
+
         if(isTesting.current){
           console.log("나 테스트중")
           fingerOfcontextRef.current.clearRect(0, 0, windowSize.width, windowSize.height); //검사 완료 후 글씨쓴 캔버스 초기화
@@ -351,7 +358,7 @@ function Canvas(props) {
         }
 
         isUserTesting.current = !constants.IS_TESTING;  //정답 판정이 끝났음을 표시함
-          // console.log("결과값: " + result.data.text)
+        // console.log("결과값: " + result.data.text)
       });
 
   }
@@ -360,12 +367,31 @@ function Canvas(props) {
   const videoRef = useRef(null);
   // const anotherVideoRef = useRef(null);
   const client = useRef({});
-
   let stream;
-  let myPeerConnection;
-
+  const myPeerConnection = useRef();
+  const navigate = useNavigate();
 
   const dataChannel = useRef();
+
+  const disconnectWebRTC = async () => {
+    if (props.isBackButton == true) {
+      await client.current.unsubscribe();
+      await client.current.deactivate();
+      await dataChannel.current.close(); // 채널닫음
+      await myPeerConnection.current.close();
+      navigate("/lobby");
+    }
+
+  }
+  useEffect(() => {
+    fetchData();
+
+  }, []);
+  useEffect(() => {
+    disconnectWebRTC();
+  }, [props.isBackButton]);
+
+
 
   // function1
   const subscribe = () => {
@@ -377,15 +403,13 @@ function Canvas(props) {
       `/sub/play/${props.roomid}`,
       async ({ body }) => {
         const data = JSON.parse(body);
-        // console.log(body);
-        console.log("내이름은" + props.sender);
         switch (data.type) {
           case 'ENTER':
             if (data.sender !== props.sender) {
-              console.log("sneder  " + data.sender);
-              const offer = await myPeerConnection.createOffer();
-              console.log("@@offer : ", (offer));
-              myPeerConnection.setLocalDescription(offer);
+              // console.log("sneder  " + data.sender);
+              const offer = await myPeerConnection.current.createOffer();
+              // console.log("@@offer : ", (offer));
+              myPeerConnection.current.setLocalDescription(offer);
               client.current.publish({
                 destination: `/pub/play`,
                 body: JSON.stringify({
@@ -395,7 +419,7 @@ function Canvas(props) {
                   offer: JSON.stringify(offer),
                 }),
               });
-              console.log("진입" + offer + "그리더 : " + props.sender)
+              // console.log("진입" + offer + "그리더 : " + props.sender)
               console.log('오퍼전송');
 
             }
@@ -404,9 +428,9 @@ function Canvas(props) {
           case 'OFFER':
             if (data.sender !== props.sender) {
               console.log('오퍼수신');
-              myPeerConnection.setRemoteDescription(JSON.parse(data.offer));
-              const answer = await myPeerConnection.createAnswer();
-              myPeerConnection.setLocalDescription(answer);
+              myPeerConnection.current.setRemoteDescription(JSON.parse(data.offer));
+              const answer = await myPeerConnection.current.createAnswer();
+              myPeerConnection.current.setLocalDescription(answer);
               client.current.publish({
                 destination: `/pub/play`,
                 body: JSON.stringify({
@@ -422,13 +446,13 @@ function Canvas(props) {
           case 'ANSWER':
             if (data.sender !== props.sender) {
               console.log('엔서수신');
-              myPeerConnection.setRemoteDescription(JSON.parse(data.answer));
+              myPeerConnection.current.setRemoteDescription(JSON.parse(data.answer));
             }
             break;
           case 'ICE':
             if (data.sender !== props.sender) {
               console.log("아이스 수신 값 : " + data.ice);
-              myPeerConnection.addIceCandidate(JSON.parse(data.ice));
+              myPeerConnection.current.addIceCandidate(JSON.parse(data.ice));
             }
             break;
           default:
@@ -518,12 +542,12 @@ function Canvas(props) {
     let x = data.x;
     let y = data.y;
 
-    setOpponentFingerPosition({ x: x, y: y});     //상대방의 8번 좌표 변경을 알림
+    setOpponentFingerPosition({ x: x, y: y });     //상대방의 8번 좌표 변경을 알림
   }
 
   //function8
   async function makeConnection() {
-    myPeerConnection = new RTCPeerConnection({
+    myPeerConnection.current = new RTCPeerConnection({
       iceServers: [
         {
           urls: [constants.STUN_SERVER],
@@ -538,19 +562,30 @@ function Canvas(props) {
       ],
     });
 
-    myPeerConnection.addEventListener('icecandidate', handleIce);
-    myPeerConnection.addEventListener('addstream', handleAddStream); // 스트림 받기
-    myPeerConnection.addEventListener('datachannel', handleChannel);
+    myPeerConnection.current.addEventListener('icecandidate', handleIce);
+    myPeerConnection.current.addEventListener('addstream', handleAddStream); // 스트림 받기
+    myPeerConnection.current.addEventListener('datachannel', handleChannel);
     stream.getTracks().forEach((track) => {
-      myPeerConnection.addTrack(track, stream);
+      myPeerConnection.current.addTrack(track, stream);
     });
   }
+  //상대방이 나가 채널이 닫겼을때
+  async function closeDataChannel() {
+    console.log("데이터채널의 닫김")
+    await client.current.unsubscribe();
+    await client.current.deactivate();
+    await dataChannel.current.close(); // 채널닫음
+    await myPeerConnection.current.close();
+    navigate("/lobby");
+  }
+
+
   //function9
   async function makeMessageConnection() {
-    dataChannel.current = await myPeerConnection.createDataChannel("chat", { reliable: true });
+    dataChannel.current = await myPeerConnection.current.createDataChannel("chat", { reliable: true });
 
     dataChannel.current.addEventListener("error", (error) => console.log("데이터채널의 오류 : " + error));
-    dataChannel.current.addEventListener("close", () => console.log("데이터채널의 닫김"));
+    dataChannel.current.addEventListener("close", closeDataChannel);
     dataChannel.current.addEventListener("open", () => console.log("데이터채널 열림"));
     dataChannel.current.addEventListener("message", makeOtherDrawing);
 
@@ -558,16 +593,10 @@ function Canvas(props) {
   //function10
   async function fetchData() {
     await getMedia();
-    makeConnection();
-    connect();
-    makeMessageConnection();
+    await makeConnection();
+    await connect();
+    await makeMessageConnection();
   }
-  //function11
-  useEffect(() => {
-    fetchData();
-
-  }, []);
-
 
 
   return (
