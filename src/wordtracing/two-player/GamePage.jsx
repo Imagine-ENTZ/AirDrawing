@@ -22,20 +22,26 @@ function GamePage() {
   const [windowHeight, setWindowHeight] = useState(window.innerHeight * constants.HEIGHT_RATIO);
 
   const wordWrittenByUser = useRef(null);  //사용자가 쓴 글자
+  const wordWrittenByOpponentUser = useRef(null);  //사용자가 쓴 글자
   const wordToTest = useRef(null);         //현재 사용자가 작성해야 하는 단어
+
   const indexOfwordList = useRef(0);       //단어목록에서 현재 사용자가 작성해야하는 단어의 인덱스값
   const userScore = useRef(0);             //현재 플레이어의 점수
   const opponentUserScore = useRef(0);     //상대 플레이어의 점수
 
-  const [isTesting, setIsTesting] = useState(!constants.IS_TESTING);    //현재 사용자의 정답 테스트 여부
-  const [isOtherUserTesting, setIsOtherUserTesting] = useState(!constants.IS_TESTING);  //상대방 유저의 정답 테스트 여부
+  const [isTesting, setIsTesting] = useState(!constants.IS_TESTING);    //사용자의 정답 테스트 여부
+  const [isOpponentTesting, setIsOpponentTesting] = useState(!constants.IS_TESTING);    //상대 유저의 정답 테스트 여부
 
   const wordList = ["red", "apple", "z", "cat", "Zoo", "b", "happy", "bread", "J", "ball", "car", "bird",
     "farm", "duck", "grape"];
 
-  const incorrection = useRef(false);
+  const incorrection = useRef(false);     //사용자의 정답여부
   const correction = useRef(false);
   const failure = useRef(false);
+
+  const opponentIncorrection = useRef(false);  //상대 유저의 정답 여부
+  const opponentCorrection = useRef(false);
+  const opponentFailure = useRef(false);
 
   const loadingStyle = {
     position: "absolute",
@@ -100,10 +106,34 @@ function GamePage() {
     }
 
     wordWrittenByUser.current = null;   //사용자가 작성하는 단어 초기화
-    setIsTesting(!constants.IS_TESTING);
+    setIsTesting(!constants.IS_TESTING);//사용자의 정답 판정이 끝남
 
     console.log("index: " + indexOfwordList.current + ", current word: " + wordToTest.current);
   }, [wordWrittenByUser.current])
+
+  // useEffect(() => {
+  //   if (wordWrittenByOpponentUser.current === null) {
+  //     return;
+  //   }
+
+  //   if (wordWrittenByUser.current.toUpperCase() === wordList[indexOfwordList.current].toUpperCase()) {   //현재 화면에 표시된 단어와 사용자가 작성한 단어가 일치하는지를 확인함
+  //     // console.log("정답 -> 사용자[" + wordWrittenByUser.current + "], 정답[" + wordList[indexOfwordList.current] + "]");
+  //     correction.current = true;
+  //     // userScore.current += 100;
+  //     // indexOfwordList.current += 1;  //정답인 경우에만 다음 단어로 넘어감
+  //     // wordToTest.current = wordList[indexOfwordList.current];
+  //   }
+  //   else {
+  //     console.log("오답 -> 사용자[" + wordWrittenByUser.current + "], 정답[" + wordList[indexOfwordList.current] + "]");
+  //     incorrection.current = true;
+  //   }
+
+  //   // wordWrittenByUser.current = null;   //사용자가 작성하는 단어 초기화
+  //   // setIsTesting(!constants.IS_TESTING);//사용자의 정답 판정이 끝남
+
+  //   // console.log("index: " + indexOfwordList.current + ", current word: " + wordToTest.current);
+  // }, [wordWrittenByOpponentUser.current])  //상대 유저가 작성한 답
+
 
   const handleResize = () => {
     let height = window.innerHeight * constants.HEIGHT_RATIO;
@@ -155,7 +185,7 @@ function GamePage() {
       return;
     }
     
-    // if (props.isTesting == constants.IS_TESTING) {
+    // if (isOtherUserTesting == constants.IS_TESTING) {  //상대 유저가 현재 정답판정중이라면 더 이상의 정답 판정 시도는 불가
     //   return;
     // }
 

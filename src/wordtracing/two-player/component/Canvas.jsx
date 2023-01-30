@@ -235,7 +235,6 @@ function Canvas(props) {
 
       preHandGesture.current = handGesture.current;
       handGesture.current = detectHandGesture(results.multiHandLandmarks[0]);  //현재 그리기 모드
-      console.log("전 x: " + results.multiHandLandmarks[0][8].x + ", y: " + results.multiHandLandmarks[0][8].y)
       let radius = 10;
 
       //현재 8번으로 포인트되는 지점 표시
