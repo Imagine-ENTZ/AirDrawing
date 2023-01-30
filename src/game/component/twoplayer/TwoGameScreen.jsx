@@ -36,10 +36,10 @@ const TwoGameScreen = forwardRef((props, ref) => {
         captureImage
     }))
 
-    // const headers = {
-    //     'Accept': 'application/json',
-    //     'Authorization': constants.AUTHORIZATION_IMAGE
-    // };
+    const headers = {
+        'Accept': 'application/json',
+        'Authorization': constants.AUTHORIZATION_IMAGE
+    };
 
     // 웹캡 변수
     const webcamRef = useRef(null);
@@ -509,11 +509,12 @@ const TwoGameScreen = forwardRef((props, ref) => {
         const response = axios.get(
             'https://api.flaticon.com/v3/search/icons/{orderBy}?q=' + emojiName,
             {
-                headers: {
+                // headers: {
 
-                    'Accept': 'application/json',
-                    'Authorization': "Bearer " + token
-                },
+                //     'Accept': 'application/json',
+                //     'Authorization': "Bearer " + token
+                // },
+                headers
             }
         ).then(res => {
             var source = res.data.data[2].images[512];
