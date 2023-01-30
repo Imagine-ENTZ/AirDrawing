@@ -4,20 +4,19 @@ import TwoGameScreen from "./component/twoplayer/TwoGameScreen.jsx";
 import OnOff from "./img/on-off-button.png";
 import StarRain from "./component/effect/StarRain.jsx";
 import { useNavigate } from "react-router-dom";
+import Loading from "./component/loading/Loading";
 
 import * as constants from "../utils/Constants";
 
 import { useLocation } from "react-router-dom";
-import { createBrowserHistory } from "history";
+import axios from 'axios';
 
 
 function TwoDecorativeGame() {
 
     const anotherVideoRef = useRef(null);
     const otherDrawingRef = useRef(null);
-    const otherContextRef = useRef(null);
     const otherEmojiRef = useRef(null);
-    const otherEmojiContextRef = useRef(null);
 
 
     /// 파라미터로 방 코드 받음
@@ -31,17 +30,14 @@ function TwoDecorativeGame() {
 
     const handleResize = () => {
         let height = window.innerHeight * constants.TWO_DECORATIVE_GAME_HEIGHT_RATIO;
-        console.log(height)
-
         setWindowHeight(height);
     }
 
-    // 모달창 (타이머)
-    const [isOpen, setIsOpen] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
 
-    const onClickButton = () => {
-        setIsOpen(true);
-    };
+    const getVideo = (isLoading) => {
+        console.log(isLoading);
+    }
 
     // 자식 함수 데려오기
     const gameScreenRef = useRef();
@@ -54,6 +50,7 @@ function TwoDecorativeGame() {
     const [word, setWord] = useState("Your Word Here!");
     // 뒤로가기 버튼 클릭
     const [isBackButton, setIsBackButton] = useState(false);
+
     // 상대 이모지 개수 불러오기
     const [otherNumber, setOtherNumber] = useState(0);
 
@@ -61,8 +58,13 @@ function TwoDecorativeGame() {
         console.log(otherNumber);
     }
 
+    const onClickedBack = ()=> {
+        deleteRoom(code);
+        setIsBackButton(!isBackButton)
+    }
     
-    
+    const otherShapes = useRef([]);
+
     useEffect(() => {
 
         window.addEventListener('resize', handleResize);
@@ -72,6 +74,24 @@ function TwoDecorativeGame() {
 
     }, [])
 
+    // 방 나가기 -> 방 삭제
+    const deleteRoom = (code) => {
+        axios.post(constants.GAMEROOM_URL + "/delete",
+            {
+                code: code,
+            })
+            .then((res) => {
+
+                if (res.data.result == "FAIL") {
+                    console.log("방 삭제 실패");
+                }
+                else {
+                    console.log("방 삭제 성공")
+                }
+            })
+            .catch((Error) => { console.log("에러", Error) })
+    }
+
     return (
         <div className="main-container-decoration-game-two">
             <StarRain />
@@ -80,7 +100,7 @@ function TwoDecorativeGame() {
                     <div className="best-top-left-decoration-game-two">
                     </div>
                     <div className="best-top-right-decoration-game-two">
-                        <div className="on-off-button-two-decorative" onClick={()=> { setIsBackButton(!isBackButton)}}>
+                        <div className="on-off-button-two-decorative" onClick={onClickedBack}>
                             <img className="on-off-image-two-decorative" src={OnOff} alt="END"></img>
                         </div>
                     </div>
@@ -115,9 +135,9 @@ function TwoDecorativeGame() {
                                 sender={Math.random().toString(36).substring(2, 11)} 
                                 anotherVideoRef={anotherVideoRef} 
                                 otherDrawingRef={otherDrawingRef} 
-                                otherContextRef={otherContextRef} 
                                 otherEmojiRef={otherEmojiRef}
                                 isBackButton = {isBackButton} />
+
                             </div>
                         </div>
                     </div>
@@ -130,6 +150,7 @@ function TwoDecorativeGame() {
 
                 <div className="right-body-container-decoration-game-two">
                     <div className="body-container-of-right-decoration-game-two">
+                        <Loading loading={isLoading}/>
                         <div style={{
                             position: "relative",
                             height: "100%"
@@ -143,8 +164,15 @@ function TwoDecorativeGame() {
                                     position: "absolute",
                                     width: (window.innerHeight * constants.TWO_DECORATIVE_GAME_HEIGHT_RATIO * (4.0 / 3.0)),
                                     height: windowHeight,
-                                    margin: "auto",
+                                    marginLeft: "auto",
+                                    marginRight: "auto",
+                                    top: "0",
+                                    left: "0",
+                                    right: "0",
+                                    textAlign: "center",
                                     zIndex: 1,
+                                    width: "100%",
+                                    height: "100%",
                                     transform: "scaleX(-1)"
                                 }}
                             />
@@ -155,7 +183,7 @@ function TwoDecorativeGame() {
                                 // tabIndex={0}s
                                 //onKeyDown={f1Down}
                                 style={{
-                                    // background:"red",
+                                    // background: "red",
                                     position: "absolute",
                                     marginLeft: "auto",
                                     marginRight: "auto",
@@ -163,8 +191,8 @@ function TwoDecorativeGame() {
                                     right: "0",
                                     textAlign: "center",
                                     zIndex: 9,
-                                    width: "100%",
-                                    height: "100%",
+                                    width: (window.innerHeight * constants.TWO_DECORATIVE_GAME_HEIGHT_RATIO * (4.0 / 3.0)),
+                                    height: windowHeight,
                                 }}>
                             </canvas>
                             <canvas
@@ -180,8 +208,8 @@ function TwoDecorativeGame() {
                                     right: "0",
                                     textAlign: "center",
                                     zIndex: 11,
-                                    width: "100%",
-                                    height: "100%",
+                                    width: (window.innerHeight * constants.TWO_DECORATIVE_GAME_HEIGHT_RATIO * (4.0 / 3.0)),
+                                    height: windowHeight,
                                 }}>
                             </canvas>
                         </div>

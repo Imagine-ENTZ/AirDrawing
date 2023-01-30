@@ -8,6 +8,7 @@ import Canvas from './component/Canvas';
 import CheckSpinner from "../component/CheckSpinner"
 import canvasPicture from "../img/canvas_with_transparent_bg.png"
 import OnOff from "../../game/img/on-off-button.png"
+import axios from 'axios';
 import Modal from "./component/Modal"
 import styled from "styled-components";
 
@@ -238,25 +239,33 @@ function GamePage() {
     }, 1000);
   }
 
-  // const Button = styled.button`
-  //   font-size: 14px;
-  //   padding: 10px 20px;
-  //   border: none;
-  //   background-color: #fa9f98;
-  //   border-radius: 10px;
-  //   color: white;
-  //   font-style: italic;
-  //   font-weight: 200;
-  //   cursor: pointer;
-  //   &:hover {
-  //     background-color: #fac2be;
-  //   }
-  // `;
+  // 뒤로나가기 클릭
+  const onClickedBack = () => {
+    deleteRoom(code);
+    setIsBackButton(!isBackButton)
+  }
+
+  // 방 나가기 -> 방 삭제
+  const deleteRoom = (code) => {
+    axios.post(constants.GAMEROOM_URL + "/delete",
+      {
+        code: code,
+      })
+      .then((res) => {
+
+        if (res.data.result == "FAIL") {
+          console.log("방 삭제 실패");
+        }
+        else {
+          console.log("방 삭제 성공")
+        }
+      })
+      .catch((Error) => { console.log("에러", Error) })
+  }
 
   const AppWrap = styled.div`
-    text-align: center;
-  `;
-
+  text-align: center;
+`;
   return (
     <div className='word-tracing-play-container'>
       <div className='word-tracing-full-screen-container'>
@@ -300,7 +309,7 @@ function GamePage() {
               />
             </div>
             <div className="word-tracing-exit-button">
-              <div className="word-tracing-exit-button-wrapper"  onClick={()=> { setIsBackButton(!isBackButton)}}>
+              <div className="word-tracing-exit-button-wrapper" onClick={onClickedBack}>
                 <img className="word-tracing-exit-button-img" src={OnOff} alt="END"></img>
               </div>
           </div>
