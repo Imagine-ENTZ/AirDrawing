@@ -21,6 +21,16 @@ const TwoGameScreen = forwardRef((props, ref) => {
         height: window.innerHeight * constants.TWO_DECORATIVE_GAME_HEIGHT_RATIO
     });
 
+    const [windowHeight, setWindowHeight] = useState(window.innerHeight * constants.TWO_DECORATIVE_GAME_HEIGHT_RATIO);
+
+    const handleResize = () => {
+        let height = window.innerHeight * constants.TWO_DECORATIVE_GAME_HEIGHT_RATIO;
+        console.log(height)
+
+        setWindowHeight(height);
+    }
+
+
     useImperativeHandle(ref, () => ({
         // 부모 컴포넌트에서 사용할 함수를 선언
         captureImage
@@ -60,7 +70,6 @@ const TwoGameScreen = forwardRef((props, ref) => {
 
     // 캔버스 합성 변수
     const canvasRef5 = useRef(null);
-
 
     // 마우스 드래그
     let dragok = false;
@@ -166,14 +175,12 @@ const TwoGameScreen = forwardRef((props, ref) => {
         context.lineCap = "round";
         context.strokeStyle = "black";
         context.lineWidth = 10;
-        props.otherContextRef.current = context;
         console.log("otherDrawingRef");
 
     }, [props.otherDrawingRef]);
 
     useEffect(() => {
         const canvas = props.otherEmojiRef.current;
-        const context = canvas.getContext("2d");
         canvas.width = windowSize.width;
         canvas.height = windowSize.height;
     }, [props.otherEmojiRef]);
@@ -214,7 +221,6 @@ const TwoGameScreen = forwardRef((props, ref) => {
 
     useEffect(() => {
         const canvas = canvasRef5.current;
-        const ctx = canvas.getContext("2d");
         canvas.width = windowSize.width;
         canvas.height = windowSize.height;
     }, [canvasRef5]);
@@ -317,21 +323,19 @@ const TwoGameScreen = forwardRef((props, ref) => {
     function rect(r) {
         const image = new Image();
         image.src = r.fill;
-        // canvasRef4.current.getContext('2d').fillStyle = image;
-        // canvasRef4.current.getContext('2d').fillRect(r.x, r.y, r.width, r.height);
-        // const image = new Image();
-        // image.src = r.fill;
+
         image.onload = function () {
             canvasRef4.current.getContext('2d').drawImage(image, r.x, r.y, r.width, r.height);
+            // props.otherEmojiRef.current.getContext('2d').drawImage(image, r.x, r.y, r.width, r.height);
         }
     }
 
     function clear() {
         canvasRef4.current.getContext('2d').clearRect(0, 0, windowSize.width, windowSize.height);
+        // props.otherEmojiRef.current.getContext('2d').clearRect(0, 0, windowSize.width, windowSize.height);
     }
 
     function draw() {
-        console.log("thisisdraw " + shapes.current.length);
         // redraw each shape in the shapes[] array
         for (let i = 0; i < shapes.current.length; i++) {
             // decide if the shape is a rect or circle
@@ -354,14 +358,11 @@ const TwoGameScreen = forwardRef((props, ref) => {
         const mx = parseInt(nativeEvent.clientX - canvasOffSetX.current);
         const my = parseInt(nativeEvent.clientY - canvasOffSetY.current);
 
-        console.log("x:" + mx + ", y:" + my);
-        console.log("myDown" + dragok);
         // test each shape to see if mouse is inside
         dragok = false;
-        console.log("thisisDown " + shapes.current.length);
+
         for (let i = 0; i < shapes.current.length; i++) {
             var s = shapes.current[i];
-            console.log("xx:" + s.x + ", yy:" + s.y);
             // decide if the shape is a rect or circle
             if (s.width) {
                 // test if the mouse is inside this rect
@@ -389,6 +390,13 @@ const TwoGameScreen = forwardRef((props, ref) => {
         // save the current mouse position
         startX = mx;
         startY = my;
+
+        const object = {
+            "number": shapes.current.length,
+            "shapes": shapes.current
+        }
+        if (dataChannel.current != null)
+            dataChannel.current.send(JSON.stringify(object));
     }
 
     // handle mouseup events
@@ -397,19 +405,24 @@ const TwoGameScreen = forwardRef((props, ref) => {
         nativeEvent.preventDefault();
         nativeEvent.stopPropagation();
 
-        console.log("myUp" + dragok);
         // clear all the dragging flags
         dragok = false;
         for (let i = 0; i < shapes.current.length; i++) {
             shapes.current[i].isDragging = false;
         }
+
+        const object = {
+            "number": shapes.current.length,
+            "shapes": shapes.current
+        }
+        if (dataChannel.current != null)
+            dataChannel.current.send(JSON.stringify(object));
     }
 
     // handle mouse moves
     function myMove({ nativeEvent }) {
         // if we're dragging anything...
         if (dragok) {
-            console.log("drag ok! - myMove");
             // tell the browser we're handling this mouse event
             nativeEvent.preventDefault();
             nativeEvent.stopPropagation();
@@ -441,24 +454,20 @@ const TwoGameScreen = forwardRef((props, ref) => {
             startX = mx;
             startY = my;
         }
-        else {
-            console.log("drag no ok! - myMove");
+
+        const object = {
+            "number": shapes.current.length,
+            "shapes": shapes.current
         }
+        if (dataChannel.current != null)
+            dataChannel.current.send(JSON.stringify(object));
     }
 
     // 이미지 저장
     const spaceDown = (e) => {
         if (e.key === ' ') {
             console.log("space click");
-            //const image = canvasRef2.current.toDataURL("image/png"); // 이걸로 바로하면 흑백 처리 안됨
-            //const image = converToGray();
             const image = preprocessImage(canvasRef2.current, windowSize.width, windowSize.height);
-
-            // 이미지 저장
-            // const a = document.createElement("a");
-            // a.href = image;
-            // a.setAttribute("download", "hong.png");
-            // a.click();
             saveImage(image);
         }
     };
@@ -507,26 +516,31 @@ const TwoGameScreen = forwardRef((props, ref) => {
                 },
             }
         ).then(res => {
-            console.log(res.data);
             var source = res.data.data[2].images[512];
             console.log(source);
             source = source.replace("https://cdn-icons-png.flaticon.com", "");
             image.crossOrigin = "anonymous";
             image.src = source;
         })
-            .catch((Error) => console.log(Error))
-
-
-        image.onerror = function () {
+        .catch((error) => {
             draw();
             props.getWord("Try Again");
-        }
+            const object = {
+                "number": shapes.current.length,
+                "shapes": shapes.current
+            }
+            if (dataChannel.current != null)
+                dataChannel.current.send(JSON.stringify(object));
+        })
+
+        //image.src = "https://emojiapi.dev/api/v1/" + emojiName + "/" + parseInt(windowSize.width * constants.GAME_EMOJI_RATIO) + ".png";
 
         image.onload = function () {
             shapes.current.push({
                 x: windowSize.width * constants.GAME_FRAME_POSITION_X_RATIO, y: 0, width: windowSize.width * constants.GAME_EMOJI_RATIO, height: windowSize.width * constants.GAME_EMOJI_RATIO,
                 fill: image.src, isDragging: false
             });
+
             props.getData(shapes.current.length);
             props.getWord(emojiName);
 
@@ -534,7 +548,8 @@ const TwoGameScreen = forwardRef((props, ref) => {
             const object = {
                 "image": image.src,
                 "number": shapes.current.length,
-                "word": emojiName
+                "word": emojiName,
+                "shapes": shapes.current,
             }
             if (dataChannel.current) {
                 if (dataChannel.current.readyState == "open") {
@@ -542,6 +557,7 @@ const TwoGameScreen = forwardRef((props, ref) => {
                         dataChannel.current.send(JSON.stringify(object));
                 }
             }
+
 
 
             draw();
@@ -560,7 +576,6 @@ const TwoGameScreen = forwardRef((props, ref) => {
         ctx.drawImage(emojiCanvas, 0, 0);
         console.log(canvas);
         var img = new Image();
-        // img.crossOrigin = "anonymous";
         img.src = canvas.toDataURL('image/png');
 
         //a태그를 만들고 다운로드한뒤 갖다 버린다
@@ -572,7 +587,6 @@ const TwoGameScreen = forwardRef((props, ref) => {
         document.body.removeChild(link);
         canvasRef5.current.getContext('2d').clearRect(0, 0, windowSize.width, windowSize.height); // 저장 후 지우기
     }
-
     /////////////////////////////////////////////////////////
 
 
@@ -759,47 +773,58 @@ const TwoGameScreen = forwardRef((props, ref) => {
         const context = props.otherDrawingRef.current.getContext('2d');
         switch (HandGesture.current) {
             case constants.DRAW:
-                context.fillStyle = "#"
-                context.beginPath();
-                context.moveTo(obj.startX * constants.TWO_DECORATIVE_GAME_HEIGHT_RATIO * (4.0 / 3.0), obj.startY);
-                context.lineTo(obj.lastX * constants.TWO_DECORATIVE_GAME_HEIGHT_RATIO * (4.0 / 3.0), obj.lastY);
-                context.stroke();
-                context.closePath();
+                props.otherDrawingRef.current.getContext('2d').fillStyle = "#"
+                props.otherDrawingRef.current.getContext('2d').beginPath();
+                props.otherDrawingRef.current.getContext('2d').moveTo(obj.startX, obj.startY);
+                props.otherDrawingRef.current.getContext('2d').lineTo(obj.lastX, obj.lastY);
+                props.otherDrawingRef.current.getContext('2d').stroke();
+                props.otherDrawingRef.current.getContext('2d').closePath();
                 break;
 
             case constants.ERASE:
-                context.save();
-                context.beginPath();
-                context.arc(obj.lastX * constants.TWO_DECORATIVE_GAME_HEIGHT_RATIO * (4.0 / 3.0), obj.lastY, radius, 0, 2 * Math.PI, true);
-                context.clip();
-                context.clearRect(obj.lastX * constants.TWO_DECORATIVE_GAME_HEIGHT_RATIO * (4.0 / 3.0) - radius, obj.lastY - radius, radius * 2, radius * 2);
-                context.restore();
+                props.otherDrawingRef.current.getContext('2d').save();
+                props.otherDrawingRef.current.getContext('2d').beginPath();
+                props.otherDrawingRef.current.getContext('2d').arc(obj.lastX, obj.lastY, radius, 0, 2 * Math.PI, true);
+                props.otherDrawingRef.current.getContext('2d').clip();
+                props.otherDrawingRef.current.getContext('2d').clearRect(obj.lastX - radius, obj.lastY - radius, radius * 2, radius * 2);
+                props.otherDrawingRef.current.getContext('2d').restore();
                 break;
         }
 
-        props.otherEmojiRef.current.getContext('2d');
-
-        if (obj.word != null) {
+        if (obj.number > 0) {
             props.otherDrawingRef.current.getContext('2d').clearRect(0, 0, windowSize.width, windowSize.height); // 저장 후 지우기
-        }
-        if (obj.image != null) {
-            const image = new Image();
 
-            image.crossOrigin = "anonymous";
-            image.src = obj.image;
-
-            props.getData(obj.number);
-
-            image.onerror = function () {
-                draw();
-                props.getData(1234567);
+            for (let i = 0; i < obj.shapes.length; i++) {
+                drawImage(obj.shapes[i].fill, props.otherEmojiRef, i, obj.shapes)
             }
 
-            image.onload = function () {
-                draw();
-            }
+            props.otherEmojiRef.current.getContext('2d').clearRect(0, 0, windowSize.width, windowSize.height);
+
+            props.getOtherData(obj.number);
         }
+        
     }
+
+    // 이모지 캔버스 그림 (보내기)
+    async function drawImage(source, canvas, i, shapes) {
+        var image = new Image();
+        image.src = source;
+
+        let imgPromise = new Promise((resolve, reject) => {
+            resolve();
+        });
+
+        // resolve가 호출 될때 에는 , then() 메서드가 실행 
+        // , reject 일시에는 catch() 
+        imgPromise.then(() => {
+            image.onload = () => {
+                canvas.current.getContext('2d').drawImage(image, shapes[i].x, shapes[i].y, shapes[i].width, shapes[i].height);
+            };
+        });
+
+        await imgPromise;
+    }
+
     //function8
     async function makeConnection() {
         myPeerConnection.current = new RTCPeerConnection({

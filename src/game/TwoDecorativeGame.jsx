@@ -4,6 +4,7 @@ import TwoGameScreen from "./component/twoplayer/TwoGameScreen.jsx";
 import OnOff from "./img/on-off-button.png";
 import StarRain from "./component/effect/StarRain.jsx";
 import { useNavigate } from "react-router-dom";
+import Loading from "./component/loading/Loading";
 
 import * as constants from "../utils/Constants";
 
@@ -15,9 +16,7 @@ function TwoDecorativeGame() {
 
     const anotherVideoRef = useRef(null);
     const otherDrawingRef = useRef(null);
-    const otherContextRef = useRef(null);
     const otherEmojiRef = useRef(null);
-    const otherEmojiContextRef = useRef(null);
 
 
     /// 파라미터로 방 코드 받음
@@ -31,17 +30,14 @@ function TwoDecorativeGame() {
 
     const handleResize = () => {
         let height = window.innerHeight * constants.TWO_DECORATIVE_GAME_HEIGHT_RATIO;
-        console.log(height)
-
         setWindowHeight(height);
     }
 
-    // 모달창 (타이머)
-    const [isOpen, setIsOpen] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
 
-    const onClickButton = () => {
-        setIsOpen(true);
-    };
+    const getVideo = (isLoading) => {
+        console.log(isLoading);
+    }
 
     // 자식 함수 데려오기
     const gameScreenRef = useRef();
@@ -54,6 +50,7 @@ function TwoDecorativeGame() {
     const [word, setWord] = useState("Your Word Here!");
     // 뒤로가기 버튼 클릭
     const [isBackButton, setIsBackButton] = useState(false);
+
     // 상대 이모지 개수 불러오기
     const [otherNumber, setOtherNumber] = useState(0);
 
@@ -66,6 +63,8 @@ function TwoDecorativeGame() {
         setIsBackButton(!isBackButton)
     }
     
+    const otherShapes = useRef([]);
+
     useEffect(() => {
 
         window.addEventListener('resize', handleResize);
@@ -139,6 +138,7 @@ function TwoDecorativeGame() {
                                 otherContextRef={otherContextRef} 
                                 otherEmojiRef={otherEmojiRef}
                                 isBackButton = {isBackButton} />
+
                             </div>
                         </div>
                     </div>
@@ -151,6 +151,7 @@ function TwoDecorativeGame() {
 
                 <div className="right-body-container-decoration-game-two">
                     <div className="body-container-of-right-decoration-game-two">
+                        <Loading loading={isLoading}/>
                         <div style={{
                             position: "relative",
                             height: "100%"
@@ -164,8 +165,15 @@ function TwoDecorativeGame() {
                                     position: "absolute",
                                     width: (window.innerHeight * constants.TWO_DECORATIVE_GAME_HEIGHT_RATIO * (4.0 / 3.0)),
                                     height: windowHeight,
-                                    margin: "auto",
+                                    marginLeft: "auto",
+                                    marginRight: "auto",
+                                    top: "0",
+                                    left: "0",
+                                    right: "0",
+                                    textAlign: "center",
                                     zIndex: 1,
+                                    width: "100%",
+                                    height: "100%",
                                     transform: "scaleX(-1)"
                                 }}
                             />
@@ -176,7 +184,7 @@ function TwoDecorativeGame() {
                                 // tabIndex={0}s
                                 //onKeyDown={f1Down}
                                 style={{
-                                    // background:"red",
+                                    // background: "red",
                                     position: "absolute",
                                     marginLeft: "auto",
                                     marginRight: "auto",
@@ -184,8 +192,8 @@ function TwoDecorativeGame() {
                                     right: "0",
                                     textAlign: "center",
                                     zIndex: 9,
-                                    width: "100%",
-                                    height: "100%",
+                                    width: (window.innerHeight * constants.TWO_DECORATIVE_GAME_HEIGHT_RATIO * (4.0 / 3.0)),
+                                    height: windowHeight,
                                 }}>
                             </canvas>
                             <canvas
@@ -201,8 +209,8 @@ function TwoDecorativeGame() {
                                     right: "0",
                                     textAlign: "center",
                                     zIndex: 11,
-                                    width: "100%",
-                                    height: "100%",
+                                    width: (window.innerHeight * constants.TWO_DECORATIVE_GAME_HEIGHT_RATIO * (4.0 / 3.0)),
+                                    height: windowHeight,
                                 }}>
                             </canvas>
                         </div>
