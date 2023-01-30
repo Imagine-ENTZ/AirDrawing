@@ -1,5 +1,6 @@
 .modal-wrap {
     width: 30%;
+    height: fit-content;
     border-radius: 15px;
     background-color: transparent;
     position: relative;
