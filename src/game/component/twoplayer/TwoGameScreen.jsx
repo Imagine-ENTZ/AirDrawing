@@ -99,11 +99,14 @@ const TwoGameScreen = forwardRef((props, ref) => {
                     "lastY": fingerPosition.y
                 }
 
-                // 단어쓰는 프레임 밖으로 빠져나가면 값 전달 안함
-                if (!isNaN(preFingerPositionX.current) && !isNaN(preFingerPositionY.current) &&
-                    !isNaN(fingerPosition.x) && !isNaN(fingerPosition.y) &&
-                    dataChannel.current != null) {
-                    dataChannel.current.send(JSON.stringify(obj));
+                if (dataChannel.current) {
+                    if (dataChannel.current.readyState == "open") {
+                        // 단어쓰는 프레임 밖으로 빠져나가면 값 전달 안함
+                        if (!isNaN(preFingerPositionX.current) && !isNaN(preFingerPositionY.current) &&
+                            !isNaN(fingerPosition.x) && !isNaN(fingerPosition.y)) {
+                            dataChannel.current.send(JSON.stringify(obj));
+                        }
+                    }
                 }
                 break;
             case constants.ERASE:
@@ -567,30 +570,9 @@ const TwoGameScreen = forwardRef((props, ref) => {
 
 
     const videoRef = useRef(null);
-    // const anotherVideoRef = useRef(null);
-    // const client = useRef({});
-
     let stream;
     let myPeerConnection;
-
-
     const dataChannel = useRef();
-
-
-
-    
-    // useEffect(() => {
-
-    //     console.log("디스컨넥" + props.isBackButton);
-        
-    //     if (props.isBackButton == true) {
-    //         client.current.unsubscribe();
-    //         client.current.disactive();
-    //     }
-
-        
-    // }, [props.isBackButton])
-
 
     // function1
     const subscribe = () => {
@@ -769,13 +751,13 @@ const TwoGameScreen = forwardRef((props, ref) => {
         }
 
         props.otherEmojiRef.current.getContext('2d');
-  
+
         if (obj.word != null) {
             props.otherDrawingRef.current.getContext('2d').clearRect(0, 0, windowSize.width, windowSize.height); // 저장 후 지우기
         }
         if (obj.image != null) {
             const image = new Image();
-            
+
             image.crossOrigin = "anonymous";
             image.src = obj.image;
 
@@ -789,10 +771,7 @@ const TwoGameScreen = forwardRef((props, ref) => {
             image.onload = function () {
                 draw();
             }
-<<<<<<< HEAD
         }
-=======
->>>>>>> hong
     }
     //function8
     async function makeConnection() {
