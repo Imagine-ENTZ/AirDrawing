@@ -579,6 +579,10 @@ function Canvas(props) {
     navigate("/lobby");
   }
 
+  const startDataChannel = () => {
+    props.setIsOpponentUserConnected(true)
+    console.log("데이터채널 열림")
+  }
 
   //function9
   async function makeMessageConnection() {
@@ -586,7 +590,7 @@ function Canvas(props) {
 
     dataChannel.current.addEventListener("error", (error) => console.log("데이터채널의 오류 : " + error));
     dataChannel.current.addEventListener("close", closeDataChannel);
-    dataChannel.current.addEventListener("open", () => console.log("데이터채널 열림"));
+    dataChannel.current.addEventListener("open", startDataChannel);
     dataChannel.current.addEventListener("message", makeOtherDrawing);
 
   }

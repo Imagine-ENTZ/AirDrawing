@@ -45,6 +45,8 @@ function GamePage() {
   const opponentCorrection = useRef(false);
   const opponentFailure = useRef(false);
 
+  const [isOpponentUserConnected, setIsOpponentUserConnected] = useState(false);
+
   const loadingStyle = {
     position: "absolute",
     left: "0",
@@ -186,27 +188,36 @@ function GamePage() {
   const [timeLeft, setTimeLeft] = useState(minutes * 60 + seconds); //남은 시간
   const totalTime = useRef(minutes * 60 + seconds);  //게임의 총 시간
 
-  useEffect(() => {
-    const countdown = setInterval(() => {
-      if (parseInt(seconds) > 0) {
-        setSeconds(parseInt(seconds) - 1);
-      }
-      if (parseInt(seconds) === 0) {
-        if (parseInt(minutes) === 0) {
-          clearInterval(countdown);
-        } else {
-          setMinutes(parseInt(minutes) - 1);
-          setSeconds(59);
+  useEffect(() => {   //상대 유저가 방에 들어왔을 때 기다림 모달창을 닫음
+    if(isOpponentUserConnected == true){
+      setisGameWaitModalOpen(false)
+
+      const countdown = setInterval(() => {
+        if (parseInt(seconds) > 0) {
+          setSeconds(parseInt(seconds) - 1);
         }
+        if (parseInt(seconds) === 0) {
+          if (parseInt(minutes) === 0) {
+            clearInterval(countdown);
+          } else {
+            setMinutes(parseInt(minutes) - 1);
+            setSeconds(59);
+          }
+        }
+        setTimeLeft(minutes * 60 + seconds);
+      }, 1000);
+  
+      if (timeLeft === 0) {
+        console.log("총 점수 : " + userScore);
       }
-      setTimeLeft(minutes * 60 + seconds);
-    }, 1000);
-
-    if (timeLeft === 0) {
-      console.log("총 점수 : " + userScore);
+  
+      return () => clearInterval(countdown);
     }
-
-    return () => clearInterval(countdown);
+  }, [isOpponentUserConnected, seconds, minutes])
+  
+  useEffect(() => {
+    
+    
   }, [minutes, seconds]);
 
 
@@ -271,7 +282,6 @@ function GamePage() {
       <div className='word-tracing-full-screen-container'>
         <div style={{width: "100%", height: "100%"}}>
           <AppWrap>
-            {/* <Button onClick={()=> setisGameWaitModalOpen(true)}>Click Me !</Button> */}
             {isGameWaitModalOpen && (<Modal
               open={isGameWaitModalOpen}
               onClose={() => setisGameWaitModalOpen(false)}
@@ -281,15 +291,6 @@ function GamePage() {
         </div>
       </div>
 
-
-
-      {/* <button onClick={()=> setisGameWaitModalOpen(true)}>Modal Open</button>
-      <Modal 
-        isOpen={isGameWaitModalOpen} 
-        onRequestClose={() => setisGameWaitModalOpen(false)}
-      >
-        This is Modal content
-      </Modal> */}
       <div className='word-tracing-full-screen-container'>
         <div className='word-tracing-timer-container'>
           <div className='word-tracing-timer'>
@@ -375,6 +376,7 @@ function GamePage() {
                     opponentFingerOfcontextRef={opponentFingerOfcontextRef}   //상대방의 좌표데이터를 바탕으로 그릴 context
 
                     isBackButton = {isBackButton}  // 뒤로가기 버튼 클릭 여부
+                    setIsOpponentUserConnected={setIsOpponentUserConnected}
                     style={{
                       position: "absolute",
                       left: "0",
