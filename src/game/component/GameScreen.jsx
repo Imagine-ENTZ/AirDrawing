@@ -500,6 +500,7 @@ const GameScreen = forwardRef((props, ref) => {
         link.click();
         document.body.removeChild(link);
         canvasRef5.current.getContext('2d').clearRect(0, 0, windowSize.width, windowSize.height); // 저장 후 지우기
+        canvasRef2.current.focus();
     }
 
     return (
