@@ -1,0 +1,56 @@
+.word-tracing-user-img-container{
+  width: 100%;
+  height: 40%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.word-tracing-player-screen{
+  width: 45%;
+}
+
+.word-tracing-player-versus-screen{
+  width: 10%;
+  font-size: 1.5em;  
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: Silkscreen;
+  font-weight: bold;
+}
+
+.word-tracing-user-img{
+  width: 50%;
+  object-fit: contain;
+}
+
+.word-tracing-user-img-wrapper{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.word-tracing-user-name{
+  width: 100%;
+  font-size: 1.25em;  
+  font-family: Silkscreen;
+  font-weight: bold;
+  color: rgb(171, 92, 250);
+}
+
+.word-tracing-wait-message{
+  width: 100%;
+  height: 50%;
+  font-size: 1.5em;  
+  font-family: Silkscreen;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 30px;
+  margin-bottom: 30px;
+  padding: 10px 0px 10px 0px;
+  background: rgb(171, 92, 250);
+  color: white;
+}

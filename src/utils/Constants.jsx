@@ -34,6 +34,7 @@ export const LOGIN_URL = `https://entz.azurewebsites.net/member/login`//`http://
 export const REGISTER_URL = `https://entz.azurewebsites.net/member`//`http://localhost:8080/member/`
 export const GAMEROOM_URL = `https://entz.azurewebsites.net/room`//`http://localhost:8080/room/`
 export const SOCKET_JS = `https://entz.azurewebsites.net/play`;  //`http://localhost:8080/play`;
+export const TOKEN_URL =`https://entz.azurewebsites.net/token`
 
 export const AUTHORIZATION_IMAGE = 'Bearer eyJ0eXAiOiJhdCtKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtbnpjTTZta2Z3NFM5UnB6RGc2UTVkWlVpS0FRYXp0SVd2MUFZYnNwc0JRZTNtTkkiLCJpc3MiOiJodHRwczpcL1wvYXBpLmZsYXRpY29uLmNvbVwvb2F1dGhcL3Rva2VuIiwiZXhwIjoxNjc1MTU5NjgwLCJpYXQiOjE2NzUwNzMyODAsImp0aSI6ImI1NWY4ZGE1LWRmMDctNGNkMi1iMGZlLTUwYmVmMjg2ZGI4OCIsImNsaWVudF9pZCI6Im1uemNNNm1rZnc0UzlScHpEZzZRNWRaVWlLQVFhenRJV3YxQVlic3BzQlFlM21OSSJ9.CazGdCJEbpZfyg0ARSryoSrw_koyWZ9lxUN0OBzoxCg';
 
@@ -46,4 +47,4 @@ export const ROOM_POSSIBLE = 0;
 
 export const EXIT = 'POP';
 
-
+export const IS_MODAL_OPEN = true;

@@ -10,27 +10,31 @@ import canvasPicture from "../../img/canvas_with_transparent_bg.png"
 import Tesseract from 'tesseract.js';
 import * as StompJs from "@stomp/stompjs";
 import * as SockJS from "sockjs-client";
+import { useNavigate } from "react-router-dom";
 
 function Canvas(props) {
-  const isTesting = useRef(!constants.IS_TESTING);  //현재 단어의 정답 여부를 테스트 중인지 관리
+  const isTesting = useRef(!constants.IS_TESTING);           //현재 단어의 정답 여부를 테스트 중인지 관리
+  const isOpponentTesting = useRef(!constants.IS_TESTING);   //상대 유저의 정답 테스트 여부
 
-  const sendWordToParentComponent = (text) => {
+  const sendWordToParentComponent = (text, wordWrittenByUser) => {
     text = text.split("\n").join("");
     text = text.split(' ').join('');
     // console.log("사용자가 쓴 글씨 : [" + text + "]")
-    props.wordWrittenByUser.current = text;   //사용자가 작성한 영어단어 전달
+    wordWrittenByUser.current = text;   //사용자가 작성한 영어단어 전달
   }
 
   const webcamRef = useRef(null);
   const canvasRef = useRef(null);
 
   //손가락으로 캔버스에 그리는 변수
-  const fingerOfcanvasRef = useRef(null);
+  const fingerOfcanvasRef = useRef(null);          //현재 플레이어의 손가락 좌표
   const fingerOfcontextRef = useRef(null);
+  const opponentFingerOfcanvasRef = useRef(null);  //상대방의 손가락 좌표
+  const opponentFingerOfcontextRef = useRef(null);
 
   //현재 그리기 모드
-  const handGesture = useRef(constants.HOVER);
-  const preHandGesture = useRef(constants.HOVER);
+  const handGesture = useRef(constants.HOVER);          //현재 플레이어의 그리기 모드
+  const opponentHandGesture = useRef(constants.HOVER);  //상대방의 그리기 모드
 
   //스팰링 도안 캔버스 변수
   const spellingArtOfCanvasRef = useRef(null);
@@ -41,9 +45,15 @@ function Canvas(props) {
   const pointOfCanvasRef = useRef(null);
 
   //직전의 손가락 위치
-  const preFingerPositionX = useRef(null);
+  const preFingerPositionX = useRef(null);         //현재 플레이어의 손가락 좌표
   const preFingerPositionY = useRef(null);
   const [fingerPosition, setFingerPosition] = useState({
+    x: null,
+    y: null
+  });
+  const opponentPreFingerPositionX = useRef(null);  //상대방의 손가락 좌표
+  const opponentPreFingerPositionY = useRef(null);
+  const [opponentFingerPosition, setOpponentFingerPosition] = useState({
     x: null,
     y: null
   });
@@ -145,7 +155,34 @@ function Canvas(props) {
     }
   }, [])
 
-  // 손그리기 캔버스
+  const drawLineOnCanvas = (isTesting, handGesture, fingerOfcontextRef, preFingerPositionX, preFingerPositionY, fingerPosition) => {
+    let radius = 20;
+
+    if ( dataChannel.current && dataChannel.current.readyState == "open") {
+      switch (handGesture) {
+        case constants.DRAW:
+          fingerOfcontextRef.beginPath();
+          fingerOfcontextRef.moveTo(preFingerPositionX, preFingerPositionY);
+          fingerOfcontextRef.lineTo(fingerPosition.x, fingerPosition.y);
+          fingerOfcontextRef.stroke();
+          fingerOfcontextRef.closePath();
+          break;
+        case constants.ERASE:
+          fingerOfcontextRef.save();
+          fingerOfcontextRef.beginPath();
+          fingerOfcontextRef.arc(fingerPosition.x, fingerPosition.y, radius, 0, 2 * Math.PI, true);
+          fingerOfcontextRef.clip();
+          fingerOfcontextRef.clearRect(fingerPosition.x - radius, fingerPosition.y - radius, radius * 2, radius * 2);
+          fingerOfcontextRef.restore();
+          break;
+        case constants.OK:
+          checkIfWordsMatch(isTesting);
+          break;
+      }
+    }
+  }
+
+  //현재 플레이어의 손그리기 캔버스
   useEffect(() => {
     let radius = 20;
 
@@ -157,32 +194,37 @@ function Canvas(props) {
       return;
     }
 
-    switch (handGesture.current) {
-      case constants.DRAW:
-        fingerOfcontextRef.current.beginPath();
-        fingerOfcontextRef.current.moveTo(preFingerPositionX.current, preFingerPositionY.current);
-        fingerOfcontextRef.current.lineTo(fingerPosition.x, fingerPosition.y);
-        fingerOfcontextRef.current.stroke();
-        fingerOfcontextRef.current.closePath();
-        break;
-      case constants.ERASE:
-        fingerOfcontextRef.current.save();
-        fingerOfcontextRef.current.beginPath();
-        fingerOfcontextRef.current.arc(fingerPosition.x, fingerPosition.y, radius, 0, 2 * Math.PI, true);
-        fingerOfcontextRef.current.clip();
-        fingerOfcontextRef.current.clearRect(fingerPosition.x - radius, fingerPosition.y - radius, radius * 2, radius * 2);
-        fingerOfcontextRef.current.restore();
-        break;
-      case constants.OK:
-        checkIfWordsMatch();
-        break;
-    }
+    drawLineOnCanvas(
+      isTesting, handGesture.current, fingerOfcontextRef.current,
+      preFingerPositionX.current, preFingerPositionY.current, fingerPosition);
 
     if (fingerOfcontextRef.current) {
       preFingerPositionX.current = fingerPosition.x;
       preFingerPositionY.current = fingerPosition.y;
     }
+
   }, [fingerPosition])
+
+  //상대 플레이어의 손그리기 캔버스
+  useEffect(() => {
+    if (opponentHandGesture.current == constants.DRAW && (opponentPreFingerPositionX == null || opponentPreFingerPositionY == null)) {
+      return;
+    }
+
+    if (props.isOpponentTesting == constants.IS_TESTING) {
+      return;
+    }
+
+    drawLineOnCanvas(   //현재 정답 테스트 여부, 그리기모드, contextRef, 이전 x좌표, 이전 y좌표, 현재 (x, y)좌표
+      isOpponentTesting, opponentHandGesture.current, props.opponentFingerOfcontextRef.current,
+      opponentPreFingerPositionX.current, opponentPreFingerPositionY.current, opponentFingerPosition);
+
+    if (props.opponentFingerOfcontextRef.current) {
+      opponentPreFingerPositionX.current = opponentFingerPosition.x;
+      opponentPreFingerPositionY.current = opponentFingerPosition.y;
+    }
+
+  }, [opponentFingerPosition])
 
   const getCurrentHandGesture = () => {
     switch (handGesture.current) {
@@ -233,7 +275,6 @@ function Canvas(props) {
       let x = parseInt(windowSize.width - results.multiHandLandmarks[0][8].x * windowSize.width);
       let y = parseInt(windowSize.height * results.multiHandLandmarks[0][8].y);
 
-      preHandGesture.current = handGesture.current;
       handGesture.current = detectHandGesture(results.multiHandLandmarks[0]);  //현재 그리기 모드
       let radius = 10;
 
@@ -241,16 +282,17 @@ function Canvas(props) {
       pointOfContextRef.current.clearRect(0, 0, windowSize.width, windowSize.height);
       pointOfContextRef.current.beginPath();
       pointOfContextRef.current.arc(x, y, radius, 0, 2 * Math.PI, false);
-      // pointOfContextRef.current.fillStyle = contextRef.current.strokeStyle;
-      // pointOfContextRef.current.fillRect();
       pointOfContextRef.current.lineWidth = 3;
       pointOfContextRef.current.strokeStyle = "rgb(207, 145, 255)";
       pointOfContextRef.current.stroke();
       pointOfContextRef.current.closePath();
 
       // webRTC
-      if (dataChannel.current != null)
-        dataChannel.current.send(JSON.stringify(results.multiHandLandmarks[0]));
+      if (dataChannel.current) {
+        if (dataChannel.current.readyState == "open") {
+          dataChannel.current.send(JSON.stringify({x: x, y: y, handGesture: handGesture.current}));
+        }
+      }
 
       setFingerPosition({ x: x, y: y });
     }
@@ -259,20 +301,31 @@ function Canvas(props) {
   };
 
   //사용자가 적은 단어와 제시된 단어의 일치 여부 확인
-  const checkIfWordsMatch = () => {
+  const checkIfWordsMatch = (isUserTesting) => {
     //아직 이전의 결과를 테스트 중인 경우 중복 테스트가 되는 것을 방지함
-    if (isTesting.current == constants.IS_TESTING) {
+    if (isUserTesting.current) {
       return;
     }
 
-    props.setIsTesting(constants.IS_TESTING);   //현재 테스트중임을 gamepage에 알림 -> 확인중 아이콘을 띄움
-    isTesting.current = constants.IS_TESTING;
+    isUserTesting.current = constants.IS_TESTING;   //test중임을 알림
 
-    const image = fingerOfcanvasRef.current.toDataURL("image/png");
-    saveImage(image);
+    if(isTesting.current){               //현재 플레이어의 단어가 판별중인 경우
+      props.setIsTesting(constants.IS_TESTING);   //현재 테스트중임을 gamepage에 알림 -> 확인중 아이콘을 띄움
+      console.log("나 테스트 시작합니다")
+
+      const image = fingerOfcanvasRef.current.toDataURL("image/png");
+      saveImage(image, isUserTesting, props.wordWrittenByUser);
+    }
+    else if (isOpponentTesting.current) {  //상대 플레이어의 단어가 판별중인 경우
+      props.setIsOpponentTesting(constants.IS_TESTING);   //현재 테스트중임을 gamepage에 알림 -> 확인중 아이콘을 띄움
+      console.log("상대방 테스트 시작합니다")
+
+      const image = props.opponentFingerOfcanvasRef.current.toDataURL("image/png");
+      saveImage(image, isUserTesting, props.wordWrittenByOpponentUser);
+    }
   };
 
-  const saveImage = (imgDataUrl) => {
+  const saveImage = (imgDataUrl, isUserTesting, wordWrittenByUser) => {
 
     var blobBin = atob(imgDataUrl.split(',')[1]);	// base64 데이터 디코딩
     var array = [];
@@ -293,11 +346,19 @@ function Canvas(props) {
         console.error(err);
       })
       .then((result) => {
-        isTesting.current = !constants.IS_TESTING;
-        sendWordToParentComponent(result.data.text);  //부모 컴포넌트에 사용자가 쓴 단어 텍스트값 보내기
-        // console.log("결과값: " + result.data.text)
+        sendWordToParentComponent(result.data.text, wordWrittenByUser);  //부모 컴포넌트에 사용자가 쓴 단어 텍스트값 보내기
 
-        fingerOfcontextRef.current.clearRect(0, 0, windowSize.width, windowSize.height); //검사 완료 후 글씨쓴 캔버스 초기화
+        if(isTesting.current){
+          console.log("나 테스트중")
+          fingerOfcontextRef.current.clearRect(0, 0, windowSize.width, windowSize.height); //검사 완료 후 글씨쓴 캔버스 초기화
+        }
+        else if(isOpponentTesting.current){
+          console.log("상대방 테스트중")
+          props.opponentFingerOfcontextRef.current.clearRect(0, 0, windowSize.width, windowSize.height); //검사 완료 후 글씨쓴 캔버스 초기화
+        }
+
+        isUserTesting.current = !constants.IS_TESTING;  //정답 판정이 끝났음을 표시함
+        // console.log("결과값: " + result.data.text)
       });
 
   }
@@ -306,12 +367,31 @@ function Canvas(props) {
   const videoRef = useRef(null);
   // const anotherVideoRef = useRef(null);
   const client = useRef({});
-
   let stream;
-  let myPeerConnection;
-
+  const myPeerConnection = useRef();
+  const navigate = useNavigate();
 
   const dataChannel = useRef();
+
+  const disconnectWebRTC = async () => {
+    if (props.isBackButton == true) {
+      await client.current.unsubscribe();
+      await client.current.deactivate();
+      await dataChannel.current.close(); // 채널닫음
+      await myPeerConnection.current.close();
+      navigate("/lobby");
+    }
+
+  }
+  useEffect(() => {
+    fetchData();
+
+  }, []);
+  useEffect(() => {
+    disconnectWebRTC();
+  }, [props.isBackButton]);
+
+
 
   // function1
   const subscribe = () => {
@@ -323,15 +403,13 @@ function Canvas(props) {
       `/sub/play/${props.roomid}`,
       async ({ body }) => {
         const data = JSON.parse(body);
-        // console.log(body);
-        console.log("내이름은" + props.sender);
         switch (data.type) {
           case 'ENTER':
             if (data.sender !== props.sender) {
-              console.log("sneder  " + data.sender);
-              const offer = await myPeerConnection.createOffer();
-              console.log("@@offer : ", (offer));
-              myPeerConnection.setLocalDescription(offer);
+              // console.log("sneder  " + data.sender);
+              const offer = await myPeerConnection.current.createOffer();
+              // console.log("@@offer : ", (offer));
+              myPeerConnection.current.setLocalDescription(offer);
               client.current.publish({
                 destination: `/pub/play`,
                 body: JSON.stringify({
@@ -341,7 +419,7 @@ function Canvas(props) {
                   offer: JSON.stringify(offer),
                 }),
               });
-              console.log("진입" + offer + "그리더 : " + props.sender)
+              // console.log("진입" + offer + "그리더 : " + props.sender)
               console.log('오퍼전송');
 
             }
@@ -350,9 +428,9 @@ function Canvas(props) {
           case 'OFFER':
             if (data.sender !== props.sender) {
               console.log('오퍼수신');
-              myPeerConnection.setRemoteDescription(JSON.parse(data.offer));
-              const answer = await myPeerConnection.createAnswer();
-              myPeerConnection.setLocalDescription(answer);
+              myPeerConnection.current.setRemoteDescription(JSON.parse(data.offer));
+              const answer = await myPeerConnection.current.createAnswer();
+              myPeerConnection.current.setLocalDescription(answer);
               client.current.publish({
                 destination: `/pub/play`,
                 body: JSON.stringify({
@@ -368,13 +446,13 @@ function Canvas(props) {
           case 'ANSWER':
             if (data.sender !== props.sender) {
               console.log('엔서수신');
-              myPeerConnection.setRemoteDescription(JSON.parse(data.answer));
+              myPeerConnection.current.setRemoteDescription(JSON.parse(data.answer));
             }
             break;
           case 'ICE':
             if (data.sender !== props.sender) {
               console.log("아이스 수신 값 : " + data.ice);
-              myPeerConnection.addIceCandidate(JSON.parse(data.ice));
+              myPeerConnection.current.addIceCandidate(JSON.parse(data.ice));
             }
             break;
           default:
@@ -457,21 +535,19 @@ function Canvas(props) {
   }
   //function7
   function makeOtherDrawing(event) {
-    // console.log("[받은 문자의 내용 : " + event.data + "]");
-    const landmark = JSON.parse(event.data);
+    const data = JSON.parse(event.data);
 
-    props.preHandGesture.current = handGesture.current;
-    props.handGesture.current = detectHandGesture(landmark);  //상대방의 현재 그리기 모드
+    opponentHandGesture.current = data.handGesture;  //상대방의 현재 그리기 모드
 
-    // console.log("수신하는 x: " + x + ", y: " + y)
-    let x = parseInt(windowSize.width - landmark[8].x * windowSize.width);
-    let y = parseInt(windowSize.height * landmark[8].y);
+    let x = data.x;
+    let y = data.y;
 
-    props.setFingerPosition({ x: x, y: y});   //상대방의 8번 좌표 변경을 알림
+    setOpponentFingerPosition({ x: x, y: y });     //상대방의 8번 좌표 변경을 알림
   }
+
   //function8
   async function makeConnection() {
-    myPeerConnection = new RTCPeerConnection({
+    myPeerConnection.current = new RTCPeerConnection({
       iceServers: [
         {
           urls: [constants.STUN_SERVER],
@@ -486,19 +562,30 @@ function Canvas(props) {
       ],
     });
 
-    myPeerConnection.addEventListener('icecandidate', handleIce);
-    myPeerConnection.addEventListener('addstream', handleAddStream); // 스트림 받기
-    myPeerConnection.addEventListener('datachannel', handleChannel);
+    myPeerConnection.current.addEventListener('icecandidate', handleIce);
+    myPeerConnection.current.addEventListener('addstream', handleAddStream); // 스트림 받기
+    myPeerConnection.current.addEventListener('datachannel', handleChannel);
     stream.getTracks().forEach((track) => {
-      myPeerConnection.addTrack(track, stream);
+      myPeerConnection.current.addTrack(track, stream);
     });
   }
+  //상대방이 나가 채널이 닫겼을때
+  async function closeDataChannel() {
+    console.log("데이터채널의 닫김")
+    await client.current.unsubscribe();
+    await client.current.deactivate();
+    await dataChannel.current.close(); // 채널닫음
+    await myPeerConnection.current.close();
+    navigate("/lobby");
+  }
+
+
   //function9
   async function makeMessageConnection() {
-    dataChannel.current = await myPeerConnection.createDataChannel("chat", { reliable: true });
+    dataChannel.current = await myPeerConnection.current.createDataChannel("chat", { reliable: true });
 
     dataChannel.current.addEventListener("error", (error) => console.log("데이터채널의 오류 : " + error));
-    dataChannel.current.addEventListener("close", () => console.log("데이터채널의 닫김"));
+    dataChannel.current.addEventListener("close", closeDataChannel);
     dataChannel.current.addEventListener("open", () => console.log("데이터채널 열림"));
     dataChannel.current.addEventListener("message", makeOtherDrawing);
 
@@ -506,16 +593,10 @@ function Canvas(props) {
   //function10
   async function fetchData() {
     await getMedia();
-    makeConnection();
-    connect();
-    makeMessageConnection();
+    await makeConnection();
+    await connect();
+    await makeMessageConnection();
   }
-  //function11
-  useEffect(() => {
-    fetchData();
-
-  }, []);
-
 
 
   return (

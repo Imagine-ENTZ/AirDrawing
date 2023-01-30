@@ -9,7 +9,7 @@ import Loading from "./component/loading/Loading";
 import * as constants from "../utils/Constants";
 
 import { useLocation } from "react-router-dom";
-import { createBrowserHistory } from "history";
+import axios from 'axios';
 
 
 function TwoDecorativeGame() {
@@ -41,31 +41,15 @@ function TwoDecorativeGame() {
 
     // 자식 함수 데려오기
     const gameScreenRef = useRef();
-
-    // useEffect(() => {
-    //     gameScreenRef.current.captureImage();
-    // }, []);
-
     // 이모지 개수 재주기
     const [number, setNumber] = useState(0);
-
     const getData = (number) => {
-        //setNumber(number);
         console.log(number);
     }
-
     // 쓰여진 단어 알려주기
     const [word, setWord] = useState("Your Word Here!");
-
-    const client = useRef({});
-
-
-    const backClicked = () => {
-
-        client.current.unsubscribe();
-        client.current.deactivate();
-        navigate("/lobby");
-    }
+    // 뒤로가기 버튼 클릭
+    const [isBackButton, setIsBackButton] = useState(false);
 
     // 상대 이모지 개수 불러오기
     const [otherNumber, setOtherNumber] = useState(0);
@@ -74,6 +58,11 @@ function TwoDecorativeGame() {
         console.log(otherNumber);
     }
 
+    const onClickedBack = ()=> {
+        deleteRoom(code);
+        setIsBackButton(!isBackButton)
+    }
+    
     const otherShapes = useRef([]);
 
     useEffect(() => {
@@ -85,6 +74,24 @@ function TwoDecorativeGame() {
 
     }, [])
 
+    // 방 나가기 -> 방 삭제
+    const deleteRoom = (code) => {
+        axios.post(constants.GAMEROOM_URL + "/delete",
+            {
+                code: code,
+            })
+            .then((res) => {
+
+                if (res.data.result == "FAIL") {
+                    console.log("방 삭제 실패");
+                }
+                else {
+                    console.log("방 삭제 성공")
+                }
+            })
+            .catch((Error) => { console.log("에러", Error) })
+    }
+
     return (
         <div className="main-container-decoration-game-two">
             <StarRain />
@@ -93,7 +100,7 @@ function TwoDecorativeGame() {
                     <div className="best-top-left-decoration-game-two">
                     </div>
                     <div className="best-top-right-decoration-game-two">
-                        <div className="on-off-button-two-decorative" onClick={backClicked}>
+                        <div className="on-off-button-two-decorative" onClick={onClickedBack}>
                             <img className="on-off-image-two-decorative" src={OnOff} alt="END"></img>
                         </div>
                     </div>
@@ -119,19 +126,18 @@ function TwoDecorativeGame() {
                     <div className="body-container-of-left-decoration-game-two">
                         <div className="screen-admin-decoration-game-two">
                             <div style={{ width: (window.innerHeight * constants.TWO_DECORATIVE_GAME_HEIGHT_RATIO * (4.0 / 3.0)), height: windowHeight, margin: "auto" }}>
-                                <TwoGameScreen
-                                    getOtherData={setOtherNumber}
-                                    getData={setNumber}
-                                    getWord={setWord}
-                                    getVideo={setIsLoading}
-                                    ref={gameScreenRef}
-                                    roomid={code}
-                                    sender={Math.random().toString(36).substring(2, 11)}
-                                    anotherVideoRef={anotherVideoRef}
-                                    otherDrawingRef={otherDrawingRef}
-                                    otherEmojiRef={otherEmojiRef}
-                                    otherShapes={otherShapes}
-                                    client={client} />
+                                <TwoGameScreen 
+                                getOtherData={setOtherNumber}
+                                getData={setNumber} 
+                                getWord={setWord} 
+                                ref={gameScreenRef} 
+                                roomid={code} 
+                                sender={Math.random().toString(36).substring(2, 11)} 
+                                anotherVideoRef={anotherVideoRef} 
+                                otherDrawingRef={otherDrawingRef} 
+                                otherEmojiRef={otherEmojiRef}
+                                isBackButton = {isBackButton} />
+
                             </div>
                         </div>
                     </div>
@@ -193,10 +199,8 @@ function TwoDecorativeGame() {
                                 className="canvas"
                                 ref={otherEmojiRef}
                                 mirrored={true}
-                                // tabIndex={0}s
-                                //onKeyDown={f1Down}
                                 style={{
-                                    // background:"red",
+
                                     position: "absolute",
                                     marginLeft: "auto",
                                     marginRight: "auto",
