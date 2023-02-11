@@ -3,7 +3,6 @@ import Webcam from "react-webcam";
 import { Hands, HAND_CONNECTIONS } from "@mediapipe/hands/hands";
 import { drawConnectors, drawLandmarks } from "@mediapipe/drawing_utils/drawing_utils";
 import { Camera } from "@mediapipe/camera_utils/camera_utils";
-import "../MediapipeHands.jsx"
 import { detectHandGesture } from "../HandGesture";
 import { preprocessImage } from "../PreprocessImage";
 import frame from "./frame.png";

@@ -36,11 +36,6 @@ const getCosAngle = (u, v) => {
 export const detectHandGesture = (landmarks) => {
   let threshhold = 0.7;
 
-  // for (let index = 0; index < 21; index++) {
-  //   landmarks[index].x = parseInt(landmarks[index].x * 800);
-  //   landmarks[index].y = parseInt(landmarks[index].y * 600);
-  // }
-
   // palm vector
   let palm_to_index_vector = calculateVectorize(landmarks[0], landmarks[5])
   let palm_to_middle_vector = calculateVectorize(landmarks[0], landmarks[9])
@@ -84,13 +79,6 @@ export const detectHandGesture = (landmarks) => {
         getCosAngle(palm_to_pinky_vector, pinky_vector) < threshhold &&
         getCosAngle(thumCmcToMcp, thumMcpToIp) >= 0.99 )
         return constants.OK;
-
-
-  // if( getCosAngle(index_vector, index_vector) < 0 &&
-  //     getCosAngle(index_vector, pinky_vector) > 0 &&
-  //     getCosAngle(index_vector, middle_vector) < 0 &&
-  //     getCosAngle(index_vector, ring_vector) < 0)
-  //     return constants.OK;
 
   return constants.HOVER;
 }

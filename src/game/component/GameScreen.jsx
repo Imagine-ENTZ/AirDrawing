@@ -3,7 +3,6 @@ import Webcam from "react-webcam";
 import { Hands, HAND_CONNECTIONS } from "@mediapipe/hands/hands";
 import { drawConnectors, drawLandmarks } from "@mediapipe/drawing_utils/drawing_utils";
 import { Camera } from "@mediapipe/camera_utils/camera_utils";
-import "./MediapipeHands.css"
 import { detectHandGesture } from "./HandGesture";
 import { preprocessImage } from "./PreprocessImage";
 import frame from "./frame.png";
@@ -23,7 +22,6 @@ const GameScreen = forwardRef((props, ref) => {
         // 부모 컴포넌트에서 사용할 함수를 선언
         captureImage
     }))
-
 
 
     // 웹캡 변수
@@ -259,10 +257,6 @@ const GameScreen = forwardRef((props, ref) => {
     function rect(r) {
         const image = new Image();
         image.src = r.fill;
-        // canvasRef4.current.getContext('2d').fillStyle = image;
-        // canvasRef4.current.getContext('2d').fillRect(r.x, r.y, r.width, r.height);
-        // const image = new Image();
-        // image.src = r.fill;
         image.onload = function () {
             canvasRef4.current.getContext('2d').drawImage(image, r.x, r.y, r.width, r.height);
         }
@@ -353,14 +347,9 @@ const GameScreen = forwardRef((props, ref) => {
             const mx = parseInt(nativeEvent.clientX - canvasOffSetX.current);
             const my = parseInt(nativeEvent.clientY - canvasOffSetY.current);
 
-            // calculate the distance the mouse has moved
-            // since the last mousemove
             const dx = mx - startX;
             const dy = my - startY;
 
-            // move each rect that isDragging
-            // by the distance the mouse has moved
-            // since the last mousemove
             for (let i = 0; i < shapes.current.length; i++) {
                 const s = shapes.current[i];
                 if (s.isDragging) {
@@ -482,17 +471,6 @@ const GameScreen = forwardRef((props, ref) => {
         // img.crossOrigin = "anonymous";
         img.src = canvas.toDataURL('image/png');
 
-
-        // var blobBin = atob(img.src.split(',')[1]);	// base64 데이터 디코딩
-        // var array = [];
-        // for (var i = 0; i < blobBin.length; i++) {
-        //     array.push(blobBin.charCodeAt(i));
-        // }
-
-        // var file = new Blob([new Uint8Array(array)], { type: 'image/png' });	// Blob 생성
-        // const image = URL.createObjectURL(file);
-
-
         //a태그를 만들고 다운로드한뒤 갖다 버린다
         let link = document.createElement('a');
         link.download = "my_image.png";
@@ -501,7 +479,7 @@ const GameScreen = forwardRef((props, ref) => {
         link.click();
         document.body.removeChild(link);
         canvasRef5.current.getContext('2d').clearRect(0, 0, windowSize.width, windowSize.height); // 저장 후 지우기
-        // canvasRef2.current.focus();
+        canvasRef2.current.focus();
     }
 
     return (
@@ -547,7 +525,6 @@ const GameScreen = forwardRef((props, ref) => {
                 ref={canvasRef2}
                 mirrored={true}
                 tabIndex={0}
-                //onKeyDown={f1Down}
                 onKeyDown={spaceDown}
                 style={{
                     position: "absolute",

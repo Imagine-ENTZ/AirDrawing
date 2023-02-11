@@ -1,4 +1,3 @@
-import MainPage from "./game/MainPage.jsx";
 import HomePage from "./membership/HomePage.jsx";
 import FirstPage from "./navigation/Home.jsx";
 import LobbyPage from "./navigation/Lobby.jsx";
@@ -35,7 +34,6 @@ function App() {
         <Route path="/word-tracing/play" element={<GamePage />} />
         <Route path="/2p-word-tracing/play/:code" element={<GamePageForTwo />} />
         
-        <Route path="/main" element={<MainPage />} />
         <Route path="/selection" element={<SelectionPage />} />
         <Route path="/decorative" element={<DecorativeGamePage />} />
         <Route path="/decorative/game" element={<DecorationGamePage />} />

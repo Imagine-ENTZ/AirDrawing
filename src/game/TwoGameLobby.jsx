@@ -7,7 +7,6 @@ import SimpleBarReact from "simplebar-react";
 import 'simplebar-react/dist/simplebar.min.css';
 import axios from 'axios';
 import * as constants from "../utils/Constants"
-import { type } from "@testing-library/user-event/dist/type";
 import Modal from 'react-modal';
 import Select from "react-select";
 import { AiTwotoneCheckCircle, AiTwotoneCloseCircle} from "react-icons/ai";

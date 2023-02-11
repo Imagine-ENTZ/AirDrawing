@@ -58,11 +58,11 @@ function TwoDecorativeGame() {
         console.log(otherNumber);
     }
 
-    const onClickedBack = ()=> {
+    const onClickedBack = () => {
         deleteRoom(code);
         setIsBackButton(!isBackButton)
     }
-    
+
     const otherShapes = useRef([]);
 
     useEffect(() => {
@@ -126,17 +126,17 @@ function TwoDecorativeGame() {
                     <div className="body-container-of-left-decoration-game-two">
                         <div className="screen-admin-decoration-game-two">
                             <div style={{ width: (window.innerHeight * constants.TWO_DECORATIVE_GAME_HEIGHT_RATIO * (4.0 / 3.0)), height: windowHeight, margin: "auto" }}>
-                                <TwoGameScreen 
-                                getOtherData={setOtherNumber}
-                                getData={setNumber} 
-                                getWord={setWord} 
-                                ref={gameScreenRef} 
-                                roomid={code} 
-                                sender={Math.random().toString(36).substring(2, 11)} 
-                                anotherVideoRef={anotherVideoRef} 
-                                otherDrawingRef={otherDrawingRef} 
-                                otherEmojiRef={otherEmojiRef}
-                                isBackButton = {isBackButton} />
+                                <TwoGameScreen
+                                    getOtherData={setOtherNumber}
+                                    getData={setNumber}
+                                    getWord={setWord}
+                                    ref={gameScreenRef}
+                                    roomid={code}
+                                    sender={Math.random().toString(36).substring(2, 11)}
+                                    anotherVideoRef={anotherVideoRef}
+                                    otherDrawingRef={otherDrawingRef}
+                                    otherEmojiRef={otherEmojiRef}
+                                    isBackButton={isBackButton} />
 
                             </div>
                         </div>
@@ -179,10 +179,7 @@ function TwoDecorativeGame() {
                                 className="canvas"
                                 ref={otherDrawingRef}
                                 mirrored={true}
-                                // tabIndex={0}s
-                                //onKeyDown={f1Down}
                                 style={{
-                                    // background: "red",
                                     position: "absolute",
                                     marginLeft: "auto",
                                     marginRight: "auto",
