@@ -105,7 +105,7 @@
 - 전처리(기울기, 매끄럽게 다듬기) 등을 통해서 인식률을 높였습니다.
 
 <div align="center">
-<img src="https://github.com/stock-price-calculator/tradingbot/assets/77156858/a6c5c53e-450d-4e9a-a859-72c17c5beefa" width="100%" height="150">
+<img src="https://github.com/stock-price-calculator/tradingbot/assets/77156858/a6c5c53e-450d-4e9a-a859-72c17c5beefa" width="100%" height="100%">
 </div>
 
 
