@@ -91,15 +91,13 @@
 |:---:|:---:|
 |손모양에 따른 그리기 기능|벡터 계산|
 
-|<img src="https://github.com/stock-price-calculator/tradingbot/assets/77156858/71a22d26-d404-4d0c-9122-bcfff934ab37"  width="100%" >|<img src="https://github.com/stock-price-calculator/tradingbot/assets/77156858/ff8ac359-a89d-4f0f-84cd-159b3eaf3419"  width="100%"> |
+|<img src="https://github.com/stock-price-calculator/tradingbot/assets/77156858/ff8ac359-a89d-4f0f-84cd-159b3eaf3419"  width="100%"> |<img src="https://github.com/stock-price-calculator/tradingbot/assets/77156858/71a22d26-d404-4d0c-9122-bcfff934ab37"  width="100%" >|
 |:---:|:---:|
-|벡터 계산|손 모양에 따른 기능|
+|손 모양에 따른 기능| 각 지점 벡터|
 
-<!-- <img src="https://github.com/stock-price-calculator/tradingbot/assets/77156858/71a22d26-d404-4d0c-9122-bcfff934ab37" width="90%">
-<img src="https://github.com/stock-price-calculator/tradingbot/assets/77156858/5462609c-7c7a-459b-a2b7-be828387f293" width="90%"> -->
+
 
 </div>
-
 
 
 <hr>
@@ -141,7 +139,8 @@ Game Player
 
 </div>
 
-- 랜덤으로 제시된 단어를 따라서 작성한 후 "OK" 손동작을 취하면 정답이 맞는지 확인해 줍니다.
+- 랜덤으로 제시된 단어를 따라서 작성합니다.
+- "OK" 손동작(엄지 척)을 취하면 정답이 맞는지 확인해 줍니다.
 - 정답을 맞추면 Score가 100점씩 증가합니다.
 ## 2.  🎮 나의 화면 꾸미기 ( DECORATING )
 
@@ -149,19 +148,34 @@ Game Player
 
 <img src="https://github.com/stock-price-calculator/tradingbot/assets/77156858/052d846b-7f58-420d-b080-5157d6ddbea7" width="100%" >
 
+|<img src="https://github.com/stock-price-calculator/tradingbot/assets/77156858/fb7c0810-c933-426f-ab83-68743bfc770d"  width="100%"> |<img src="https://github.com/stock-price-calculator/tradingbot/assets/77156858/a473501c-9839-4f8e-9c0c-0c9a43b71e90"  width="100%" >|<img src="https://github.com/stock-price-calculator/tradingbot/assets/77156858/047e3bac-2eaf-4dd6-ae96-3d3def6a2138"  width="100%"> |
+|:---:|:---:|:---:|
+|단어 작성| 아이콘 생성| 아이콘 이동|
+
 </div>
 
-<hr>
+- 원하는 단어를 작성합니다.
+- 스페이스바( Space bar )를 누르면 해당 단어의 아이콘이 랜덤으로 화면에 나옵니다.
+- 마우스 커서를 이용해 아이콘을 움직이며 웹화면을 꾸밀 수 있습니다.
+- 아이콘을 배치하고 화면을 이미지로 다운로드할 수 있습니다.
 
+<hr>
 
 ##  💾 시스템 설계도
 <img src="https://github.com/stock-price-calculator/tradingbot/assets/77156858/59c46ea5-5656-40c6-b63b-9558914a41ae" height="100%" width="100%" >
 
 
 
+## 📌 페이지 화면
+
+### 1. 메인페이지
 <p align="center">
     <img src="https://github.com/stock-price-calculator/tradingbot/assets/77156858/7cb49ab8-3f3c-4b2e-bd1e-fd1e35fdd187"/>
     
 <img src="https://github.com/stock-price-calculator/tradingbot/assets/77156858/fb8f9b1b-e0d1-4730-8fa7-b386e3b21282">
     
+|<img src="https://github.com/stock-price-calculator/tradingbot/assets/77156858/7cb49ab8-3f3c-4b2e-bd1e-fd1e35fdd187"  width="100%"> |<img src="https://github.com/stock-price-calculator/tradingbot/assets/77156858/fb8f9b1b-e0d1-4730-8fa7-b386e3b21282"  width="100%" >|
+|:---:|:---:|
+|손 모양에 따른 기능| 각 지점 벡터|
+
 </p>
