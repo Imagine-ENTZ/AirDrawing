@@ -60,11 +60,11 @@
 
 <div align="center">
 
-|<img src="https://github.com/stock-price-calculator/tradingbot/assets/77156858/091a1c65-7887-4698-8dae-dad117b6ea51" height="350" width="100%" >|<img src="https://github.com/stock-price-calculator/tradingbot/assets/77156858/0defb593-b499-4065-8143-4a83538c2f64" height="350" width="100%"> |
+|<img src="https://github.com/stock-price-calculator/tradingbot/assets/77156858/091a1c65-7887-4698-8dae-dad117b6ea51" height="200" width="100%" >|<img src="https://github.com/stock-price-calculator/tradingbot/assets/77156858/0defb593-b499-4065-8143-4a83538c2f64" height="200" width="100%"> |
 |:---:|:---:|
 |실제 손모양 인식|손동작 모델|
 
-|<img src="https://github.com/stock-price-calculator/tradingbot/assets/77156858/ebbd8951-33b6-45c1-9c76-7f84f8d10874" height="350" width="100%" >|<img src="https://github.com/stock-price-calculator/tradingbot/assets/77156858/98b38baa-312f-4777-94a2-eec5f9367e0d" height="350" width="100%"> |
+|<img src="https://github.com/stock-price-calculator/tradingbot/assets/77156858/ebbd8951-33b6-45c1-9c76-7f84f8d10874" height="200" width="100%" >|<img src="https://github.com/stock-price-calculator/tradingbot/assets/77156858/98b38baa-312f-4777-94a2-eec5f9367e0d" height="200" width="100%"> |
 |:---:|:---:|
 |손모양에 따른 그리기 기능|벡터 계산|
 
