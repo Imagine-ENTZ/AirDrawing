@@ -93,8 +93,8 @@
 
 </div>
 
-<img src="https://github.com/stock-price-calculator/tradingbot/assets/77156858/bd06c5c1-cc74-4786-b315-1fcdebbdabe7" width="350">
-<img src="https://github.com/stock-price-calculator/tradingbot/assets/77156858/5462609c-7c7a-459b-a2b7-be828387f293" width="350">
+<img src="https://github.com/stock-price-calculator/tradingbot/assets/77156858/bd06c5c1-cc74-4786-b315-1fcdebbdabe7" width="400">
+<img src="https://github.com/stock-price-calculator/tradingbot/assets/77156858/5462609c-7c7a-459b-a2b7-be828387f293" width="400">
 
 <hr>
 
