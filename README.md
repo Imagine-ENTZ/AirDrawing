@@ -91,8 +91,12 @@
 |:---:|:---:|
 |손모양에 따른 그리기 기능|벡터 계산|
 
-<img src="https://github.com/stock-price-calculator/tradingbot/assets/77156858/bd06c5c1-cc74-4786-b315-1fcdebbdabe7" width="90%">
-<img src="https://github.com/stock-price-calculator/tradingbot/assets/77156858/5462609c-7c7a-459b-a2b7-be828387f293" width="90%">
+|<img src="https://github.com/stock-price-calculator/tradingbot/assets/77156858/71a22d26-d404-4d0c-9122-bcfff934ab37"  width="100%" >|<img src="https://github.com/stock-price-calculator/tradingbot/assets/77156858/ff8ac359-a89d-4f0f-84cd-159b3eaf3419"  width="100%"> |
+|:---:|:---:|
+|벡터 계산|손 모양에 따른 기능|
+
+<!-- <img src="https://github.com/stock-price-calculator/tradingbot/assets/77156858/71a22d26-d404-4d0c-9122-bcfff934ab37" width="90%">
+<img src="https://github.com/stock-price-calculator/tradingbot/assets/77156858/5462609c-7c7a-459b-a2b7-be828387f293" width="90%"> -->
 
 </div>
 
