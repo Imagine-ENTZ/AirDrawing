@@ -93,8 +93,8 @@
 
 </div>
 
-<img src="https://github.com/stock-price-calculator/tradingbot/assets/77156858/bd06c5c1-cc74-4786-b315-1fcdebbdabe7" width="100%">
-<img src="https://github.com/stock-price-calculator/tradingbot/assets/77156858/5462609c-7c7a-459b-a2b7-be828387f293" width="100%">
+<img src="https://github.com/stock-price-calculator/tradingbot/assets/77156858/bd06c5c1-cc74-4786-b315-1fcdebbdabe7" width="350">
+<img src="https://github.com/stock-price-calculator/tradingbot/assets/77156858/5462609c-7c7a-459b-a2b7-be828387f293" width="350">
 
 <hr>
 
@@ -131,13 +131,17 @@ Game Player
 
 <img src="https://github.com/stock-price-calculator/tradingbot/assets/77156858/b39b6ced-acc0-40cf-8ed7-fa7752eb65ae" width="100%" >
 
+<img src="https://github.com/stock-price-calculator/tradingbot/assets/77156858/fb8f9b1b-e0d1-4730-8fa7-b386e3b21282">
+
 </div>
 
+- 랜덤으로 제시된 단어를 따라서 작성한 후 "OK" 손동작을 취하면 정답이 맞는지 확인해 줍니다.
+- 정답을 맞추면 Score가 100점씩 증가합니다.
 ## 2.  🎮 나의 화면 꾸미기 ( DECORATING )
 
 <div align="center">
 
-<img src="https://github.com/stock-price-calculator/tradingbot/assets/77156858/b39b6ced-acc0-40cf-8ed7-fa7752eb65ae" width="100%" >
+<img src="https://github.com/stock-price-calculator/tradingbot/assets/77156858/052d846b-7f58-420d-b080-5157d6ddbea7" width="100%" >
 
 </div>
 
@@ -146,6 +150,9 @@ Game Player
 
 ##  💾 시스템 설계도
 <img src="https://github.com/stock-price-calculator/tradingbot/assets/77156858/59c46ea5-5656-40c6-b63b-9558914a41ae" height="100%" width="100%" >
+
+
+
 <p align="center">
     <img src="https://github.com/stock-price-calculator/tradingbot/assets/77156858/7cb49ab8-3f3c-4b2e-bd1e-fd1e35fdd187"/>
     
